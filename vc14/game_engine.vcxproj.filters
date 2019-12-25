@@ -4,13 +4,58 @@
     <Filter Include="framework">
       <UniqueIdentifier>{a33ca838-4bfd-40e5-b89a-57f465243511}</UniqueIdentifier>
     </Filter>
+    <Filter Include="framework\platform">
+      <UniqueIdentifier>{4d6bfdfb-04a7-469c-a371-8c16219c1974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\graphics">
+      <UniqueIdentifier>{6569e3b5-8bfe-44ed-b663-8b4568da903c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\graphics\core">
+      <UniqueIdentifier>{13579c3e-705e-4d9b-bcce-19ed75d8420f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\graphics\opengl">
+      <UniqueIdentifier>{6ad26ccb-4ed5-4aed-b6bd-a3ac2ca76631}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\core">
+      <UniqueIdentifier>{8b81050f-a88d-46e0-b3a5-493af50cdb8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
+    <ClCompile Include="..\src\framework\platform\application.cpp">
+      <Filter>framework\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\platform\window.cpp">
+      <Filter>framework\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\opengl\context.cpp">
+      <Filter>framework\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\core\context.cpp">
+      <Filter>framework\graphics\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\core\color.cpp">
+      <Filter>framework\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../src/framework/pch.h">
       <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\platform\application.h">
+      <Filter>framework\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\platform\window.h">
+      <Filter>framework\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\opengl\context.h">
+      <Filter>framework\graphics\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\core\context.h">
+      <Filter>framework\graphics\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\core\color.h">
+      <Filter>framework\core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
