@@ -23,17 +23,24 @@ public:
 	void show();
 	void hide();
 
-	SDL_Window* sdlWindow() { return m_window; }
-	const SDL_Window* sdlWindow() const { return m_window; }
+	void setWindowSize(glm::uvec2 size);
+	glm::uvec2 getWindowSize() { return m_size; }
+	void updateWindowSize();
+	void resize(glm::uvec2 size);
 
-	OBJECT_ACCESSOR(framework::graphics::core::Context*, context);
+	const std::string title() const {
+		return SDL_GetWindowTitle(m_sdlWindow);
+	}
 
-	void swap();
+	OBJECT_GETACCESSOR(SDL_Window*, const SDL_Window* , sdlWindow);
+	OBJECT_ACCESSOR(framework::graphics::core::Context*, const framework::graphics::core::Context* , context);
 
 private:
 
-	SDL_Window* m_window;
+	SDL_Window* m_sdlWindow;
 	framework::graphics::core::Context* m_context;
+
+	glm::uvec2 m_size;
 
 	bool m_initialized = false;
 };
