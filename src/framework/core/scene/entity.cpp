@@ -12,7 +12,7 @@ Object_ptr Entity::attach(Object_ptr&& obj, std::string name)
 
 Object_ptr Entity::attach(Object* obj, std::string name)
 {
-	return attachInternal(std::move(std::make_shared<Object>(obj)), name);
+	return attachInternal(std::move(std::shared_ptr<Object>(obj)), name);
 }
 
 Object_ptr Entity::attachInternal(Object_ptr&& obj, std::string name)

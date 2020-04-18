@@ -5,6 +5,7 @@
 #include <framework/graphics/core/context.h>
 #include <framework/graphics/opengl/mesh_descriptor.h>
 #include <framework/graphics/opengl/opengl_shader.h>
+#include <framework/graphics/opengl/opengl_texture.h>
 #include <SDL2/SDL_video.h>
 
 namespace framework {
@@ -26,6 +27,10 @@ public:
 
 	framework::core::BaseMeshDescriptor_ptr makeDescriptor(std::vector<framework::core::VertexDesc>& descs) override final {
 		return std::make_shared<MeshDescriptor>(descs);
+	}
+
+	framework::core::Texture_ptr makeTexture(unsigned char* buffer) override final {
+		return std::make_shared<OpenGLTexture>(buffer);
 	}
 
 	void clear(bool color, bool depth) override final;

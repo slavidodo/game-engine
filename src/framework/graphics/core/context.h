@@ -3,6 +3,7 @@
 #define FRAMEWORK_GRAPHICS_CORE_CONTEXT
 
 #include <framework/core/mesh.h>
+#include <framework/core/texture.h>
 #include <framework/graphics/core/shader.h>
 
 namespace framework {
@@ -18,6 +19,7 @@ public:
 
 	virtual Shader_ptr makeShader(std::string vertexCode, std::string pixelCode) = 0;
 	virtual framework::core::BaseMeshDescriptor_ptr makeDescriptor(std::vector<framework::core::VertexDesc>& descs) = 0;
+	virtual framework::core::Texture_ptr makeTexture(unsigned char* buffer) = 0;
 
 	template<typename VertexType, typename ...Args>
 	framework::core::BaseMesh_ptr makeMesh(Args... args) {

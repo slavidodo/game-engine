@@ -6,6 +6,7 @@
 #include <framework/platform/window.h>
 #include <framework/managers/scene_manager.h>
 #include <framework/managers/input_manager.h>
+#include <framework/managers/resource_manager.h>
 
 using namespace framework::platform;
 
@@ -13,6 +14,10 @@ Application g_app;
 
 bool Application::init()
 {
+	// TODO; error codes based on faliure
+	if (!g_resourceManager.init())
+		return false;
+
 	if (m_initialized)
 		return false;
 

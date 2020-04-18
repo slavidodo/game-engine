@@ -158,15 +158,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
+    <ClCompile Include="..\src\framework\core\model.cpp" />
     <ClCompile Include="..\src\framework\core\scene\entity.cpp" />
     <ClCompile Include="..\src\framework\core\scene\node.cpp" />
     <ClCompile Include="..\src\framework\core\scene\object.cpp" />
     <ClCompile Include="..\src\framework\core\scene\scene_node.cpp" />
+    <ClCompile Include="..\src\framework\core\texture.cpp" />
     <ClCompile Include="..\src\framework\core\transform.cpp" />
     <ClCompile Include="..\src\framework\core\utils.cpp" />
     <ClCompile Include="..\src\framework\core\loaders\object_loader.cpp" />
     <ClCompile Include="..\src\framework\core\material.cpp" />
     <ClCompile Include="..\src\framework\core\mesh.cpp" />
+    <ClCompile Include="..\src\framework\filesystem\file.cpp" />
     <ClCompile Include="..\src\framework\graphics\camera.cpp" />
     <ClCompile Include="..\src\framework\graphics\core\context.cpp" />
     <ClCompile Include="..\src\framework\graphics\core\shader.cpp" />
@@ -174,6 +177,7 @@
     <ClCompile Include="..\src\framework\graphics\opengl\opengl_context.cpp" />
     <ClCompile Include="..\src\framework\graphics\opengl\mesh_descriptor.cpp" />
     <ClCompile Include="..\src\framework\graphics\opengl\opengl_shader.cpp" />
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_texture.cpp" />
     <ClCompile Include="..\src\framework\graphics\scene.cpp" />
     <ClCompile Include="..\src\framework\managers\audio_manager.cpp" />
     <ClCompile Include="..\src\framework\managers\input_manager.cpp" />
@@ -184,10 +188,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../src/framework/pch.h" />
+    <ClInclude Include="..\src\framework\core\model.h" />
     <ClInclude Include="..\src\framework\core\scene\entity.h" />
     <ClInclude Include="..\src\framework\core\scene\node.h" />
     <ClInclude Include="..\src\framework\core\scene\object.h" />
     <ClInclude Include="..\src\framework\core\scene\scene_node.h" />
+    <ClInclude Include="..\src\framework\core\texture.h" />
     <ClInclude Include="..\src\framework\core\transform.h" />
     <ClInclude Include="..\src\framework\core\utils.h" />
     <ClInclude Include="..\src\framework\core\loaders\object_loader.h" />
@@ -195,6 +201,7 @@
     <ClInclude Include="..\src\framework\core\material.h" />
     <ClInclude Include="..\src\framework\core\mesh.h" />
     <ClInclude Include="..\src\framework\core\vertex_type.h" />
+    <ClInclude Include="..\src\framework\filesystem\file.h" />
     <ClInclude Include="..\src\framework\graphics\camera.h" />
     <ClInclude Include="..\src\framework\graphics\core\context.h" />
     <ClInclude Include="..\src\framework\graphics\core\shader.h" />
@@ -202,6 +209,7 @@
     <ClInclude Include="..\src\framework\graphics\opengl\opengl_context.h" />
     <ClInclude Include="..\src\framework\graphics\opengl\mesh_descriptor.h" />
     <ClInclude Include="..\src\framework\graphics\opengl\opengl_shader.h" />
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_texture.h" />
     <ClInclude Include="..\src\framework\graphics\opengl\vertex_descriptor.h" />
     <ClInclude Include="..\src\framework\graphics\scene.h" />
     <ClInclude Include="..\src\framework\managers\audio_manager.h" />

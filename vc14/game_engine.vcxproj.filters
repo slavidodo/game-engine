@@ -40,6 +40,9 @@
     <Filter Include="framework\core\scene">
       <UniqueIdentifier>{440f2a94-e17d-4e78-b62b-4d8cde61ff36}</UniqueIdentifier>
     </Filter>
+    <Filter Include="framework\filesystem">
+      <UniqueIdentifier>{bad3b308-7190-4d2c-a6b9-faac3247f776}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
@@ -111,6 +114,18 @@
     </ClCompile>
     <ClCompile Include="..\src\framework\core\scene\entity.cpp">
       <Filter>framework\core\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\core\model.cpp">
+      <Filter>framework\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\core\texture.cpp">
+      <Filter>framework\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\filesystem\file.cpp">
+      <Filter>framework\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_texture.cpp">
+      <Filter>framework\graphics\opengl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +209,18 @@
     </ClInclude>
     <ClInclude Include="..\src\framework\core\scene\entity.h">
       <Filter>framework\core\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\core\model.h">
+      <Filter>framework\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\core\texture.h">
+      <Filter>framework\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\filesystem\file.h">
+      <Filter>framework\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_texture.h">
+      <Filter>framework\graphics\opengl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

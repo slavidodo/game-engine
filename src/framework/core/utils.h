@@ -1,6 +1,6 @@
 
-#ifndef FRAMEWORK_CORE_COLOR_H
-#define FRAMEWORK_CORE_COLOR_H
+#ifndef FRAMEWORK_CORE_UTILS_H
+#define FRAMEWORK_CORE_UTILS_H
 
 namespace framework {
 namespace core {
