@@ -87,12 +87,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;$(VULKAN_SDK)/Include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32d.lib;opengl32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(VULKAN_SDK)/Lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -101,14 +103,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;$(VULKAN_SDK)/Include</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(VULKAN_SDK)/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,14 +123,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;$(VULKAN_SDK)/Include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(VULKAN_SDK)/Lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,30 +143,71 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;$(VULKAN_SDK)/Include</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)\</ObjectFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(VULKAN_SDK)/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
-    <ClCompile Include="..\src\framework\core\color.cpp" />
+    <ClCompile Include="..\src\framework\core\scene\entity.cpp" />
+    <ClCompile Include="..\src\framework\core\scene\node.cpp" />
+    <ClCompile Include="..\src\framework\core\scene\object.cpp" />
+    <ClCompile Include="..\src\framework\core\scene\scene_node.cpp" />
+    <ClCompile Include="..\src\framework\core\transform.cpp" />
+    <ClCompile Include="..\src\framework\core\utils.cpp" />
+    <ClCompile Include="..\src\framework\core\loaders\object_loader.cpp" />
+    <ClCompile Include="..\src\framework\core\material.cpp" />
+    <ClCompile Include="..\src\framework\core\mesh.cpp" />
+    <ClCompile Include="..\src\framework\graphics\camera.cpp" />
     <ClCompile Include="..\src\framework\graphics\core\context.cpp" />
-    <ClCompile Include="..\src\framework\graphics\opengl\context.cpp" />
+    <ClCompile Include="..\src\framework\graphics\core\shader.cpp" />
+    <ClCompile Include="..\src\framework\graphics\mesh_renderer.cpp" />
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_context.cpp" />
+    <ClCompile Include="..\src\framework\graphics\opengl\mesh_descriptor.cpp" />
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_shader.cpp" />
+    <ClCompile Include="..\src\framework\graphics\scene.cpp" />
+    <ClCompile Include="..\src\framework\managers\audio_manager.cpp" />
+    <ClCompile Include="..\src\framework\managers\input_manager.cpp" />
+    <ClCompile Include="..\src\framework\managers\resource_manager.cpp" />
+    <ClCompile Include="..\src\framework\managers\scene_manager.cpp" />
     <ClCompile Include="..\src\framework\platform\application.cpp" />
     <ClCompile Include="..\src\framework\platform\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../src/framework/pch.h" />
-    <ClInclude Include="..\src\framework\core\color.h" />
+    <ClInclude Include="..\src\framework\core\scene\entity.h" />
+    <ClInclude Include="..\src\framework\core\scene\node.h" />
+    <ClInclude Include="..\src\framework\core\scene\object.h" />
+    <ClInclude Include="..\src\framework\core\scene\scene_node.h" />
+    <ClInclude Include="..\src\framework\core\transform.h" />
+    <ClInclude Include="..\src\framework\core\utils.h" />
+    <ClInclude Include="..\src\framework\core\loaders\object_loader.h" />
+    <ClInclude Include="..\src\framework\core\loaders\tmp_loader.h" />
+    <ClInclude Include="..\src\framework\core\material.h" />
+    <ClInclude Include="..\src\framework\core\mesh.h" />
+    <ClInclude Include="..\src\framework\core\vertex_type.h" />
+    <ClInclude Include="..\src\framework\graphics\camera.h" />
     <ClInclude Include="..\src\framework\graphics\core\context.h" />
-    <ClInclude Include="..\src\framework\graphics\opengl\context.h" />
+    <ClInclude Include="..\src\framework\graphics\core\shader.h" />
+    <ClInclude Include="..\src\framework\graphics\mesh_renderer.h" />
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_context.h" />
+    <ClInclude Include="..\src\framework\graphics\opengl\mesh_descriptor.h" />
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_shader.h" />
+    <ClInclude Include="..\src\framework\graphics\opengl\vertex_descriptor.h" />
+    <ClInclude Include="..\src\framework\graphics\scene.h" />
+    <ClInclude Include="..\src\framework\managers\audio_manager.h" />
+    <ClInclude Include="..\src\framework\managers\input_manager.h" />
+    <ClInclude Include="..\src\framework\managers\resource_manager.h" />
+    <ClInclude Include="..\src\framework\managers\scene_manager.h" />
     <ClInclude Include="..\src\framework\platform\application.h" />
     <ClInclude Include="..\src\framework\platform\window.h" />
   </ItemGroup>

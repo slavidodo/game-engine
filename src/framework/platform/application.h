@@ -21,8 +21,8 @@ public:
 	Application& operator=(const Application&) = delete;
 
 protected:
-
 	void handleEvent(const SDL_Event& e);
+	void handleWindowEvent(const SDL_WindowEvent& e);
 
 private:
 	bool m_initialized = false;
