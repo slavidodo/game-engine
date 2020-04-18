@@ -23,8 +23,8 @@ public:
 	uint64_t tell();
 	uint64_t length();
 	uint64_t read(void* buf, uint32_t len);
+	uint64_t write(const void* buf, uint32_t len);
 
-	// todo; add read/write methods
 private:
 	PHYSFS_File* m_handle;
 };

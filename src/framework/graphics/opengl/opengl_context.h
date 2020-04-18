@@ -29,8 +29,8 @@ public:
 		return std::make_shared<MeshDescriptor>(descs);
 	}
 
-	framework::core::Texture_ptr makeTexture(unsigned char* buffer) override final {
-		return std::make_shared<OpenGLTexture>(buffer);
+	framework::core::Texture_ptr makeTexture(unsigned char* buffer, unsigned long long size) override final {
+		return std::make_shared<OpenGLTexture>(buffer, size);
 	}
 
 	void clear(bool color, bool depth) override final;

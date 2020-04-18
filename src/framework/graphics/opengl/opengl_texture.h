@@ -4,6 +4,8 @@
 
 #include <framework/core/texture.h>
 
+#include <external/stbi_image.h>
+
 namespace framework {
 namespace graphics {
 namespace opengl {
@@ -11,12 +13,12 @@ namespace opengl {
 class OpenGLTexture : public framework::core::Texture
 {
 public:
-	OpenGLTexture(unsigned char* buffer) {
-		load(buffer);
+	OpenGLTexture(unsigned char* buffer, unsigned long long size) {
+		load(buffer, size);
 	}
 
 private:
-	bool load(unsigned char* buffer) override final;
+	bool load(unsigned char* buffer, unsigned long long size) override final;
 };
 
 } // ns opengl

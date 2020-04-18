@@ -52,3 +52,8 @@ uint64_t File::read(void* buf, uint32_t len)
 {
 	return PHYSFS_read(m_handle, buf, len, 1);
 }
+
+uint64_t File::write(const void* buf, uint32_t len) 
+{
+	return PHYSFS_write(m_handle, buf, len, 1);
+}

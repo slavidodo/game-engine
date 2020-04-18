@@ -38,8 +38,8 @@ struct TextureSetting
 
 class Texture
 {
-private:
-	virtual bool load(unsigned char* buffer) = 0;
+protected:
+	virtual bool load(unsigned char* buffer, unsigned long long size) = 0;
 
 	TextureSetting m_settings; // 2d/3d/cube/wrap/compression
 };
