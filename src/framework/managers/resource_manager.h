@@ -84,7 +84,7 @@ public:
 	}
 	template <typename T>
 	core::BaseModel_ptr loadModel(std::string filename, const aiScene* sceneObject) {
-		return std::move(std::shared_ptr<core::Model>(filename, sceneObject));
+		return std::move(std::shared_ptr<core::Model<T>>(filename, sceneObject));
 	}
 
 	OBJECT_GETACCESSOR(bool, bool, initialized);

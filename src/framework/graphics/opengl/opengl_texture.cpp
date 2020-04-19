@@ -1,6 +1,7 @@
 
 #include <framework/pch.h>
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "opengl_context.h"
 #include "opengl_texture.h"
 
