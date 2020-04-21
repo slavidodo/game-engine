@@ -7,14 +7,18 @@
 namespace framework {
 namespace core {
 
+class Material;
+typedef std::shared_ptr<Material> Material_ptr;
+typedef std::weak_ptr<Material> Material_weakPtr;
+
 class Material
 {
-	typedef framework::graphics::core::Shader Shader;
+	typedef graphics::core::Shader_ptr Shader_ptr;
 
 public:
-	explicit Material(Shader* shader) {
+	explicit Material(Shader_ptr shader)
+		: m_shader(shader) {
 		assert(shader == nullptr);
-		m_shader.reset(shader);
 	}
 
 	void setBool(std::string global, bool value)			{ m_shader->setBool(std::move(global), glm::bvec1(value)); }
@@ -62,7 +66,7 @@ public:
 	}
 
 protected:
-	std::shared_ptr<Shader> m_shader;
+	Shader_ptr m_shader;
 };
 
 } // ns core

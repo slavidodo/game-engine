@@ -9,7 +9,6 @@ constexpr int32_t WINDOW_WIDTH = 1024;
 constexpr int32_t WINDOW_HEIGHT = 768;
 
 #include <framework/graphics/opengl/opengl_context.h>
-#define FALLBACK_RENDERING_BACKEND opengl::OpenGLContext
 
 #if defined(DIRECTX12_RENDERER_BACKEND)
 #	include <framework/graphics/d3d12/d3d12_context.h>
@@ -21,17 +20,11 @@ constexpr int32_t WINDOW_HEIGHT = 768;
 #	include <framework/graphics/vulkan/vulkan_context.h>
 #	define RENDERING_BACKEND vulkan::VulkanContext
 #else
-#	define RENDERING_BACKEND FALLBACK_RENDERING_BACKEND
-#	define RENDERING_FALLBACK_ACTIVATED
+#	define RENDERING_BACKEND opengl::OpenGLContext
+#	define RENDERING_OPENGL_FALLBACK
 #endif
 
 using Context = framework::graphics::RENDERING_BACKEND;
-
-#ifdef RENDERING_FALLBACK_ACTIVATED
-#	undef FALLBACK_RENDERING_BACKEND
-#else
-using FallbackContext = framework::graphics::FALLBACK_RENDERING_BACKEND;
-#endif
 
 int main(int argc, char* argv[])
 {
@@ -39,9 +32,6 @@ int main(int argc, char* argv[])
 
 	uint32_t defaultWindowFlags = SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE;
 	uint32_t windowFlags = Context::WindowFlags() | defaultWindowFlags;
-#ifndef RENDERING_FALLBACK_ACTIVATED
-	uint32_t fallbackWindowFlags = FallbackContext::WindowFlags() | defaultWindowFlags;
-#endif
 
 	if (!g_app.init())
 		return 1;
@@ -50,12 +40,14 @@ int main(int argc, char* argv[])
 	// and it's not actually supported in SDL2
 	if (g_window.init(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, windowFlags))
 		g_window.context(new Context());
-#ifndef RENDERING_FALLBACK_ACTIVATED
-	else if (g_window.init(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, fallbackWindowFlags))
-		g_window.context(new FallbackContext());
+#ifndef RENDERING_OPENGL_FALLBACK
+	else if (g_window.init(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, framework::graphics::opengl::OpenGLContext::WindowFlags() | defaultWindowFlags))
+		g_window.context(new framework::graphics::opengl::OpenGLContext());
 #endif
 	else
 		return 1;
+
+	g_window.context()->init();
 
 	g_window.show();
 	g_app.run();

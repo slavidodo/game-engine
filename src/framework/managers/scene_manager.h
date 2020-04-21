@@ -12,6 +12,8 @@ class SceneManager
 public:
 	void render();
 
+private:
+	framework::graphics::Scene_ptr m_currentScene;
 };
 
 } // ns managers

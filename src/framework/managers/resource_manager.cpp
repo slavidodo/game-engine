@@ -4,6 +4,7 @@
 #include "resource_manager.h"
 
 #include <framework/platform/window.h>
+#include <physfs.h>
 
 using namespace framework::managers;
 using namespace framework;
@@ -15,7 +16,7 @@ bool ResourceManager::init()
 	if (m_initialized)
 		return true;
 
-	m_initialized = PHYSFS_init(nullptr) == 0;
+	m_initialized = PHYSFS_init(nullptr) != 0;
 	return m_initialized;
 }
 
@@ -63,7 +64,7 @@ core::Texture_ptr ResourceManager::loadTexture(std::string filename)
 core::Texture_ptr ResourceManager::loadTexture(filesystem::File_ptr file)
 {
 	size_t length = (size_t)file->length();
-	unsigned char* buffer = new unsigned char[length];
+	uint8_t* buffer = new uint8_t[length];
 
 	if (file->read((void*)buffer, length) != length)
 		return nullptr;
@@ -71,62 +72,18 @@ core::Texture_ptr ResourceManager::loadTexture(filesystem::File_ptr file)
 	return g_window.context()->makeTexture(buffer, length);
 }
 
+core::Model_ptr ResourceManager::loadModel(std::string filename)
+{
+	Assimp::Importer importer;
+	importer.SetIOHandler(new filesystem::AssimpIOSystem);
 
+	const aiScene* sceneObject = importer.ReadFile(
+		filename,
+		aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType
+	); // TODO: give the user the choice of flags?
 
+	if (sceneObject == nullptr || sceneObject->mFlags & AI_SCENE_FLAGS_INCOMPLETE || sceneObject->mRootNode == NULL)
+		return nullptr;
 
-AssimpIOStream::AssimpIOStream(const char* fileName) {
-	m_file = g_resourceManager.openRead(fileName);
-}
-
-AssimpIOStream::~AssimpIOStream() {
-	m_file->close();
-}
-
-size_t AssimpIOStream::Read(void* buffer, size_t pSize, size_t pCount) {
-	unsigned long long length = m_file->length();
-	m_file->read(buffer, length);
-
-	return length;
-}
-
-size_t AssimpIOStream::Write(const void* pvBuffer, size_t pSize, size_t pCount) {
-	return m_file->write(pvBuffer, pCount);
-}
-
-size_t AssimpIOStream::FileSize() const {
-	return m_file->length();
-}
-
-aiReturn AssimpIOStream::Seek(size_t pOffset, aiOrigin pOrigin) {
-	if (pOrigin == aiOrigin_SET && m_file->seek(pOffset) != NULL)
-		return aiReturn::aiReturn_SUCCESS;
-	return aiReturn::aiReturn_FAILURE;
-}
-
-size_t AssimpIOStream::Tell() const {
-	return m_file->tell();
-}
-
-void AssimpIOStream::Flush() {
-	m_file->flush();
-}
-
-
-
-
-bool AssimpIOSystem::Exists(const char* fileName) const {
-	return g_resourceManager.exists(fileName);
-}
-
-char AssimpIOSystem::getOsSeparator() const {
-	return '/';
-}
-
-Assimp::IOStream* AssimpIOSystem::Open(const char* fileName, const char* pMode) {
-	return new AssimpIOStream(fileName);
-}
-
-void AssimpIOSystem::Close(Assimp::IOStream* pFile) {
-	pFile->~IOStream();
-	delete pFile;
+	return std::move(std::make_shared<core::Model>(filename, sceneObject));
 }

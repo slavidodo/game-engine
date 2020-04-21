@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.props" Condition="Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -160,27 +159,36 @@
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
     <ClCompile Include="..\src\framework\core\model.cpp" />
-    <ClCompile Include="..\src\framework\core\scene\entity.cpp" />
-    <ClCompile Include="..\src\framework\core\scene\node.cpp" />
     <ClCompile Include="..\src\framework\core\scene\object.cpp" />
     <ClCompile Include="..\src\framework\core\scene\scene_node.cpp" />
     <ClCompile Include="..\src\framework\core\texture.cpp" />
     <ClCompile Include="..\src\framework\core\transform.cpp" />
     <ClCompile Include="..\src\framework\core\utils.cpp" />
-    <ClCompile Include="..\src\framework\core\loaders\object_loader.cpp" />
     <ClCompile Include="..\src\framework\core\material.cpp" />
     <ClCompile Include="..\src\framework\core\mesh.cpp" />
+    <ClCompile Include="..\src\framework\filesystem\assimp_iostream.cpp" />
     <ClCompile Include="..\src\framework\filesystem\file.cpp" />
     <ClCompile Include="..\src\framework\graphics\camera.cpp" />
     <ClCompile Include="..\src\framework\graphics\core\context.cpp" />
     <ClCompile Include="..\src\framework\graphics\core\shader.cpp" />
+    <ClCompile Include="..\src\framework\graphics\mesh_factory.cpp" />
     <ClCompile Include="..\src\framework\graphics\mesh_renderer.cpp" />
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.cpp" />
     <ClCompile Include="..\src\framework\graphics\opengl\opengl_context.cpp" />
-    <ClCompile Include="..\src\framework\graphics\opengl\mesh_descriptor.cpp" />
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_impl.cpp" />
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_index_buffer.cpp" />
     <ClCompile Include="..\src\framework\graphics\opengl\opengl_shader.cpp" />
     <ClCompile Include="..\src\framework\graphics\opengl\opengl_texture.cpp" />
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_vertex_buffer.cpp" />
+    <ClCompile Include="..\src\framework\graphics\rendering\hardware_buffer.cpp" />
+    <ClCompile Include="..\src\framework\graphics\rendering\index_buffer.cpp" />
+    <ClCompile Include="..\src\framework\graphics\rendering\index_data.cpp" />
+    <ClCompile Include="..\src\framework\graphics\rendering\vertex_buffer.cpp" />
+    <ClCompile Include="..\src\framework\graphics\rendering\vertex_data.cpp" />
+    <ClCompile Include="..\src\framework\graphics\rendering\vertex_format.cpp" />
     <ClCompile Include="..\src\framework\graphics\scene.cpp" />
     <ClCompile Include="..\src\framework\managers\audio_manager.cpp" />
+    <ClCompile Include="..\src\framework\managers\hardware_buffer_manager.cpp" />
     <ClCompile Include="..\src\framework\managers\input_manager.cpp" />
     <ClCompile Include="..\src\framework\managers\resource_manager.cpp" />
     <ClCompile Include="..\src\framework\managers\scene_manager.cpp" />
@@ -190,48 +198,43 @@
   <ItemGroup>
     <ClInclude Include="../src/framework/pch.h" />
     <ClInclude Include="..\src\framework\core\model.h" />
-    <ClInclude Include="..\src\framework\core\scene\entity.h" />
-    <ClInclude Include="..\src\framework\core\scene\node.h" />
     <ClInclude Include="..\src\framework\core\scene\object.h" />
     <ClInclude Include="..\src\framework\core\scene\scene_node.h" />
     <ClInclude Include="..\src\framework\core\texture.h" />
     <ClInclude Include="..\src\framework\core\transform.h" />
     <ClInclude Include="..\src\framework\core\utils.h" />
-    <ClInclude Include="..\src\framework\core\loaders\object_loader.h" />
-    <ClInclude Include="..\src\framework\core\loaders\tmp_loader.h" />
     <ClInclude Include="..\src\framework\core\material.h" />
     <ClInclude Include="..\src\framework\core\mesh.h" />
-    <ClInclude Include="..\src\framework\core\vertex_type.h" />
+    <ClInclude Include="..\src\framework\filesystem\assimp_iostream.h" />
     <ClInclude Include="..\src\framework\filesystem\file.h" />
     <ClInclude Include="..\src\framework\graphics\camera.h" />
     <ClInclude Include="..\src\framework\graphics\core\context.h" />
     <ClInclude Include="..\src\framework\graphics\core\shader.h" />
+    <ClInclude Include="..\src\framework\graphics\mesh_factory.h" />
     <ClInclude Include="..\src\framework\graphics\mesh_renderer.h" />
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.h" />
     <ClInclude Include="..\src\framework\graphics\opengl\opengl_context.h" />
-    <ClInclude Include="..\src\framework\graphics\opengl\mesh_descriptor.h" />
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_impl.h" />
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_index_buffer.h" />
     <ClInclude Include="..\src\framework\graphics\opengl\opengl_shader.h" />
     <ClInclude Include="..\src\framework\graphics\opengl\opengl_texture.h" />
-    <ClInclude Include="..\src\framework\graphics\opengl\vertex_descriptor.h" />
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_vertex_buffer.h" />
+    <ClInclude Include="..\src\framework\graphics\rendering\hardware_buffer.h" />
+    <ClInclude Include="..\src\framework\graphics\rendering\index_buffer.h" />
+    <ClInclude Include="..\src\framework\graphics\rendering\index_data.h" />
+    <ClInclude Include="..\src\framework\graphics\rendering\vertex_buffer.h" />
+    <ClInclude Include="..\src\framework\graphics\rendering\vertex_data.h" />
+    <ClInclude Include="..\src\framework\graphics\rendering\vertex_format.h" />
     <ClInclude Include="..\src\framework\graphics\scene.h" />
     <ClInclude Include="..\src\framework\managers\audio_manager.h" />
+    <ClInclude Include="..\src\framework\managers\hardware_buffer_manager.h" />
     <ClInclude Include="..\src\framework\managers\input_manager.h" />
     <ClInclude Include="..\src\framework\managers\resource_manager.h" />
     <ClInclude Include="..\src\framework\managers\scene_manager.h" />
     <ClInclude Include="..\src\framework\platform\application.h" />
     <ClInclude Include="..\src\framework\platform\window.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets" Condition="Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets')" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.props'))" />
-    <Error Condition="!Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets'))" />
-  </Target>
 </Project>

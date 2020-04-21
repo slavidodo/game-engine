@@ -5,12 +5,14 @@
 #include "opengl_context.h"
 #include "opengl_texture.h"
 
+#include <GL/glew.h>
+
 using namespace framework::graphics::opengl;
 
-bool OpenGLTexture::load(unsigned char* buffer, unsigned long long size)
+bool OpenGLTexture::load(uint8_t* buffer, uint64_t size)
 {
 	int width = 0, height = 0, numOfChannels;
-    unsigned char* data = stbi_load_from_memory(buffer, size, &width, &height, &numOfChannels, 4);
+    uint8_t* data = stbi_load_from_memory(buffer, (uint32_t)size, &width, &height, &numOfChannels, 4);
     if (buffer == nullptr)
         return false;
 

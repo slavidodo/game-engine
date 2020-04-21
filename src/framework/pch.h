@@ -11,6 +11,8 @@
 #include <set>
 #include <memory>
 #include <ostream>
+#include <array>
+#include <tuple>
 
 #define SDL_MAIN_HANDLED
 

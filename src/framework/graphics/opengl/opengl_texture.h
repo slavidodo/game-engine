@@ -13,12 +13,12 @@ namespace opengl {
 class OpenGLTexture : public framework::core::Texture
 {
 public:
-	OpenGLTexture(unsigned char* buffer, unsigned long long size) {
+	OpenGLTexture(uint8_t* buffer, uint64_t size) {
 		load(buffer, size);
 	}
 
 private:
-	bool load(unsigned char* buffer, unsigned long long size) override final;
+	bool load(uint8_t* buffer, uint64_t size) override final;
 };
 
 } // ns opengl

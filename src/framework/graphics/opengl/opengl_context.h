@@ -3,7 +3,6 @@
 #define FRAMEWORK_GRAPHICS_OPENGL_CONTEXT_H
 
 #include <framework/graphics/core/context.h>
-#include <framework/graphics/opengl/mesh_descriptor.h>
 #include <framework/graphics/opengl/opengl_shader.h>
 #include <framework/graphics/opengl/opengl_texture.h>
 #include <SDL2/SDL_video.h>
@@ -25,19 +24,17 @@ public:
 		return std::make_shared<OpenGLShader>(vertexCode, pixelCode);
 	}
 
-	framework::core::BaseMeshDescriptor_ptr makeDescriptor(std::vector<framework::core::VertexDesc>& descs) override final {
-		return std::make_shared<MeshDescriptor>(descs);
-	}
-
-	framework::core::Texture_ptr makeTexture(unsigned char* buffer, unsigned long long size) override final {
+	framework::core::Texture_ptr makeTexture(uint8_t* buffer, uint64_t size) override final {
 		return std::make_shared<OpenGLTexture>(buffer, size);
 	}
 
+	void init() override final;
+
 	void clear(bool color, bool depth) override final;
 	void clearColor(glm::fvec4 color) override final;
-	void draw(framework::core::BaseMesh_ptr mesh,
-			  framework::graphics::core::Shader_ptr shader,
-			  glm::mat4 mvp) override final;
+	void draw(framework::core::Mesh_ptr mesh,
+			  framework::core::Material_ptr shader,
+			  framework::graphics::Camera_ptr camera) override final;
 
 	void resize(glm::uvec2 size) override final;
 

@@ -14,14 +14,16 @@ Application g_app;
 
 bool Application::init()
 {
-	// TODO; error codes based on faliure
-	if (!g_resourceManager.init())
-		return false;
-
 	if (m_initialized)
 		return false;
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	// TODO; error codes based on faliure
+	if (!g_resourceManager.init()) {
+		std::cout << "Resource manager failed to load!" << std::endl;
+		return false;
+	}
+
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		std::cout << "SDL could not initialize! SDL Error: %s" << SDL_GetError() << std::endl;
 		return false;
 	}

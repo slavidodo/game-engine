@@ -3,9 +3,10 @@
 
 #include "opengl_context.h"
 
-#include <framework/graphics/opengl/opengl_shader.h>
-#include <framework/graphics/opengl/mesh_descriptor.h>
+#include "opengl_shader.h"
+#include "opengl_hardware_buffer_manager.h"
 #include <framework/platform/window.h>
+#include <framework/managers/hardware_buffer_manager.h>
 #include <GL/glew.h>
 
 using namespace framework::core;
@@ -40,6 +41,11 @@ OpenGLContext::~OpenGLContext()
 	SDL_GL_DeleteContext(m_sdlContext);
 }
 
+void OpenGLContext::init()
+{
+	framework::managers::HardwareBufferManager::instance(new OpenGLHardwareBufferManager);
+}
+
 void OpenGLContext::clear(bool color, bool depth)
 {
 	GLbitfield bits = 0;
@@ -57,10 +63,12 @@ void OpenGLContext::clearColor(glm::fvec4 color)
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void OpenGLContext::draw(framework::core::BaseMesh_ptr mesh, framework::graphics::core::Shader_ptr shader, glm::mat4 mvp)
+void OpenGLContext::draw(framework::core::Mesh_ptr mesh, framework::core::Material_ptr material,
+						 framework::graphics::Camera_ptr camera)
 {
+	/*
 	// obtain descriptor and upload gpu data if not yet
-	auto descriptor = std::dynamic_pointer_cast<MeshDescriptor>(mesh->descriptor());
+	auto descriptor = std::dynamic_pointer_cast<OpenGLMeshDescriptor>(mesh->descriptor());
 	descriptor->update();
 
 	// put the shader to use
@@ -72,7 +80,7 @@ void OpenGLContext::draw(framework::core::BaseMesh_ptr mesh, framework::graphics
 	glDrawElements(GL_TRIANGLES, (GLsizei)descriptor->mesh()->indices().size(), GL_UNSIGNED_INT, 0);
 
 	// reset vao binding
-	glBindVertexArray(0);
+	glBindVertexArray(0);*/
 }
 
 void OpenGLContext::resize(glm::uvec2 size)

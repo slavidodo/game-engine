@@ -1,6 +1,7 @@
 
 #include <framework/pch.h>
 
-#include "entity.h"
+#include "object.h"
 
 using namespace framework::core::scene;
+

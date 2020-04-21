@@ -31,9 +31,6 @@
     <Filter Include="framework\bindings">
       <UniqueIdentifier>{22831cad-59ad-4817-b935-ad02a5bce57b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framework\core\loaders">
-      <UniqueIdentifier>{dbce764a-99f5-4e73-bb13-aa71dcc80855}</UniqueIdentifier>
-    </Filter>
     <Filter Include="framework\managers">
       <UniqueIdentifier>{b544bceb-2f52-4a26-9d2e-94c2c87c7b6e}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     </Filter>
     <Filter Include="framework\filesystem">
       <UniqueIdentifier>{bad3b308-7190-4d2c-a6b9-faac3247f776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\graphics\rendering">
+      <UniqueIdentifier>{40316b2f-89a1-4af0-a8ec-41b76b79f7d7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -64,17 +64,11 @@
     <ClCompile Include="..\src\framework\core\mesh.cpp">
       <Filter>framework\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\opengl\mesh_descriptor.cpp">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\framework\graphics\opengl\opengl_context.cpp">
       <Filter>framework\graphics\opengl</Filter>
     </ClCompile>
     <ClCompile Include="..\src\framework\graphics\opengl\opengl_shader.cpp">
       <Filter>framework\graphics\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\loaders\object_loader.cpp">
-      <Filter>framework\core\loaders</Filter>
     </ClCompile>
     <ClCompile Include="..\src\framework\core\utils.cpp">
       <Filter>framework\core</Filter>
@@ -103,16 +97,10 @@
     <ClCompile Include="..\src\framework\managers\resource_manager.cpp">
       <Filter>framework\managers</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\framework\core\scene\node.cpp">
-      <Filter>framework\core\scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\framework\core\scene\object.cpp">
       <Filter>framework\core\scene</Filter>
     </ClCompile>
     <ClCompile Include="..\src\framework\core\scene\scene_node.cpp">
-      <Filter>framework\core\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\scene\entity.cpp">
       <Filter>framework\core\scene</Filter>
     </ClCompile>
     <ClCompile Include="..\src\framework\core\model.cpp">
@@ -125,6 +113,45 @@
       <Filter>framework\filesystem</Filter>
     </ClCompile>
     <ClCompile Include="..\src\framework\graphics\opengl\opengl_texture.cpp">
+      <Filter>framework\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\filesystem\assimp_iostream.cpp">
+      <Filter>framework\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\rendering\vertex_format.cpp">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\rendering\index_buffer.cpp">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\rendering\vertex_buffer.cpp">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\rendering\hardware_buffer.cpp">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\managers\hardware_buffer_manager.cpp">
+      <Filter>framework\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_index_buffer.cpp">
+      <Filter>framework\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_vertex_buffer.cpp">
+      <Filter>framework\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_impl.cpp">
+      <Filter>framework\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\rendering\vertex_data.cpp">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\rendering\index_data.cpp">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\mesh_factory.cpp">
+      <Filter>framework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.cpp">
       <Filter>framework\graphics\opengl</Filter>
     </ClCompile>
   </ItemGroup>
@@ -150,26 +177,11 @@
     <ClInclude Include="..\src\framework\core\mesh.h">
       <Filter>framework\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\core\vertex_type.h">
-      <Filter>framework\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\opengl\mesh_descriptor.h">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\framework\graphics\opengl\opengl_context.h">
       <Filter>framework\graphics\opengl</Filter>
     </ClInclude>
     <ClInclude Include="..\src\framework\graphics\opengl\opengl_shader.h">
       <Filter>framework\graphics\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\opengl\vertex_descriptor.h">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framework\core\loaders\object_loader.h">
-      <Filter>framework\core\loaders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framework\core\loaders\tmp_loader.h">
-      <Filter>framework\core\loaders</Filter>
     </ClInclude>
     <ClInclude Include="..\src\framework\core\utils.h">
       <Filter>framework\core</Filter>
@@ -198,16 +210,10 @@
     <ClInclude Include="..\src\framework\managers\resource_manager.h">
       <Filter>framework\managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\core\scene\node.h">
-      <Filter>framework\core\scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\framework\core\scene\object.h">
       <Filter>framework\core\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\src\framework\core\scene\scene_node.h">
-      <Filter>framework\core\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framework\core\scene\entity.h">
       <Filter>framework\core\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\src\framework\core\model.h">
@@ -222,8 +228,44 @@
     <ClInclude Include="..\src\framework\graphics\opengl\opengl_texture.h">
       <Filter>framework\graphics\opengl</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="..\src\framework\filesystem\assimp_iostream.h">
+      <Filter>framework\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\rendering\vertex_buffer.h">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\rendering\vertex_format.h">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\rendering\index_buffer.h">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\rendering\hardware_buffer.h">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\managers\hardware_buffer_manager.h">
+      <Filter>framework\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_index_buffer.h">
+      <Filter>framework\graphics\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_vertex_buffer.h">
+      <Filter>framework\graphics\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_impl.h">
+      <Filter>framework\graphics\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\rendering\index_data.h">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\rendering\vertex_data.h">
+      <Filter>framework\graphics\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\mesh_factory.h">
+      <Filter>framework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.h">
+      <Filter>framework\graphics\opengl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

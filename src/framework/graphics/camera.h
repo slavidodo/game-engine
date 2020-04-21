@@ -5,12 +5,17 @@
 namespace framework {
 namespace graphics {
 
+class Camera;
+typedef std::shared_ptr<Camera> Camera_ptr;
+
+// todo; add support for orthographic view
 class Camera
 {
 public:
 
 private:
 
+	
 };
 
 } // ns graphics
