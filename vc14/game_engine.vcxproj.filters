@@ -43,6 +43,9 @@
     <Filter Include="framework\graphics\rendering">
       <UniqueIdentifier>{40316b2f-89a1-4af0-a8ec-41b76b79f7d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="framework\core\math">
+      <UniqueIdentifier>{0c97da2d-41ac-45b1-aefa-f2a66b102724}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
@@ -153,6 +156,9 @@
     </ClCompile>
     <ClCompile Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.cpp">
       <Filter>framework\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\framework\core\math\aabb.cpp">
+      <Filter>framework\core\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +272,9 @@
     </ClInclude>
     <ClInclude Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.h">
       <Filter>framework\graphics\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\framework\core\math\aabb.h">
+      <Filter>framework\core\math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
