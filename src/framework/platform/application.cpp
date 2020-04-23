@@ -23,10 +23,7 @@ bool Application::init()
 		return false;
 	}
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-		std::cout << "SDL could not initialize! SDL Error: %s" << SDL_GetError() << std::endl;
-		return false;
-	}
+	glfwInit();
 
 	m_initialized = true;
 	return true;
@@ -42,19 +39,14 @@ void Application::terminate()
 
 void Application::run()
 {
-	SDL_Event event;
-	bool quitting = false;
-	while (!quitting) {
-		// handle queued events
-		while (SDL_PollEvent(&event) != 0) {
-			if (event.type == SDL_QUIT)
-				quitting = true;
+	GLFWwindow* window = g_window.glfwWindow();
+	framework::graphics::core::Context* context = g_window.context();
 
-			handleEvent(event);
-		}
+	glfwSetKeyCallback(window, &Application::onKeyCallback);
+	glfwSetFramebufferSizeCallback(window, &Application::onFramebufferSizeCallback);
 
+	while (!glfwWindowShouldClose(g_window.glfwWindow())) {
 		// begin frame data
-		auto context = g_window.context();
 		context->beginFrame();
 
 		// render current scene
@@ -62,58 +54,18 @@ void Application::run()
 
 		// end frame
 		context->endFrame();
+
+		// poll events
+		glfwPollEvents();
 	}
 }
 
-void Application::handleEvent(const SDL_Event& e)
+void Application::onKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	switch (e.type) {
-		case SDL_QUIT:
-			//onQuit();
-			break;
-		case SDL_APP_TERMINATING:
-			break;
-		case SDL_APP_LOWMEMORY:
-			break;
-
-		case SDL_WINDOWEVENT:
-			handleWindowEvent(e.window);
-			break;
-
-		case SDL_KEYDOWN:
-			g_inputManager.onKeyDown(e.key);
-			break;
-		case SDL_KEYUP:
-			g_inputManager.onKeyUp(e.key);
-			break;
-		case SDL_KEYMAPCHANGED:
-			//g_inputManager.onKeymapChanged(e);
-			break;
-		case SDL_MOUSEMOTION:
-			//g_inputManager.onMouseMotion(e);
-			break;
-		case SDL_MOUSEBUTTONDOWN:
-			break;
-		case SDL_MOUSEBUTTONUP:
-			break;
-		case SDL_MOUSEWHEEL:
-			break;
-
-	}
+	//g_inputManager.onKeyCallback(key, scancode, action, mods);
 }
 
-void Application::handleWindowEvent(const SDL_WindowEvent& e)
+void Application::onFramebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
-	switch (e.event) {
-		case SDL_WINDOWEVENT_RESIZED: {
-			g_window.setWindowSize(glm::uvec2(e.data1, e.data2));
-			break;
-		}
-
-		case SDL_WINDOWEVENT_MAXIMIZED:
-		case SDL_WINDOWEVENT_RESTORED: {
-			g_window.updateWindowSize();
-			break;
-		}
-	}
+	g_window.setWindowSize(glm::uvec2(width, height));
 }

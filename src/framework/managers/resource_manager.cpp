@@ -77,13 +77,15 @@ core::Model_ptr ResourceManager::loadModel(std::string filename)
 	Assimp::Importer importer;
 	importer.SetIOHandler(new filesystem::AssimpIOSystem);
 
-	const aiScene* sceneObject = importer.ReadFile(
+	const aiScene* scene = importer.ReadFile(
 		filename,
 		aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType
 	); // TODO: give the user the choice of flags?
 
-	if (sceneObject == nullptr || sceneObject->mFlags & AI_SCENE_FLAGS_INCOMPLETE || sceneObject->mRootNode == NULL)
+	if (scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		return nullptr;
+	}
 
-	return std::move(std::make_shared<core::Model>(filename, sceneObject));
+	auto model = std::make_shared<core::Model>(filename, scene);
+	return model;
 }

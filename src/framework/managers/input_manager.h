@@ -2,19 +2,16 @@
 #ifndef FRAMEWORK_MANAGERS_INPUTMANAGER_H
 #define FRAMEWORK_MANAGERS_INPUTMANAGER_H
 
-#include <SDL2/SDL.h>
-
 namespace framework {
 namespace managers {
 
 class InputManager
 {
 public:
-	void onKeyDown(const SDL_KeyboardEvent& e);
-	void onKeyUp(const SDL_KeyboardEvent& e);
+	void onKeyCallback(int32_t key, int32_t scancode, int32_t action, int32_t mods);
 
 private:
-	std::map<SDL_Keycode, uint32_t> m_keys;
+	std::map<int32_t, uint32_t> m_keys;
 
 };
 

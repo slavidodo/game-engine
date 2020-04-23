@@ -14,7 +14,16 @@
 #include <array>
 #include <tuple>
 
-#define SDL_MAIN_HANDLED
+#if __has_include("vulkan/vulkan.h")
+#define GLFW_INCLUDE_VULKAN
+#endif
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+// todo get rid of these
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 #define OBJECT_GETACCESSOR(type, c_type, name) \
 type name() { return m_##name; } \
@@ -36,6 +45,4 @@ OBJECT_GETACCESSOR(type, c_type, name)
 OBJECT_SETACCESSOR_DYNAMIC(type, name, set_state) \
 OBJECT_GETACCESSOR_DYNAMIC(type, c_type, name, get_state, __VA_ARGS__)
 
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
 #endif

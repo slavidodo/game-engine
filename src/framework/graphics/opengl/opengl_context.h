@@ -5,7 +5,6 @@
 #include <framework/graphics/core/context.h>
 #include <framework/graphics/opengl/opengl_shader.h>
 #include <framework/graphics/opengl/opengl_texture.h>
-#include <SDL2/SDL_video.h>
 
 namespace framework {
 namespace graphics {
@@ -15,16 +14,18 @@ class OpenGLContext : public core::Context
 {
 public:
 	OpenGLContext();
-	~OpenGLContext();
 
-	OBJECT_GETACCESSOR(SDL_GLContext, const SDL_GLContext, sdlContext);
-	OBJECT_ACCESSOR_DYNAMIC(bool, bool, vsync, SDL_GL_SetSwapInterval, SDL_GL_GetSwapInterval);
+	bool vsync() const { return m_vsync; }
+	void vsync(bool value) {
+		m_vsync = value;
+		glfwSwapInterval(m_vsync);
+	}
 
-	framework::graphics::core::Shader_ptr makeShader(std::string vertexCode, std::string pixelCode) override final {
+	Shader_ptr makeShader(std::string vertexCode, std::string pixelCode) override final {
 		return std::make_shared<OpenGLShader>(vertexCode, pixelCode);
 	}
 
-	framework::core::Texture_ptr makeTexture(uint8_t* buffer, uint64_t size) override final {
+	Texture_ptr makeTexture(uint8_t* buffer, uint64_t size) override final {
 		return std::make_shared<OpenGLTexture>(buffer, size);
 	}
 
@@ -41,11 +42,8 @@ public:
 	void beginFrame() override final;
 	void endFrame() override final;
 
-	static uint32_t WindowFlags() {
-		return SDL_WINDOW_OPENGL;
-	}
 private:
-	SDL_GLContext m_sdlContext;
+	bool m_vsync;
 };
 
 } // ns opengl

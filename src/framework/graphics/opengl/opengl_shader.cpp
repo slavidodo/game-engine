@@ -3,9 +3,6 @@
 
 #include "opengl_shader.h"
 
-#include <GL/glew.h>
-#include <glm/gtc/type_ptr.hpp>
-
 using namespace framework::graphics::opengl;
 
 namespace {

@@ -3,7 +3,6 @@
 #define FRAMEWORK_GRAPHICS_OPENGL_HARDWARE_BUFFER_IMPL_H
 
 #include <framework/graphics/rendering/hardware_buffer.h>
-#include <GL/glew.h>
 
 namespace framework {
 namespace graphics {

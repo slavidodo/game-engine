@@ -32,15 +32,10 @@ int main(int argc, char* argv[])
 {
 	std::vector<std::string> args(argv, argv + argc);
 
-	uint32_t defaultWindowFlags = SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE;
-	uint32_t windowFlags = Context::WindowFlags() | defaultWindowFlags;
-
 	if (!g_app.init())
 		return 1;
 
-	// this will mostly happen when compiling using vulkan
-	// and it's not actually supported in SDL2
-	if (g_window.init(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, windowFlags))
+	if (g_window.init(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT))
 		g_window.context(new Context());
 #ifndef RENDERING_OPENGL_FALLBACK
 	else if (g_window.init(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, framework::graphics::opengl::OpenGLContext::WindowFlags() | defaultWindowFlags))

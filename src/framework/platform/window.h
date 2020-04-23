@@ -3,7 +3,6 @@
 #define FRAMEWORK_PLATFORM_WINDOW_H
 
 #include <framework/graphics/core/context.h>
-#include <SDL2/SDL.h>
 
 namespace framework {
 namespace platform {
@@ -14,7 +13,7 @@ public:
 	Window() = default;
 	~Window();
 
-	bool init(std::string title, int32_t width, int32_t height, uint32_t flags);
+	bool init(std::string title, int32_t width, int32_t height);
 	void terminate();
 
 	Window(const Window&) = delete;
@@ -28,17 +27,18 @@ public:
 	void updateWindowSize();
 	void resize(glm::uvec2 size);
 
+	void title(std::string value);
 	const std::string title() const {
-		return SDL_GetWindowTitle(m_sdlWindow);
+		return m_title;
 	}
 
-	OBJECT_GETACCESSOR(SDL_Window*, const SDL_Window* , sdlWindow);
+	OBJECT_GETACCESSOR(GLFWwindow*, const GLFWwindow* , glfwWindow);
 	OBJECT_ACCESSOR(framework::graphics::core::Context*, const framework::graphics::core::Context* , context);
 
 private:
-
-	SDL_Window* m_sdlWindow;
+	GLFWwindow* m_glfwWindow;
 	framework::graphics::core::Context* m_context;
+	std::string m_title;
 
 	glm::uvec2 m_size;
 

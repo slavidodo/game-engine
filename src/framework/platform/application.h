@@ -2,8 +2,6 @@
 #ifndef FRAMEWORK_PLATFORM_APPLICATION_H
 #define FRAMEWORK_PLATFORM_APPLICATION_H
 
-#include <SDL2/SDL.h>
-
 namespace framework {
 namespace platform {
 
@@ -11,18 +9,17 @@ class Application
 {
 public:
 	Application() = default;
+	Application(const Application&) = delete;
+	Application& operator=(const Application&) = delete;
 
 	bool init();
 	void terminate();
 
 	void run();
 
-	Application(const Application&) = delete;
-	Application& operator=(const Application&) = delete;
-
 protected:
-	void handleEvent(const SDL_Event& e);
-	void handleWindowEvent(const SDL_WindowEvent& e);
+	static void onKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void onFramebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 private:
 	bool m_initialized = false;

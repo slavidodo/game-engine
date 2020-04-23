@@ -2,10 +2,9 @@
 #include "pch.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "opengl_context.h"
 #include "opengl_texture.h"
 
-#include <GL/glew.h>
+#include "opengl_context.h"
 
 using namespace framework::graphics::opengl;
 

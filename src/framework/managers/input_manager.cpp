@@ -9,22 +9,7 @@ using namespace framework::managers;
 
 InputManager g_inputManager;
 
-void InputManager::onKeyDown(const SDL_KeyboardEvent& e)
+void InputManager::onKeyCallback(int32_t key, int32_t scancode, int32_t action, int32_t mods)
 {
-	// value refers to last pressed time
-	uint32_t& value = m_keys[e.keysym.sym];
-
-	if (value != 0) {
-		// repeat
-	} else {
-		// no repeat
-	}
-
-	value = SDL_GetTicks();
-}
-
-void InputManager::onKeyUp(const SDL_KeyboardEvent& e)
-{
-	uint32_t& value = m_keys[e.keysym.sym];
-	value = 0;
+	// TODO
 }

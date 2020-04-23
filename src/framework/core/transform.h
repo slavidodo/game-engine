@@ -22,7 +22,7 @@ public:
 	}
 
 	OBJECT_GETACCESSOR(glm::fvec3, glm::fvec3, translation);
-	OBJECT_GETACCESSOR(glm::fquat, glm::quat, rotation);
+	OBJECT_GETACCESSOR(glm::fquat, glm::fquat, rotation);
 	OBJECT_GETACCESSOR(glm::fvec3, glm::fvec3, scale);
 
 	void translation(glm::fvec3 value);

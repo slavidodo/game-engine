@@ -47,7 +47,7 @@ void Transform::lookAt(glm::fvec3 position)
 {
 	// if there are pending changes, just recalculate up vector
 	if (m_mustUpdate)
-		m_up = m_rotation * glm::vec3(0.0, 1.0, 0.0);
+		m_up = m_rotation * glm::fvec3(0.0, 1.0, 0.0);
 
 	glm::fmat4 rotationMat = glm::lookAt(position, m_translation, m_up);
 	glm::fquat rotationQuat = glm::quat_cast(rotationMat);
@@ -59,9 +59,9 @@ void Transform::ensureUpdated()
 	if (m_mustUpdate) {
 		m_mustUpdate = false;
 
-		m_forward = m_rotation * glm::vec3(0.0, 0.0, 1.0);
-		m_right = m_rotation * glm::vec3(1.0, 0.0, 0.0);
-		m_up = m_rotation * glm::vec3(0.0, 1.0, 0.0);
+		m_forward = m_rotation * glm::fvec3(0.0, 0.0, 1.0);
+		m_right = m_rotation * glm::fvec3(1.0, 0.0, 0.0);
+		m_up = m_rotation * glm::fvec3(0.0, 1.0, 0.0);
 
 		// update the model matrix
 		m_localToWorld = glm::fmat4(1.0f);
