@@ -154,11 +154,12 @@
     <ClCompile Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.cpp">
       <Filter>framework\graphics\opengl</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\autotrack_camera.cpp">
+      <Filter>framework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="../src/framework/pch.h">
-      <Filter>framework</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\framework\platform\application.h">
       <Filter>framework\platform</Filter>
     </ClInclude>
@@ -267,5 +268,9 @@
     <ClInclude Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.h">
       <Filter>framework\graphics\opengl</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\autotrack_camera.h">
+      <Filter>framework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\pch.h" />
   </ItemGroup>
 </Project>

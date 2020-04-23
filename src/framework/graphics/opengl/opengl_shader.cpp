@@ -1,5 +1,5 @@
 
-#include <framework/pch.h>
+#include "pch.h"
 
 #include "opengl_shader.h"
 
@@ -163,7 +163,7 @@ void OpenGLShader::setFloat4Array(std::string global, glm::fvec4* array, std::si
 	glUniform4fv(getLocation(global), (int32_t)size, glm::value_ptr(array[0]));
 }
 
-void OpenGLShader::setMat4x4(std::string global, glm::mat4x4 mat)
+void OpenGLShader::setMat4x4(std::string global, glm::fmat4 mat)
 {
 	checkInit();
 	glUniformMatrix4fv(getLocation(global), 1, GL_FALSE, glm::value_ptr(mat));

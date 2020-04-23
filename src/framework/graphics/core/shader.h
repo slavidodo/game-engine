@@ -34,7 +34,7 @@ public:
 	virtual void setFloat3Array(std::string global, glm::fvec3* array, std::size_t size) = 0;
 	virtual void setFloat4Array(std::string global, glm::fvec4* array, std::size_t size) = 0;
 
-	virtual void setMat4x4(std::string global, glm::mat4x4 mat) = 0;
+	virtual void setMat4x4(std::string global, glm::fmat4 mat) = 0;
 
 	virtual void use() = 0;
 };

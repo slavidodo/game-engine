@@ -89,6 +89,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../src;$(VULKAN_SDK)/Include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -168,6 +170,7 @@
     <ClCompile Include="..\src\framework\core\mesh.cpp" />
     <ClCompile Include="..\src\framework\filesystem\assimp_iostream.cpp" />
     <ClCompile Include="..\src\framework\filesystem\file.cpp" />
+    <ClCompile Include="..\src\framework\graphics\autotrack_camera.cpp" />
     <ClCompile Include="..\src\framework\graphics\camera.cpp" />
     <ClCompile Include="..\src\framework\graphics\core\context.cpp" />
     <ClCompile Include="..\src\framework\graphics\core\shader.cpp" />
@@ -194,9 +197,11 @@
     <ClCompile Include="..\src\framework\managers\scene_manager.cpp" />
     <ClCompile Include="..\src\framework\platform\application.cpp" />
     <ClCompile Include="..\src\framework\platform\window.cpp" />
+    <ClCompile Include="..\src\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="../src/framework/pch.h" />
     <ClInclude Include="..\src\framework\core\model.h" />
     <ClInclude Include="..\src\framework\core\scene\object.h" />
     <ClInclude Include="..\src\framework\core\scene\scene_node.h" />
@@ -207,6 +212,7 @@
     <ClInclude Include="..\src\framework\core\mesh.h" />
     <ClInclude Include="..\src\framework\filesystem\assimp_iostream.h" />
     <ClInclude Include="..\src\framework\filesystem\file.h" />
+    <ClInclude Include="..\src\framework\graphics\autotrack_camera.h" />
     <ClInclude Include="..\src\framework\graphics\camera.h" />
     <ClInclude Include="..\src\framework\graphics\core\context.h" />
     <ClInclude Include="..\src\framework\graphics\core\shader.h" />
@@ -233,6 +239,7 @@
     <ClInclude Include="..\src\framework\managers\scene_manager.h" />
     <ClInclude Include="..\src\framework\platform\application.h" />
     <ClInclude Include="..\src\framework\platform\window.h" />
+    <ClInclude Include="..\src\pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
