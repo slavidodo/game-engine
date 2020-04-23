@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
+    <ClCompile Include="..\src\framework\core\math\aabb.cpp" />
     <ClCompile Include="..\src\framework\core\model.cpp" />
     <ClCompile Include="..\src\framework\core\scene\object.cpp" />
     <ClCompile Include="..\src\framework\core\scene\scene_node.cpp" />
@@ -202,6 +203,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\framework\core\math\aabb.h" />
     <ClInclude Include="..\src\framework\core\model.h" />
     <ClInclude Include="..\src\framework\core\scene\object.h" />
     <ClInclude Include="..\src\framework\core\scene\scene_node.h" />
