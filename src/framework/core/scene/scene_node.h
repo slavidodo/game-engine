@@ -29,13 +29,36 @@ public:
     Object_ptr attachObject(Object_ptr&& obj);
     Object_ptr attachObject(Object* obj);
 
+    OBJECT_GETACCESSOR(Transform_ptr, const Transform_ptr, transform);
+
+    template<typename T>
+    std::shared_ptr<T> getAttachedObject() const {
+        auto it = m_attachedObjects.begin();
+        auto end = m_attachedObjects.end();
+        while (it != end) {
+            std::shared_ptr<T> p = std::dynamic_pointer_cast<T>(*it);
+            if (p != nullptr) {
+                return *p;
+            }
+
+            it++;
+        }
+
+        return nullptr;
+    }
+
+    template<>
+    std::shared_ptr<Transform> getAttachedObject() const {
+        return m_transform;
+    }
+
 private:
     Object_ptr attachObjectInternal(Object_ptr&& obj);
 
     std::vector<SceneNode_ptr> m_children;
-    std::vector<Object_ptr> m_attachedObjects;
+    mutable std::vector<Object_ptr> m_attachedObjects;
 	SceneNode_weakPtr m_parent;
-    Transform m_transform;
+    Transform_ptr m_transform;
     bool m_active;
 
 protected:

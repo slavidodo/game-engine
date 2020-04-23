@@ -37,7 +37,5 @@ OBJECT_SETACCESSOR_DYNAMIC(type, name, set_state) \
 OBJECT_GETACCESSOR_DYNAMIC(type, c_type, name, get_state, __VA_ARGS__)
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
+#include <glm/ext.hpp>
 #endif

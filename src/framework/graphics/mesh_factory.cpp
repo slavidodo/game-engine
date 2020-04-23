@@ -1,5 +1,5 @@
 
-#include <framework/pch.h>
+#include "pch.h"
 
 #include "mesh_factory.h"
 
@@ -51,6 +51,25 @@ framework::core::Mesh_ptr MeshFactory::createCube(float edgeLength /* = 100 */)
 		 edgeLength, -edgeLength,  edgeLength,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
 		-edgeLength, -edgeLength,  edgeLength,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f };
 
+	float indices[totalIndices] = {
+		// front
+		0, 1, 2, 0, 2, 3,
+		
+		// back
+		4, 5, 6, 4, 6, 7,
+
+		// left
+		8, 9, 10, 8, 10, 11,
+
+		// right
+		12, 13, 14, 12, 14, 15,
+
+		// up
+		16, 17, 18, 16, 18, 19,
+
+		// back
+		20, 21, 22, 20, 22, 23 };
+
 	core::Mesh_ptr mesh = std::make_shared<core::Mesh>();
 	mesh->sharedVertexData(std::make_shared<rendering::VertexData>());
 	mesh->sharedVertexData()->vertexCount(totalVertices);
@@ -62,10 +81,15 @@ framework::core::Mesh_ptr MeshFactory::createCube(float edgeLength /* = 100 */)
 	offset += vertexFormat->addItem(rendering::VERTEX_ELEMENT_SEMANTIC_POSITION, offset, rendering::VERTEX_ELEMENT_TYPE_FLOAT3).size();
 	offset += vertexFormat->addItem(rendering::VERTEX_ELEMENT_SEMANTIC_POSITION, offset, rendering::VERTEX_ELEMENT_TYPE_FLOAT2).size();
 	
+	managers::HardwareBufferManager& hwBufferMgr = managers::HardwareBufferManager::instance();
+
 	size_t vertexSize = offset;
-	auto vertexBuffer = managers::HardwareBufferManager::instance().createVertexBuffer(totalVertices, vertexSize,
-																					   rendering::HardwareBuffer::USAGE_STATIC_WRITE_ONLY);
+	auto vertexBuffer = hwBufferMgr.createVertexBuffer(totalVertices, vertexSize,
+													   rendering::HardwareBuffer::USAGE_STATIC_WRITE_ONLY);
 	vertexBuffer->write((void*)vertices, vertexBuffer->size(), 0, true);
+
+	auto indexBuffer = hwBufferMgr.createIndexBuffer(totalIndices, rendering::HardwareBuffer::USAGE_STATIC_WRITE_ONLY);
+	indexBuffer->write((void*)totalIndices, indexBuffer->size(), 0, true);
 
 	// TODO; hell no, there are a lot more to do
 	// this buffer wont really draw itself

@@ -37,7 +37,7 @@ public:
 	inline void setFloat3Array(std::string global, glm::fvec3* array, std::size_t size) override final;
 	inline void setFloat4Array(std::string global, glm::fvec4* array, std::size_t size) override final;
 
-	inline void setMat4x4(std::string global, glm::mat4x4 mat) override final;
+	inline void setMat4x4(std::string global, glm::fmat4 mat) override final;
 
 	void use() override final;
 

@@ -1,8 +1,10 @@
 
-#include <framework/pch.h>
+#include "pch.h"
 
 #include <framework/platform/application.h>
 #include <framework/platform/window.h>
+#include <framework/core/transform.h>
+#include <glm/gtx/string_cast.hpp>
 
 const std::string WINDOW_TITLE = "Game Engine";
 constexpr int32_t WINDOW_WIDTH = 1024;

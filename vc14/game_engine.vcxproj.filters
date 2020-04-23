@@ -160,11 +160,12 @@
     <ClCompile Include="..\src\framework\core\math\aabb.cpp">
       <Filter>framework\core\math</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\framework\graphics\autotrack_camera.cpp">
+      <Filter>framework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="../src/framework/pch.h">
-      <Filter>framework</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\framework\platform\application.h">
       <Filter>framework\platform</Filter>
     </ClInclude>
@@ -276,5 +277,9 @@
     <ClInclude Include="..\src\framework\core\math\aabb.h">
       <Filter>framework\core\math</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\framework\graphics\autotrack_camera.h">
+      <Filter>framework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\pch.h" />
   </ItemGroup>
 </Project>

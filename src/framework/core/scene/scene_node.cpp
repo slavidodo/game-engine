@@ -1,5 +1,5 @@
 
-#include <framework/pch.h>
+#include "pch.h"
 
 #include "scene_node.h"
 
@@ -17,6 +17,8 @@ Object_ptr SceneNode::attachObject(Object* obj)
 
 Object_ptr SceneNode::attachObjectInternal(Object_ptr&& obj)
 {
+	obj->m_parent = weak_from_this();
+
 	m_attachedObjects.push_back(std::move(obj));
 	return m_attachedObjects.back();
 }
