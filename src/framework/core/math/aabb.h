@@ -2,10 +2,6 @@
 #ifndef FRAMEWORK_CORE_MATH_AABB_H
 #define FRAMEWORK_CORE_MATH_AABB_H
 
-#include <assert.h>
-#include <glm/glm.hpp>
-
-
 namespace framework {
 namespace core {
 namespace math {
