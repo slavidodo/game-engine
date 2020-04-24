@@ -1,285 +1,251 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="framework">
+    <Filter Include="TESTS">
+      <UniqueIdentifier>{770ccdf6-d416-4ac5-bbd6-5232849ae36c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
       <UniqueIdentifier>{a33ca838-4bfd-40e5-b89a-57f465243511}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framework\platform">
-      <UniqueIdentifier>{4d6bfdfb-04a7-469c-a371-8c16219c1974}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="framework\graphics">
-      <UniqueIdentifier>{6569e3b5-8bfe-44ed-b663-8b4568da903c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="framework\graphics\core">
-      <UniqueIdentifier>{13579c3e-705e-4d9b-bcce-19ed75d8420f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="framework\graphics\opengl">
-      <UniqueIdentifier>{6ad26ccb-4ed5-4aed-b6bd-a3ac2ca76631}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="framework\core">
+    <Filter Include="Engine\Core">
       <UniqueIdentifier>{8b81050f-a88d-46e0-b3a5-493af50cdb8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framework\ui">
+    <Filter Include="Engine\Core\Math">
+      <UniqueIdentifier>{0c97da2d-41ac-45b1-aefa-f2a66b102724}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\RHI">
+      <UniqueIdentifier>{6e56c101-688b-4c10-b03a-73aa7a0c1679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\UI">
       <UniqueIdentifier>{cdcebabe-3b03-4a32-a608-21aca377cf87}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framework\network">
+    <Filter Include="Engine\Network">
       <UniqueIdentifier>{ba2be2e7-0835-4fd4-969d-586eac36ea77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framework\phsyics">
-      <UniqueIdentifier>{01b88ad9-328e-469b-93db-b246d5ad5d76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="framework\bindings">
+    <Filter Include="Engine\bindings">
       <UniqueIdentifier>{22831cad-59ad-4817-b935-ad02a5bce57b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framework\managers">
+    <Filter Include="Engine\Audio">
       <UniqueIdentifier>{b544bceb-2f52-4a26-9d2e-94c2c87c7b6e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framework\core\scene">
-      <UniqueIdentifier>{440f2a94-e17d-4e78-b62b-4d8cde61ff36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="framework\filesystem">
+    <Filter Include="Engine\Filesystem">
       <UniqueIdentifier>{bad3b308-7190-4d2c-a6b9-faac3247f776}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framework\graphics\rendering">
-      <UniqueIdentifier>{40316b2f-89a1-4af0-a8ec-41b76b79f7d7}</UniqueIdentifier>
+    <Filter Include="Engine\RHI">
+      <UniqueIdentifier>{9e0c41b1-cd96-4c48-b79f-4b8ccc3e42fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framework\core\math">
-      <UniqueIdentifier>{0c97da2d-41ac-45b1-aefa-f2a66b102724}</UniqueIdentifier>
+    <Filter Include="Engine\Physics">
+      <UniqueIdentifier>{01b88ad9-328e-469b-93db-b246d5ad5d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Platform">
+      <UniqueIdentifier>{4d6bfdfb-04a7-469c-a371-8c16219c1974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Input">
+      <UniqueIdentifier>{4f4baef6-543c-4658-bb95-26f65c817fa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\OpenGL3RHI">
+      <UniqueIdentifier>{a4329d9e-d289-4056-9684-17534a5609fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene">
+      <UniqueIdentifier>{e939eb66-b796-4ee9-bb2e-8c76609bc5ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
-    <ClCompile Include="..\src\framework\platform\application.cpp">
-      <Filter>framework\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\platform\window.cpp">
-      <Filter>framework\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\core\context.cpp">
-      <Filter>framework\graphics\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\material.cpp">
-      <Filter>framework\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\core\shader.cpp">
-      <Filter>framework\graphics\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\mesh.cpp">
-      <Filter>framework\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_context.cpp">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_shader.cpp">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\utils.cpp">
-      <Filter>framework\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\managers\input_manager.cpp">
-      <Filter>framework\managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\managers\scene_manager.cpp">
-      <Filter>framework\managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\mesh_renderer.cpp">
-      <Filter>framework\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\scene.cpp">
-      <Filter>framework\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\camera.cpp">
-      <Filter>framework\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\transform.cpp">
-      <Filter>framework\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\managers\audio_manager.cpp">
-      <Filter>framework\managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\managers\resource_manager.cpp">
-      <Filter>framework\managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\scene\object.cpp">
-      <Filter>framework\core\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\scene\scene_node.cpp">
-      <Filter>framework\core\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\model.cpp">
-      <Filter>framework\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\texture.cpp">
-      <Filter>framework\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\filesystem\file.cpp">
-      <Filter>framework\filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_texture.cpp">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\filesystem\assimp_iostream.cpp">
-      <Filter>framework\filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\rendering\vertex_format.cpp">
-      <Filter>framework\graphics\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\rendering\index_buffer.cpp">
-      <Filter>framework\graphics\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\rendering\vertex_buffer.cpp">
-      <Filter>framework\graphics\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\rendering\hardware_buffer.cpp">
-      <Filter>framework\graphics\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\managers\hardware_buffer_manager.cpp">
-      <Filter>framework\managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_index_buffer.cpp">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_vertex_buffer.cpp">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_impl.cpp">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\rendering\vertex_data.cpp">
-      <Filter>framework\graphics\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\rendering\index_data.cpp">
-      <Filter>framework\graphics\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\mesh_factory.cpp">
-      <Filter>framework\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.cpp">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\core\math\aabb.cpp">
-      <Filter>framework\core\math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framework\graphics\autotrack_camera.cpp">
-      <Filter>framework\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\pch.cpp" />
+    <ClCompile Include="..\src\Tests\ExampleScene.cpp">
+      <Filter>TESTS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Filesystem\AssimpIOStream.cpp">
+      <Filter>Engine\Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\RHI\RHIContext.cpp">
+      <Filter>Engine\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Platform\CoreApplication.cpp">
+      <Filter>Engine\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Platform\Window.cpp">
+      <Filter>Engine\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\Model.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\RHI\RHITexture.cpp">
+      <Filter>Engine\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\RHI\VertexFormat.cpp">
+      <Filter>Engine\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\RHI\RHIBuffer.cpp">
+      <Filter>Engine\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\RHI\RHIResource.cpp">
+      <Filter>Engine\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\Camera.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\StaticMeshGenerator.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\SubMesh.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\Mesh.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Filesystem\File.cpp">
+      <Filter>Engine\Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Filesystem\ResourceManager.cpp">
+      <Filter>Engine\Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\Material.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\Shader.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Audio\AudioManager.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\Image.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Input\InputManager.cpp">
+      <Filter>Engine\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\OpenGL3RHI\OpenGL3RHIContext.cpp">
+      <Filter>Engine\OpenGL3RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\OpenGL3RHI\OpenGL3RTShader.cpp">
+      <Filter>Engine\OpenGL3RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\OpenGL3RHI\OpenGL3RHIBuffer.cpp">
+      <Filter>Engine\OpenGL3RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\OpenGL3RHI\OpenGl3RHIBufferImpl.cpp">
+      <Filter>Engine\OpenGL3RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\SceneNode.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\Object.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\Transform.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\SceneManager.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\Scene.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Utils.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\Math\AABB.cpp">
+      <Filter>Engine\Core\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\framework\platform\application.h">
-      <Filter>framework\platform</Filter>
+    <ClInclude Include="..\src\Tests\ExampleScene.h">
+      <Filter>TESTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\platform\window.h">
-      <Filter>framework\platform</Filter>
+    <ClInclude Include="..\src\Engine\Filesystem\AssimpIOStream.h">
+      <Filter>Engine\Filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\core\context.h">
-      <Filter>framework\graphics\core</Filter>
+    <ClInclude Include="..\src\Engine\RHI\RHIContext.h">
+      <Filter>Engine\RHI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\core\material.h">
-      <Filter>framework\core</Filter>
+    <ClInclude Include="..\src\Engine\platform\CoreApplication.h">
+      <Filter>Engine\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\core\shader.h">
-      <Filter>framework\graphics\core</Filter>
+    <ClInclude Include="..\src\Engine\Platform\Window.h">
+      <Filter>Engine\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\core\mesh.h">
-      <Filter>framework\core</Filter>
+    <ClInclude Include="..\src\Engine\Core\Model.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_context.h">
-      <Filter>framework\graphics\opengl</Filter>
+    <ClInclude Include="..\src\Engine\RHI\RHIResource.h">
+      <Filter>Engine\RHI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_shader.h">
-      <Filter>framework\graphics\opengl</Filter>
+    <ClInclude Include="..\src\Engine\RHI\RHITexture.h">
+      <Filter>Engine\RHI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\core\utils.h">
-      <Filter>framework\core</Filter>
+    <ClInclude Include="..\src\Engine\RHI\VertexFormat.h">
+      <Filter>Engine\RHI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\managers\input_manager.h">
-      <Filter>framework\managers</Filter>
+    <ClInclude Include="..\src\Engine\RHI\RHIBuffer.h">
+      <Filter>Engine\RHI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\managers\scene_manager.h">
-      <Filter>framework\managers</Filter>
+    <ClInclude Include="..\src\Engine\Core\Camera.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\mesh_renderer.h">
-      <Filter>framework\graphics</Filter>
+    <ClInclude Include="..\src\Engine\StaticMeshGenerator.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\scene.h">
-      <Filter>framework\graphics</Filter>
+    <ClInclude Include="..\src\Engine\Core\Mesh.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\camera.h">
-      <Filter>framework\graphics</Filter>
+    <ClInclude Include="..\src\Engine\Core\SubMesh.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\core\transform.h">
-      <Filter>framework\core</Filter>
+    <ClInclude Include="..\src\Engine\Filesystem\File.h">
+      <Filter>Engine\Filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\managers\audio_manager.h">
-      <Filter>framework\managers</Filter>
+    <ClInclude Include="..\src\Engine\Filesystem\ResourceManager.h">
+      <Filter>Engine\Filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\managers\resource_manager.h">
-      <Filter>framework\managers</Filter>
+    <ClInclude Include="..\src\Engine\Core\Material.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\core\scene\object.h">
-      <Filter>framework\core\scene</Filter>
+    <ClInclude Include="..\src\Engine\Core\Shader.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\core\scene\scene_node.h">
-      <Filter>framework\core\scene</Filter>
+    <ClInclude Include="..\src\Engine\Audio\AudioManager.h">
+      <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\core\model.h">
-      <Filter>framework\core</Filter>
+    <ClInclude Include="..\src\Engine\Core\Image.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\core\texture.h">
-      <Filter>framework\core</Filter>
+    <ClInclude Include="..\src\Engine\Input\InputManager.h">
+      <Filter>Engine\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\filesystem\file.h">
-      <Filter>framework\filesystem</Filter>
+    <ClInclude Include="..\src\Engine\OpenGL3RHI\OpenGL3RHIContext.h">
+      <Filter>Engine\OpenGL3RHI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_texture.h">
-      <Filter>framework\graphics\opengl</Filter>
+    <ClInclude Include="..\src\Engine\OpenGL3RHI\OpenGL3RTShader.h">
+      <Filter>Engine\OpenGL3RHI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\filesystem\assimp_iostream.h">
-      <Filter>framework\filesystem</Filter>
+    <ClInclude Include="..\src\Engine\OpenGL3RHI\OpenGL3RHIBuffer.h">
+      <Filter>Engine\OpenGL3RHI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\rendering\vertex_buffer.h">
-      <Filter>framework\graphics\rendering</Filter>
+    <ClInclude Include="..\src\Engine\OpenGL3RHI\OpenGl3RHIBufferImpl.h">
+      <Filter>Engine\OpenGL3RHI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\rendering\vertex_format.h">
-      <Filter>framework\graphics\rendering</Filter>
+    <ClInclude Include="..\src\Engine\Scene\SceneNode.h">
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\rendering\index_buffer.h">
-      <Filter>framework\graphics\rendering</Filter>
+    <ClInclude Include="..\src\Engine\Core\Object.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\rendering\hardware_buffer.h">
-      <Filter>framework\graphics\rendering</Filter>
+    <ClInclude Include="..\src\Engine\Core\Transform.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\managers\hardware_buffer_manager.h">
-      <Filter>framework\managers</Filter>
+    <ClInclude Include="..\src\Engine\Scene\SceneManager.h">
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_index_buffer.h">
-      <Filter>framework\graphics\opengl</Filter>
+    <ClInclude Include="..\src\Engine\Scene\Scene.h">
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_vertex_buffer.h">
-      <Filter>framework\graphics\opengl</Filter>
+    <ClInclude Include="..\src\Engine\Utils.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_impl.h">
-      <Filter>framework\graphics\opengl</Filter>
+    <ClInclude Include="..\src\Engine\Core\Math\AABB.h">
+      <Filter>Engine\Core\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\rendering\index_data.h">
-      <Filter>framework\graphics\rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\rendering\vertex_data.h">
-      <Filter>framework\graphics\rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\mesh_factory.h">
-      <Filter>framework\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.h">
-      <Filter>framework\graphics\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framework\core\math\aabb.h">
-      <Filter>framework\core\math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framework\graphics\autotrack_camera.h">
-      <Filter>framework\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\pch.h" />
   </ItemGroup>
 </Project>

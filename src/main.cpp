@@ -1,56 +1,80 @@
 
 #include "pch.h"
 
-#include <framework/platform/application.h>
-#include <framework/platform/window.h>
-#include <framework/core/transform.h>
-#include <glm/gtx/string_cast.hpp>
+#include "Engine/Platform/CoreApplication.h"
+#include "Engine/Platform/Window.h"
 
 const std::string WINDOW_TITLE = "Game Engine";
 constexpr int32_t WINDOW_WIDTH = 1024;
 constexpr int32_t WINDOW_HEIGHT = 768;
 
-#include <framework/graphics/opengl/opengl_context.h>
+#include "Engine/OpenGL3RHI/OpenGL3RHIContext.h"
 
 #if defined(DIRECTX12_RENDERER_BACKEND)
-#	include <framework/graphics/d3d12/d3d12_context.h>
+#	include "Engine/D3D12RHI/D3D12RHIContext.h"
 #	define RENDERING_BACKEND directx12::D3D12Context
 #elif defined(DIRECTX11_RENDERER_BACKEND)
-#	include <framework/graphics/d3d11/d3d11_context.h>
+#	include "Engine/D3D12RHI/D3D11RHIContext.h"
 #	define RENDERING_BACKEND directx11::D3D11Context
 #elif defined(VULKAN_RENDERER_BACKEND)
-#	include <framework/graphics/vulkan/vulkan_context.h>
-#	define RENDERING_BACKEND vulkan::VulkanContext
+#	include "Engine/VulkanRHI/VulkanRHIContext.h"
+#	define RENDERING_BACKEND VulkanRHIContext
 #else
-#	define RENDERING_BACKEND opengl::OpenGLContext
-#	define RENDERING_OPENGL_FALLBACK
+#	define RENDERING_BACKEND OpenGL3RHIContext
+#	define RENDERING_OPENGL3_FALLBACK
 #endif
 
-using Context = framework::graphics::RENDERING_BACKEND;
+using Context = RENDERING_BACKEND;
 
 int main(int argc, char* argv[])
 {
 	std::vector<std::string> args(argv, argv + argc);
 
-	if (!g_app.init())
+	// initialize core app
+	if (!g_app.Init())
 		return 1;
 
-	if (g_window.init(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT))
-		g_window.context(new Context());
-#ifndef RENDERING_OPENGL_FALLBACK
-	else if (g_window.init(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, framework::graphics::opengl::OpenGLContext::WindowFlags() | defaultWindowFlags))
-		g_window.context(new framework::graphics::opengl::OpenGLContext());
+	// initialize window
+	if (!g_window.Init(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT))
+		return 1;
+
+	// TODO the whole process of creating a window should involve creating its own context
+	// resources and manage it on its Init/Terminate
+
+	GLFWwindow* glfwWindow = g_window.glfwWindow();
+	RHIContext* context = new Context(glfwWindow);
+
+	if (!context->Init()) {
+		delete context;
+
+#ifndef RENDERING_OPENGL3_FALLBACK
+		context = new OpenGL3RHIContext(glfwWindow);
+		if (!context->Init()) {
+			delete context;
+			return 1;
+		}
+#else
+		return 1;
 #endif
-	else
-		return 1;
+	}
 
-	g_window.context()->init();
+	// set the main context of the window
+	g_window.context(context);
 
+	// show window
 	g_window.show();
-	g_app.run();
 
-	g_window.terminate();
-	g_app.terminate();
+	// run application's main loop
+	g_app.RunMainLoop();
+
+	// shut down, remove context and related resources
+	g_window.context(nullptr);
+	context->Terminate();
+	delete context;
+
+	// terminate window and core app
+	g_window.Terminate();
+	g_app.Terminate();
 
 	return 0;
 }

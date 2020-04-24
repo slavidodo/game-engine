@@ -106,7 +106,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../src;$(VULKAN_SDK)/Include</AdditionalIncludeDirectories>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -127,6 +127,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../src;$(VULKAN_SDK)/Include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,6 +150,8 @@
       <AdditionalIncludeDirectories>../src;$(VULKAN_SDK)/Include</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)\</ObjectFileName>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -160,88 +164,78 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
-    <ClCompile Include="..\src\framework\core\math\aabb.cpp" />
-    <ClCompile Include="..\src\framework\core\model.cpp" />
-    <ClCompile Include="..\src\framework\core\scene\object.cpp" />
-    <ClCompile Include="..\src\framework\core\scene\scene_node.cpp" />
-    <ClCompile Include="..\src\framework\core\texture.cpp" />
-    <ClCompile Include="..\src\framework\core\transform.cpp" />
-    <ClCompile Include="..\src\framework\core\utils.cpp" />
-    <ClCompile Include="..\src\framework\core\material.cpp" />
-    <ClCompile Include="..\src\framework\core\mesh.cpp" />
-    <ClCompile Include="..\src\framework\filesystem\assimp_iostream.cpp" />
-    <ClCompile Include="..\src\framework\filesystem\file.cpp" />
-    <ClCompile Include="..\src\framework\graphics\autotrack_camera.cpp" />
-    <ClCompile Include="..\src\framework\graphics\camera.cpp" />
-    <ClCompile Include="..\src\framework\graphics\core\context.cpp" />
-    <ClCompile Include="..\src\framework\graphics\core\shader.cpp" />
-    <ClCompile Include="..\src\framework\graphics\mesh_factory.cpp" />
-    <ClCompile Include="..\src\framework\graphics\mesh_renderer.cpp" />
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.cpp" />
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_context.cpp" />
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_impl.cpp" />
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_index_buffer.cpp" />
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_shader.cpp" />
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_texture.cpp" />
-    <ClCompile Include="..\src\framework\graphics\opengl\opengl_vertex_buffer.cpp" />
-    <ClCompile Include="..\src\framework\graphics\rendering\hardware_buffer.cpp" />
-    <ClCompile Include="..\src\framework\graphics\rendering\index_buffer.cpp" />
-    <ClCompile Include="..\src\framework\graphics\rendering\index_data.cpp" />
-    <ClCompile Include="..\src\framework\graphics\rendering\vertex_buffer.cpp" />
-    <ClCompile Include="..\src\framework\graphics\rendering\vertex_data.cpp" />
-    <ClCompile Include="..\src\framework\graphics\rendering\vertex_format.cpp" />
-    <ClCompile Include="..\src\framework\graphics\scene.cpp" />
-    <ClCompile Include="..\src\framework\managers\audio_manager.cpp" />
-    <ClCompile Include="..\src\framework\managers\hardware_buffer_manager.cpp" />
-    <ClCompile Include="..\src\framework\managers\input_manager.cpp" />
-    <ClCompile Include="..\src\framework\managers\resource_manager.cpp" />
-    <ClCompile Include="..\src\framework\managers\scene_manager.cpp" />
-    <ClCompile Include="..\src\framework\platform\application.cpp" />
-    <ClCompile Include="..\src\framework\platform\window.cpp" />
+    <ClCompile Include="..\src\Engine\Audio\AudioManager.cpp" />
+    <ClCompile Include="..\src\Engine\Core\Camera.cpp" />
+    <ClCompile Include="..\src\Engine\Core\Material.cpp" />
+    <ClCompile Include="..\src\Engine\Core\Math\AABB.cpp" />
+    <ClCompile Include="..\src\Engine\Core\Mesh.cpp" />
+    <ClCompile Include="..\src\Engine\Core\Model.cpp" />
+    <ClCompile Include="..\src\Engine\Core\Image.cpp" />
+    <ClCompile Include="..\src\Engine\Core\Object.cpp" />
+    <ClCompile Include="..\src\Engine\Core\Shader.cpp" />
+    <ClCompile Include="..\src\Engine\Core\SubMesh.cpp" />
+    <ClCompile Include="..\src\Engine\Core\Transform.cpp" />
+    <ClCompile Include="..\src\Engine\Filesystem\AssimpIOStream.cpp" />
+    <ClCompile Include="..\src\Engine\Filesystem\File.cpp" />
+    <ClCompile Include="..\src\Engine\Filesystem\ResourceManager.cpp" />
+    <ClCompile Include="..\src\Engine\Input\InputManager.cpp" />
+    <ClCompile Include="..\src\Engine\OpenGL3RHI\OpenGL3RHIBuffer.cpp" />
+    <ClCompile Include="..\src\Engine\OpenGL3RHI\OpenGl3RHIBufferImpl.cpp" />
+    <ClCompile Include="..\src\Engine\OpenGL3RHI\OpenGL3RHIContext.cpp" />
+    <ClCompile Include="..\src\Engine\OpenGL3RHI\OpenGL3RTShader.cpp" />
+    <ClCompile Include="..\src\Engine\Platform\CoreApplication.cpp" />
+    <ClCompile Include="..\src\Engine\Platform\Window.cpp" />
+    <ClCompile Include="..\src\Engine\RHI\RHIBuffer.cpp" />
+    <ClCompile Include="..\src\Engine\RHI\RHIContext.cpp" />
+    <ClCompile Include="..\src\Engine\RHI\RHIResource.cpp" />
+    <ClCompile Include="..\src\Engine\RHI\RHITexture.cpp" />
+    <ClCompile Include="..\src\Engine\RHI\VertexFormat.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\Scene.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\SceneManager.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\SceneNode.cpp" />
+    <ClCompile Include="..\src\Engine\StaticMeshGenerator.cpp" />
+    <ClCompile Include="..\src\Engine\Utils.cpp" />
     <ClCompile Include="..\src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\src\Tests\ExampleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\framework\core\math\aabb.h" />
-    <ClInclude Include="..\src\framework\core\model.h" />
-    <ClInclude Include="..\src\framework\core\scene\object.h" />
-    <ClInclude Include="..\src\framework\core\scene\scene_node.h" />
-    <ClInclude Include="..\src\framework\core\texture.h" />
-    <ClInclude Include="..\src\framework\core\transform.h" />
-    <ClInclude Include="..\src\framework\core\utils.h" />
-    <ClInclude Include="..\src\framework\core\material.h" />
-    <ClInclude Include="..\src\framework\core\mesh.h" />
-    <ClInclude Include="..\src\framework\filesystem\assimp_iostream.h" />
-    <ClInclude Include="..\src\framework\filesystem\file.h" />
-    <ClInclude Include="..\src\framework\graphics\autotrack_camera.h" />
-    <ClInclude Include="..\src\framework\graphics\camera.h" />
-    <ClInclude Include="..\src\framework\graphics\core\context.h" />
-    <ClInclude Include="..\src\framework\graphics\core\shader.h" />
-    <ClInclude Include="..\src\framework\graphics\mesh_factory.h" />
-    <ClInclude Include="..\src\framework\graphics\mesh_renderer.h" />
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_manager.h" />
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_context.h" />
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_hardware_buffer_impl.h" />
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_index_buffer.h" />
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_shader.h" />
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_texture.h" />
-    <ClInclude Include="..\src\framework\graphics\opengl\opengl_vertex_buffer.h" />
-    <ClInclude Include="..\src\framework\graphics\rendering\hardware_buffer.h" />
-    <ClInclude Include="..\src\framework\graphics\rendering\index_buffer.h" />
-    <ClInclude Include="..\src\framework\graphics\rendering\index_data.h" />
-    <ClInclude Include="..\src\framework\graphics\rendering\vertex_buffer.h" />
-    <ClInclude Include="..\src\framework\graphics\rendering\vertex_data.h" />
-    <ClInclude Include="..\src\framework\graphics\rendering\vertex_format.h" />
-    <ClInclude Include="..\src\framework\graphics\scene.h" />
-    <ClInclude Include="..\src\framework\managers\audio_manager.h" />
-    <ClInclude Include="..\src\framework\managers\hardware_buffer_manager.h" />
-    <ClInclude Include="..\src\framework\managers\input_manager.h" />
-    <ClInclude Include="..\src\framework\managers\resource_manager.h" />
-    <ClInclude Include="..\src\framework\managers\scene_manager.h" />
-    <ClInclude Include="..\src\framework\platform\application.h" />
-    <ClInclude Include="..\src\framework\platform\window.h" />
-    <ClInclude Include="..\src\pch.h" />
+    <ClInclude Include="..\src\Engine\Audio\AudioManager.h" />
+    <ClInclude Include="..\src\Engine\Core\Camera.h" />
+    <ClInclude Include="..\src\Engine\Core\Material.h" />
+    <ClInclude Include="..\src\Engine\Core\Math\AABB.h" />
+    <ClInclude Include="..\src\Engine\Core\Mesh.h" />
+    <ClInclude Include="..\src\Engine\Core\Model.h" />
+    <ClInclude Include="..\src\Engine\Core\Image.h" />
+    <ClInclude Include="..\src\Engine\Core\Object.h" />
+    <ClInclude Include="..\src\Engine\Core\Shader.h" />
+    <ClInclude Include="..\src\Engine\Core\SubMesh.h" />
+    <ClInclude Include="..\src\Engine\Core\Transform.h" />
+    <ClInclude Include="..\src\Engine\Filesystem\AssimpIOStream.h" />
+    <ClInclude Include="..\src\Engine\Filesystem\File.h" />
+    <ClInclude Include="..\src\Engine\Filesystem\ResourceManager.h" />
+    <ClInclude Include="..\src\Engine\Input\InputManager.h" />
+    <ClInclude Include="..\src\Engine\OpenGL3RHI\OpenGL3RHIBuffer.h" />
+    <ClInclude Include="..\src\Engine\OpenGL3RHI\OpenGl3RHIBufferImpl.h" />
+    <ClInclude Include="..\src\Engine\OpenGL3RHI\OpenGL3RHIContext.h" />
+    <ClInclude Include="..\src\Engine\OpenGL3RHI\OpenGL3RTShader.h" />
+    <ClInclude Include="..\src\Engine\platform\CoreApplication.h" />
+    <ClInclude Include="..\src\Engine\Platform\Window.h" />
+    <ClInclude Include="..\src\Engine\RHI\RHIBuffer.h" />
+    <ClInclude Include="..\src\Engine\RHI\RHIContext.h" />
+    <ClInclude Include="..\src\Engine\RHI\RHIResource.h" />
+    <ClInclude Include="..\src\Engine\RHI\RHITexture.h" />
+    <ClInclude Include="..\src\Engine\RHI\VertexFormat.h" />
+    <ClInclude Include="..\src\Engine\Scene\Scene.h" />
+    <ClInclude Include="..\src\Engine\Scene\SceneManager.h" />
+    <ClInclude Include="..\src\Engine\Scene\SceneNode.h" />
+    <ClInclude Include="..\src\Engine\StaticMeshGenerator.h" />
+    <ClInclude Include="..\src\Engine\Utils.h" />
+    <ClInclude Include="..\src\Tests\ExampleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
