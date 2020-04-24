@@ -2,8 +2,8 @@
 #ifndef ENGINE_CORE_MODEL_H
 #define ENGINE_CORE_MODEL_H
 
-#include <Engine/Core/Mesh.h>
-#include <Engine/RHI/RHITexture.h>
+#include "Mesh.h"
+#include "Image.h"
 
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
