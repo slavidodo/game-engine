@@ -26,7 +26,7 @@ void Model::processNode(const aiNode* node, const aiScene* sceneObject, std::str
 			// todo link to material
 		}
 
-		//m_meshes.push_back(std::move(mesh));
+		//mMeshes.push_back(std::move(mesh));
 	}
 
 	// process children nodes

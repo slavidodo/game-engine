@@ -7,11 +7,11 @@
 
 bool ResourceManager::Init()
 {
-	if (m_initialized)
+	if (mInitialized)
 		return true;
 
-	m_initialized = PHYSFS_init(nullptr) != 0;
-	return m_initialized;
+	mInitialized = PHYSFS_init(nullptr) != 0;
+	return mInitialized;
 }
 
 void ResourceManager::Terminate()
@@ -59,5 +59,6 @@ Model_ptr ResourceManager::loadModel(std::string filename)
 	}
 
 	auto model = std::make_shared<Model>(filename, scene);
+	mModelCache.emplace(filename, model);
 	return model;
 }

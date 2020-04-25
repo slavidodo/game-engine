@@ -5,7 +5,7 @@
 
 void Scene::Render()
 {
-	if (!m_mainCamera)
+	if (!mMainCamera)
 		return;
 
 	// determine the frustum of the camera and get all active scene objects

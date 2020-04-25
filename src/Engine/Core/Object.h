@@ -13,7 +13,7 @@ public:
 	Object() {};
 
 protected:
-	std::weak_ptr<SceneNode> m_parent;
+	std::weak_ptr<SceneNode> mParent;
 	friend class SceneNode;
 };
 

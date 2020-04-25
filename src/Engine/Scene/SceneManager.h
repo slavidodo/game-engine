@@ -15,7 +15,7 @@ public:
 	void Render();
 
 private:
-	Scene_ptr m_currentScene;
+	Scene_ptr mCurrentScene;
 };
 
 #endif // ENGINE_SCENE_SCENEMANAGER_H

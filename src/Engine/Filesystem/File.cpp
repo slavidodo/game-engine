@@ -6,7 +6,7 @@
 #include <physfs.h>
 
 File::File(PHYSFS_File* handle)
-	: m_handle(handle)
+	: mHandle(handle)
 {
 }
 
@@ -18,9 +18,9 @@ File::~File()
 bool File::close()
 {
 	int success = 0;
-	if (m_handle && PHYSFS_isInit()) {
-		success = PHYSFS_close(m_handle);
-		m_handle = nullptr;
+	if (mHandle && PHYSFS_isInit()) {
+		success = PHYSFS_close(mHandle);
+		mHandle = nullptr;
 	}
 
 	return success != 0;
@@ -28,30 +28,30 @@ bool File::close()
 
 bool File::flush()
 {
-	return PHYSFS_flush(m_handle) != 0;
+	return PHYSFS_flush(mHandle) != 0;
 }
 
 bool File::seek(uint64_t position)
 {
-	return PHYSFS_seek(m_handle, position) != 0;
+	return PHYSFS_seek(mHandle, position) != 0;
 }
 
 uint64_t File::tell()
 {
-	return PHYSFS_tell(m_handle);
+	return PHYSFS_tell(mHandle);
 }
 
 uint64_t File::length()
 {
-	return PHYSFS_fileLength(m_handle);
+	return PHYSFS_fileLength(mHandle);
 }
 
 uint64_t File::read(void* buf, uint32_t len, uint32_t count /* = 1*/)
 {
-	return PHYSFS_read(m_handle, buf, len, count);
+	return PHYSFS_read(mHandle, buf, len, count);
 }
 
 uint64_t File::write(const void* buf, uint32_t len, uint32_t count /* = 1*/)
 {
-	return PHYSFS_write(m_handle, buf, len, count);
+	return PHYSFS_write(mHandle, buf, len, count);
 }

@@ -14,8 +14,8 @@ public:
 	void Render();
 
 private:
-	Camera_ptr m_mainCamera;
-	SceneNode_ptr m_rootNode;
+	Camera_ptr mMainCamera;
+	SceneNode_ptr mRootNode;
 };
 
 #endif // ENGINE_SCENE_SCENE_H

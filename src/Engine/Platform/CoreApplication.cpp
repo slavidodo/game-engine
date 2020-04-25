@@ -11,7 +11,7 @@ CoreApplication g_app;
 
 bool CoreApplication::Init()
 {
-	if (m_initialized)
+	if (mInitialized)
 		return false;
 
 	// TODO; error codes based on faliure
@@ -22,29 +22,29 @@ bool CoreApplication::Init()
 
 	glfwInit();
 
-	m_initialized = true;
+	mInitialized = true;
 	return true;
 }
 
 void CoreApplication::Terminate()
 {
-	if (!m_initialized)
+	if (!mInitialized)
 		return;
 
 	ResourceManager::GetInstance().Terminate();
 
-	m_initialized = false;
+	mInitialized = false;
 }
 
 void CoreApplication::RunMainLoop()
 {
-	GLFWwindow* window = g_window.glfwWindow();
-	RHIContext* context = g_window.context();
+	GLFWwindow* window = g_window.GetGlfwWindow();
+	RHIContext* context = g_window.GetContext();
 
 	glfwSetKeyCallback(window, &CoreApplication::onKeyCallback);
 	glfwSetFramebufferSizeCallback(window, &CoreApplication::onFramebufferSizeCallback);
 
-	while (!glfwWindowShouldClose(g_window.glfwWindow())) {
+	while (!glfwWindowShouldClose(g_window.GetGlfwWindow())) {
 		// begin frame data
 		context->BeginRenderFrame();
 

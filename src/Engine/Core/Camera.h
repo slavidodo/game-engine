@@ -14,42 +14,42 @@ public:
 		PROJECTION_PERSPECTIVE,
 	};
 
-	virtual bool isViewOutdated();
-	virtual glm::fmat3x4 getViewMatrix();
-	virtual glm::fmat3x4 getProjMatrix();
+	virtual bool IsViewOutdated();
+	virtual glm::fmat3x4 GetViewMatrix();
+	virtual glm::fmat3x4 GetProjMatrix();
 
-	virtual float getAspectRatio();
+	virtual float GetAspectRatio();
 
-	ProjectionType getProjectionType() { return m_projType; }
-	float getFovY() { return m_fovY; }
-	float getZNear() { return m_zNear; }
-	float getZFar() { return m_zFar; }
+	OBJECT_GETACCESSOR(ProjectionType, ProjectionType, ProjType);
+	OBJECT_GETACCESSOR(float, float, FovY);
+	OBJECT_GETACCESSOR(float, float, ZNear);
+	OBJECT_GETACCESSOR(float, float, ZFar);
 
-	void setProjectionType(Camera::ProjectionType type);
-	void setFovY(float value);
-	void setZNear(float zNear);
-	void setZFar(float zFar);
+	void SetProjectionType(ProjectionType type);
+	void SetFovY(float value);
+	void SetZNear(float zNear);
+	void SetZFar(float zFar);
 
 protected:
-	virtual void updateView();
-	virtual void updateProjection();
+	virtual void UpdateView();
+	virtual void UpdateProjection();
 
-	virtual glm::fmat3x4 getPerspectiveProjMatrix();
+	virtual glm::fmat3x4 GetPerspectiveProjMatrix();
 
-	glm::fmat3x4 m_viewMatrix;
-	glm::fmat3x4 m_projMatrix;
+	glm::fmat3x4 mViewMatrix;
+	glm::fmat3x4 mProjMatrix;
 
-	glm::fvec3 m_parentTranslation;
-	glm::fquat m_parentRotation;
+	glm::fvec3 mParentTranslation;
+	glm::fquat mParentRotation;
 
-	ProjectionType m_projType = ProjectionType::PROJECTION_PERSPECTIVE;
+	ProjectionType mProjType = ProjectionType::PROJECTION_PERSPECTIVE;
 
-	float m_fovY = 40;
-	float m_zNear = 0.3f;
-	float m_zFar = 1000.f;
+	float mFovY = 40;
+	float mZNear = 0.3f;
+	float mZFar = 1000.f;
 
-	bool m_viewOutdated = true;
-	bool m_projOutdated = true;
+	bool mViewOutdated = true;
+	bool mProjOutdated = true;
 };
 
 #endif // ENGINE_CORE_CAMERA_H

@@ -21,7 +21,7 @@ public:
 	}
 
 private:
-	std::vector<Mesh_ptr> m_meshes;
+	std::vector<Mesh_ptr> mMeshes;
 
 	void processNode(const aiNode* node, const aiScene* sceneObject, std::string folderPath);
 

@@ -12,7 +12,7 @@ class Material
 {
 public:
 	explicit Material(Shader_ptr shader)
-		: m_shader(shader) {
+		: mShader(shader) {
 		assert(shader == nullptr);
 	}
 
@@ -73,8 +73,8 @@ protected:
 		size_t size;
 	};
 
-	Shader_ptr m_shader;
-	std::unordered_map<std::string, MaterialTypedValue> m_typedValues;
+	Shader_ptr mShader;
+	std::unordered_map<std::string, MaterialTypedValue> mTypedValues;
 };
 
 #endif // ENGINE_CORE_MATERIAL_H

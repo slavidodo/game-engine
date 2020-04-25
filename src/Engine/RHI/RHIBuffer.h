@@ -41,19 +41,19 @@ class RHIHardwareBuffer : public RHIResource
 {
 public:
 	RHIHardwareBuffer(RHIHardwareBufferUsage usage)
-		: m_usage(usage) {}
+		: mUsage(usage) {}
 
 	RHIHardwareBuffer(RHIHardwareBuffer&) = delete; // delete copy constructor
 
-	OBJECT_GETACCESSOR(RHIHardwareBufferUsage, RHIHardwareBufferUsage, usage);
-	OBJECT_GETACCESSOR(size_t, size_t, size);
+	OBJECT_GETACCESSOR(RHIHardwareBufferUsage, RHIHardwareBufferUsage, Usage);
+	OBJECT_GETACCESSOR(size_t, size_t, Size);
 
 	virtual void ReadData(size_t size, size_t offset, void* dest) = 0;
 	virtual void WriteData(void* src, size_t size, size_t offset, bool discard) = 0;
 
 protected:
-	RHIHardwareBufferUsage m_usage;
-	size_t m_size;
+	RHIHardwareBufferUsage mUsage;
+	size_t mSize;
 };
 
 class RHIVertexBuffer : public RHIHardwareBuffer
@@ -61,33 +61,34 @@ class RHIVertexBuffer : public RHIHardwareBuffer
 public:
 	RHIVertexBuffer(size_t verticesCount, size_t vertexSize, RHIHardwareBufferUsage usage)
 		: RHIHardwareBuffer(usage) {
-		m_size = verticesCount * vertexSize;
+		mSize = verticesCount * vertexSize;
 	}
 
-	OBJECT_GETACCESSOR(size_t, size_t, verticesCount);
-	OBJECT_GETACCESSOR(size_t, size_t, vertexSize);
+	OBJECT_GETACCESSOR(size_t, size_t, VerticesCount);
+	OBJECT_GETACCESSOR(size_t, size_t, VertexSize);
 
 private:
-	size_t m_verticesCount;
-	size_t m_vertexSize;
+	size_t mVerticesCount;
+	size_t mVertexSize;
 };
 
 class RHIIndexBuffer : public RHIHardwareBuffer
 {
 public:
 	RHIIndexBuffer(size_t indicesCount, RHIHardwareBufferUsage usage, RHIIndexBufferType indexType = RHIIndexBufferType::IBT_32)
-		: RHIHardwareBuffer(usage), m_indicesCount(indicesCount) {
-		m_indexSize = indexType == RHIIndexBufferType::IBT_16
+		: RHIHardwareBuffer(usage), mIndicesCount(indicesCount) {
+		mIndexSize = indexType == RHIIndexBufferType::IBT_16
 			? sizeof(uint16_t)
 			: sizeof(uint32_t);
-		m_size = indicesCount * m_indexSize;
+		mSize = indicesCount * mIndexSize;
 	}
 
-	size_t getIndexSize() const { return m_indexSize; }
+	OBJECT_GETACCESSOR(size_t, size_t, IndicesCount);
+	OBJECT_GETACCESSOR(size_t, size_t, IndexSize);
 
 private:
-	size_t m_indicesCount;
-	size_t m_indexSize;
+	size_t mIndicesCount;
+	size_t mIndexSize;
 };
 
 class RHIUniformBuffer : public RHIHardwareBuffer

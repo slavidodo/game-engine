@@ -19,7 +19,7 @@ protected:
 	static void onFramebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 private:
-	bool m_initialized = false;
+	bool mInitialized = false;
 };
 
 extern CoreApplication g_app;

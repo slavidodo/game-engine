@@ -5,7 +5,7 @@
 
 void SceneManager::Render()
 {
-	if (m_currentScene) {
-		m_currentScene->Render();
+	if (mCurrentScene) {
+		mCurrentScene->Render();
 	}
 }

@@ -7,87 +7,87 @@ class AABB
 public:
 	// TODO [honey]: use world unit
 	AABB()
-		: m_minimum(-0.5, -0.5, -0.5), m_maximum(0.5, 0.5, 0.5) {} // null extent
+		: mMinimum(-0.5, -0.5, -0.5), mMaximum(0.5, 0.5, 0.5) {} // null extent
 
 	AABB(glm::fvec3 min, glm::fvec3 max) {
 		assert((min.x <= max.x && min.y <= max.y && min.z <= max.z));
 
-		m_minimum = min;
-		m_maximum = max;
+		mMinimum = min;
+		mMaximum = max;
 	}
 
 	AABB(float ax, float ay, float az, float bx, float by, float bz) {
 		assert((ax <= bx && ay <= by && az <= bz));
 
-		m_minimum = glm::fvec3(ax, ay, az);
-		m_maximum = glm::fvec3(bx, by, bz);
+		mMinimum = glm::fvec3(ax, ay, az);
+		mMaximum = glm::fvec3(bx, by, bz);
 	}
 
 	AABB(const AABB& box)
-		: m_minimum(box.m_minimum), m_maximum(box.m_maximum) {}
+		: mMinimum(box.mMinimum), mMaximum(box.mMaximum) {}
 
 	AABB& operator=(const AABB& rhs) {
-		m_minimum = rhs.m_minimum;
-		m_maximum = rhs.m_maximum;
+		mMinimum = rhs.mMinimum;
+		mMaximum = rhs.mMaximum;
 
 		return *this;
 	}
 
 	bool operator==(const AABB& rhs) const {
-		return m_minimum == rhs.m_minimum && m_maximum == rhs.m_maximum;
+		return mMinimum == rhs.mMinimum && mMaximum == rhs.mMaximum;
 	}
 
 	bool operator!=(const AABB& rhs) const {
 		return !(*this == rhs);
 	}
 
-	inline bool intersects(glm::fvec3 v) const {
-		return v.x >= m_minimum.x && v.x <= m_maximum.x
-			&& v.y >= m_minimum.y && v.y <= m_maximum.y
-			&& v.z >= m_minimum.z && v.z <= m_maximum.z;
+	inline bool Intersects(glm::fvec3 v) const {
+		return v.x >= mMinimum.x && v.x <= mMaximum.x
+			&& v.y >= mMinimum.y && v.y <= mMaximum.y
+			&& v.z >= mMinimum.z && v.z <= mMaximum.z;
 	}
 
-	inline bool intersects(const AABB& b) const {
-		return !(m_minimum.x > b.m_maximum.x
-			|| m_minimum.y > b.m_maximum.y
-			|| m_minimum.z > b.m_maximum.z
-			|| m_maximum.x < b.m_minimum.x
-			|| m_maximum.y < b.m_minimum.y
-			|| m_maximum.z < b.m_minimum.z);
+	inline bool Intersects(const AABB& b) const {
+		return !(mMinimum.x > b.mMaximum.x
+			|| mMinimum.y > b.mMaximum.y
+			|| mMinimum.z > b.mMaximum.z
+			|| mMaximum.x < b.mMinimum.x
+			|| mMaximum.y < b.mMinimum.y
+			|| mMaximum.z < b.mMinimum.z);
 	}
 
-	inline bool contains(glm::fvec3 v) const {
-		return intersects(v);
+	inline bool Contains(glm::fvec3 v) const {
+		return Intersects(v);
 	}
 
-	inline bool contains(const AABB& b) const {
-		return contains(b.m_minimum) && contains(b.m_maximum);
+	inline bool Contains(const AABB& b) const {
+		return Contains(b.mMinimum) && Contains(b.mMaximum);
 	}
 
-	inline void scale(glm::fvec3 s) {
-		m_minimum *= s;
-		m_maximum *= s;
+	inline void Scale(glm::fvec3 s) {
+		mMinimum *= s;
+		mMaximum *= s;
 	}
 
-	inline glm::fvec3 getCenter() const {
-		return (m_minimum + m_maximum) * 0.5f;
+	inline glm::fvec3 GetCenter() const {
+		return (mMinimum + mMaximum) * 0.5f;
 	}
 
-	inline glm::fvec3 getSize() const {
-		return m_maximum - m_minimum;
+	inline glm::fvec3 GetSize() const {
+		return mMaximum - mMinimum;
 	}
 
-	inline glm::fvec3 getMinimum() {
-		return m_minimum;
+	inline glm::fvec3 GetMinimum() {
+		return mMinimum;
 	}
 
-	inline glm::fvec3 getMaximum() {
-		return m_maximum;
+	inline glm::fvec3 GetMaximum() {
+		return mMaximum;
 	}
 
 protected:
-	glm::fvec3 m_minimum;
-	glm::fvec3 m_maximum;
+	glm::fvec3 mMinimum;
+	glm::fvec3 mMaximum;
 
 };
 

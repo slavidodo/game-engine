@@ -6,107 +6,107 @@
 #include "../Scene/SceneNode.h"
 #include "../Platform/Window.h"
 
-bool Camera::isViewOutdated()
+bool Camera::IsViewOutdated()
 {
-	if (auto parent = m_parent.lock()) {
-		auto transform = parent->transform();
+	if (auto parent = mParent.lock()) {
+		auto transform = parent->GetTransform();
 
-		glm::fvec3 pTranslation = transform->translation();
-		glm::fquat pRotation = transform->rotation();
-		if (m_viewOutdated || pTranslation != m_parentTranslation || pRotation != m_parentRotation) {
-			m_parentTranslation = pTranslation;
-			m_parentRotation = pRotation;
-			m_viewOutdated = true;
+		glm::fvec3 pTranslation = transform->GetTranslation();
+		glm::fquat pRotation = transform->GetRotation();
+		if (mViewOutdated || pTranslation != mParentTranslation || pRotation != mParentRotation) {
+			mParentTranslation = pTranslation;
+			mParentRotation = pRotation;
+			mViewOutdated = true;
 		}
 	}
 
 	// editor camera should update its own values
 	// and will not rely on its parent
-	return m_viewOutdated;
+	return mViewOutdated;
 }
 
-glm::fmat3x4 Camera::getViewMatrix()
+glm::fmat3x4 Camera::GetViewMatrix()
 {
-	updateView();
-	return m_viewMatrix;
+	UpdateView();
+	return mViewMatrix;
 }
 
-glm::fmat3x4 Camera::getProjMatrix()
+glm::fmat3x4 Camera::GetProjMatrix()
 {
-	updateProjection();
-	return m_projMatrix;
+	UpdateProjection();
+	return mProjMatrix;
 }
 
-float Camera::getAspectRatio()
+float Camera::GetAspectRatio()
 {
 	glm::uvec2 size = g_window.getWindowSize();
 	return (float)size.x / (float)size.y;
 }
 
-void Camera::updateView()
+void Camera::UpdateView()
 {
-	if (isViewOutdated()) {
-		m_viewOutdated = false;
+	if (IsViewOutdated()) {
+		mViewOutdated = false;
 
-		glm::fmat3 rotation(glm::mat3_cast(m_parentRotation));
+		glm::fmat3 rotation(glm::mat3_cast(mParentRotation));
 		glm::fmat3 rotationT = glm::transpose(rotation);
 
-		glm::fvec3 translation = (-rotationT) * m_parentTranslation;
+		glm::fvec3 translation = (-rotationT) * mParentTranslation;
 		glm::fmat4 viewMatrix = rotationT;
 
 		// casts mat4x4 to mat3x4
-		m_viewMatrix = glm::translate(viewMatrix, translation);
+		mViewMatrix = glm::translate(viewMatrix, translation);
 	}
 }
 
-void Camera::setProjectionType(Camera::ProjectionType type)
+void Camera::SetProjectionType(ProjectionType type)
 {
-	if (type != m_projType) {
-		m_projType = type;
-		m_projOutdated = true;
+	if (type != mProjType) {
+		mProjType = type;
+		mProjOutdated = true;
 	}
 }
 
-void Camera::setFovY(float fovY)
+void Camera::SetFovY(float fovY)
 {
-	if (m_fovY != fovY) {
-		m_fovY = fovY;
+	if (mFovY != fovY) {
+		mFovY = fovY;
 
 		// invalidate projection matrix only if we are using perspective projection
-		if (m_projType == PROJECTION_PERSPECTIVE) {
-			m_projOutdated = true;
+		if (mProjType == PROJECTION_PERSPECTIVE) {
+			mProjOutdated = true;
 		}
 	}
 }
 
-void Camera::setZNear(float zNear)
+void Camera::SetZNear(float zNear)
 {
-	if (m_zNear != zNear) {
-		m_zNear = zNear;
-		m_projOutdated = true;
+	if (mZNear != zNear) {
+		mZNear = zNear;
+		mProjOutdated = true;
 	}
 }
 
-void Camera::setZFar(float zFar)
+void Camera::SetZFar(float zFar)
 {
-	if (m_zFar != zFar) {
-		m_zFar = zFar;
-		m_projOutdated = true;
+	if (mZFar != zFar) {
+		mZFar = zFar;
+		mProjOutdated = true;
 	}
 }
 
-void Camera::updateProjection()
+void Camera::UpdateProjection()
 {
-	if (m_projOutdated) {
-		m_projOutdated = false;
+	if (mProjOutdated) {
+		mProjOutdated = false;
 
-		if (m_projType == PROJECTION_PERSPECTIVE) {
-			m_projMatrix = getPerspectiveProjMatrix();
+		if (mProjType == PROJECTION_PERSPECTIVE) {
+			mProjMatrix = GetPerspectiveProjMatrix();
 		}
 	}
 }
 
-glm::fmat3x4 Camera::getPerspectiveProjMatrix()
+glm::fmat3x4 Camera::GetPerspectiveProjMatrix()
 {
-	return glm::perspective(m_fovY, getAspectRatio(), m_zNear, m_zFar);
+	return glm::perspective(GetFovY(), GetAspectRatio(), mZNear, mZFar);
 }

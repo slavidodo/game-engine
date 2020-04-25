@@ -9,13 +9,13 @@ class Mesh : public std::enable_shared_from_this<Mesh>
 public:
 	SubMesh_ptr createSubMesh();
 
-	//OBJECT_ACCESSOR(VertexData_ptr, const VertexData_ptr, sharedVertexData);
+	//OBJECT_ACCESSOR(VertexData_ptr, const VertexData_ptr, SharedVertexData);
 
 private:
 	// manual data assignment
-	//VertexData_ptr m_sharedVertexData = nullptr;
+	//VertexData_ptr mSharedVertexData = nullptr;
 
-	std::vector<SubMesh_ptr> m_subMeshes;
+	std::vector<SubMesh_ptr> mSubMeshes;
 };
 
 #endif // ENGINE_CORE_MESH_H

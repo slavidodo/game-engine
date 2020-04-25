@@ -2,6 +2,8 @@
 #ifndef ENGINE_CORE_IMAGE_H
 #define ENGINE_CORE_IMAGE_H
 
+#include "../RHI/RHITexture.h"
+
 class Image;
 typedef std::shared_ptr<Image> Image_ptr;
 
@@ -40,6 +42,8 @@ protected:
 
 private:
 	TextureSettings mTextureSettings;
+
+	RHITexture_ptr mTexture;
 };
 
 #endif // ENGINE_CORE_IMAGE_H

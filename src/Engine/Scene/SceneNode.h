@@ -23,12 +23,12 @@ public:
     Object_ptr attachObject(Object_ptr&& obj);
     Object_ptr attachObject(Object* obj);
 
-    OBJECT_GETACCESSOR(Transform_ptr, const Transform_ptr, transform);
+    OBJECT_GETACCESSOR(Transform_ptr, const Transform_ptr, Transform);
 
     template<typename T>
     std::shared_ptr<T> getAttachedObject() const {
-        auto it = m_attachedObjects.begin();
-        auto end = m_attachedObjects.end();
+        auto it = mAttachedObjects.begin();
+        auto end = mAttachedObjects.end();
         while (it != end) {
             std::shared_ptr<T> p = std::dynamic_pointer_cast<T>(*it);
             if (p != nullptr) {
@@ -43,17 +43,17 @@ public:
 
     template<>
     Transform_ptr getAttachedObject() const {
-        return m_transform;
+        return mTransform;
     }
 
 private:
     Object_ptr attachObjectInternal(Object_ptr&& obj);
 
-    std::vector<SceneNode_ptr> m_children;
-    mutable std::vector<Object_ptr> m_attachedObjects;
-	SceneNode_weakPtr m_parent;
-    Transform_ptr m_transform;
-    bool m_active;
+    std::vector<SceneNode_ptr> mChildren;
+    mutable std::vector<Object_ptr> mAttachedObjects;
+	SceneNode_weakPtr mParent;
+    Transform_ptr mTransform;
+    bool mActive;
 
 protected:
     friend class SceneManager;

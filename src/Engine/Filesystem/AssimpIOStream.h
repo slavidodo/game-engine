@@ -41,7 +41,7 @@ public:
 	void Flush() override final;
 
 private:
-	File_ptr m_file;
+	File_ptr mFile;
 };
 
 #endif // ENGINE_FILESYSTEM_ASSIMPIOSTREAM_H

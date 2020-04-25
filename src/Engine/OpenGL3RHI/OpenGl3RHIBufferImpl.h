@@ -16,9 +16,9 @@ public:
 private:
 	void Bind();
 
-	GLenum m_glUsage;
-	GLenum m_target;
-	GLuint m_bufferId;
+	GLenum mGlUsage;
+	GLenum mTarget;
+	GLuint mBufferId;
 };
 
 #endif // ENGINE_OPENGL3RHI_OPENGL3RHIBUFFERIMPL_H

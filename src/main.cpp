@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 	// TODO the whole process of creating a window should involve creating its own context
 	// resources and manage it on its Init/Terminate
 
-	GLFWwindow* glfwWindow = g_window.glfwWindow();
+	GLFWwindow* glfwWindow = g_window.GetGlfwWindow();
 	RHIContext* context = new Context(glfwWindow);
 
 	if (!context->Init()) {
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 	}
 
 	// set the main context of the window
-	g_window.context(context);
+	g_window.SetContext(context);
 
 	// show window
 	g_window.show();
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 	g_app.RunMainLoop();
 
 	// shut down, remove context and related resources
-	g_window.context(nullptr);
+	g_window.SetContext(nullptr);
 	context->Terminate();
 	delete context;
 

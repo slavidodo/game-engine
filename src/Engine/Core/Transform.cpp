@@ -3,70 +3,70 @@
 
 #include "Transform.h"
 
-void Transform::translation(glm::fvec3 value)
+void Transform::SetTranslation(glm::fvec3 value)
 {
-	m_translation = value;
-	m_mustUpdate = true;
+	mTranslation = value;
+	mMustUpdate = true;
 }
 
-void Transform::rotation(glm::fquat value)
+void Transform::SetRotation(glm::fquat value)
 {
-	m_rotation = value;
-	m_mustUpdate = true;
+	mRotation = value;
+	mMustUpdate = true;
 }
 
-void Transform::rotation(glm::fvec3 eulerAngles)
+void Transform::SetRotation(glm::fvec3 eulerAngles)
 {
-	rotation(glm::fquat(eulerAngles));
+	SetRotation(glm::fquat(eulerAngles));
 }
 
-void Transform::scale(glm::fvec3 value)
+void Transform::SetScale(glm::fvec3 value)
 {
-	m_scale = value;
-	m_mustUpdate = true;
+	mScale = value;
+	mMustUpdate = true;
 }
 
-void Transform::move(glm::fvec3 value)
+void Transform::Move(glm::fvec3 value)
 {
-	translation(translation() + value);
+	SetTranslation(GetTranslation() + value);
 }
 
-void Transform::rotate(glm::fquat value)
+void Transform::Rotate(glm::fquat value)
 {
-	rotation(rotation() * value);
+	SetRotation(GetRotation() * value);
 }
 
-void Transform::rotate(glm::fvec3 eulerAngles)
+void Transform::Rotate(glm::fvec3 eulerAngles)
 {
-	rotate(glm::fquat(eulerAngles));
+	Rotate(glm::fquat(eulerAngles));
 }
 
-void Transform::lookAt(glm::fvec3 position)
+void Transform::LookAt(glm::fvec3 position)
 {
 	// if there are pending changes, just recalculate up vector
-	if (m_mustUpdate)
-		m_up = m_rotation * glm::fvec3(0.0, 1.0, 0.0);
+	if (mMustUpdate)
+		mUp = mRotation * glm::fvec3(0.0, 1.0, 0.0);
 
-	glm::fmat4 rotationMat = glm::lookAt(position, m_translation, m_up);
+	glm::fmat4 rotationMat = glm::lookAt(position, mTranslation, mUp);
 	glm::fquat rotationQuat = glm::quat_cast(rotationMat);
-	rotation(glm::inverse(rotationQuat));
+	SetRotation(glm::inverse(rotationQuat));
 }
 
-void Transform::ensureUpdated()
+void Transform::EnsureUpdated()
 {
-	if (m_mustUpdate) {
-		m_mustUpdate = false;
+	if (mMustUpdate) {
+		mMustUpdate = false;
 
-		m_forward = m_rotation * glm::fvec3(0.0, 0.0, 1.0);
-		m_right = m_rotation * glm::fvec3(1.0, 0.0, 0.0);
-		m_up = m_rotation * glm::fvec3(0.0, 1.0, 0.0);
+		mForward = mRotation * glm::fvec3(0.0, 0.0, 1.0);
+		mRight = mRotation * glm::fvec3(1.0, 0.0, 0.0);
+		mUp = mRotation * glm::fvec3(0.0, 1.0, 0.0);
 
 		// update the model matrix
-		m_localToWorld = glm::fmat4(1.0f);
-		m_localToWorld = glm::translate(m_localToWorld, m_translation);
-		m_localToWorld = m_localToWorld * glm::mat4_cast(m_rotation);
-		m_localToWorld = glm::scale(m_localToWorld, m_scale);
+		mLocalToWorld = glm::fmat4(1.0f);
+		mLocalToWorld = glm::translate(mLocalToWorld, mTranslation);
+		mLocalToWorld = mLocalToWorld * glm::mat4_cast(mRotation);
+		mLocalToWorld = glm::scale(mLocalToWorld, mScale);
 
-		m_worldToLocal = glm::inverse(m_localToWorld);
+		mWorldToLocal = glm::inverse(mLocalToWorld);
 	}
 }

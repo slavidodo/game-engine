@@ -23,7 +23,7 @@ public:
 	uint64_t write(const void* buf, uint32_t len, uint32_t count = 1);
 
 private:
-	PHYSFS_File* m_handle;
+	PHYSFS_File* mHandle;
 };
 
 #endif // ENGINE_FILESYSTEM_FILE_H

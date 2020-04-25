@@ -23,30 +23,30 @@ class VertexElement
 {
 public:
 	VertexElement(VertexElementSemantic semantic, uint32_t offset, VertexElementType type)
-		: m_semantic(semantic), m_offset(offset), m_type(type) {}
+		: mSemantic(semantic), mOffset(offset), mType(type) {}
 
-	OBJECT_GETACCESSOR(VertexElementSemantic, VertexElementSemantic, semantic);
-	OBJECT_GETACCESSOR(uint32_t, uint32_t, offset);
-	OBJECT_GETACCESSOR(VertexElementType, VertexElementType, type);
-	OBJECT_GETACCESSOR_DYNAMIC(size_t, size_t, size, getTypeSize, m_type);
+	OBJECT_GETACCESSOR(VertexElementSemantic, VertexElementSemantic, Semantic);
+	OBJECT_GETACCESSOR(uint32_t, uint32_t, Offset);
+	OBJECT_GETACCESSOR(VertexElementType, VertexElementType, Type);
+	OBJECT_GETACCESSOR_DYNAMIC(size_t, size_t, Size, getTypeSize, mType);
 
 	static uint32_t getTypeSize(VertexElementType type);
 private:
-	VertexElementSemantic m_semantic;
-	uint32_t m_offset;
-	VertexElementType m_type;
+	VertexElementSemantic mSemantic;
+	uint32_t mOffset;
+	VertexElementType mType;
 };
 
 class VertexFormat
 {
 public:
 	VertexElement& addItem(VertexElementSemantic semantic, uint32_t offset, VertexElementType type) {
-		m_elements.emplace_back(semantic, offset, type);
-		return m_elements.back();
+		mElements.emplace_back(semantic, offset, type);
+		return mElements.back();
 	}
 
 private:
-	std::vector<VertexElement> m_elements;
+	std::vector<VertexElement> mElements;
 };
 
 #endif // ENGINE_RHI_VERTEXFORMAT_H

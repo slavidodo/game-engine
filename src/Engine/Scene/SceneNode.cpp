@@ -15,8 +15,8 @@ Object_ptr SceneNode::attachObject(Object* obj)
 
 Object_ptr SceneNode::attachObjectInternal(Object_ptr&& obj)
 {
-	obj->m_parent = weak_from_this();
+	obj->mParent = weak_from_this();
 
-	m_attachedObjects.push_back(std::move(obj));
-	return m_attachedObjects.back();
+	mAttachedObjects.push_back(std::move(obj));
+	return mAttachedObjects.back();
 }

@@ -27,16 +27,16 @@
 #include <glm/ext.hpp>
 
 #define OBJECT_GETACCESSOR(type, c_type, name) \
-type name() { return m_##name; } \
-c_type name() const { return m_##name; }
+type Get##name() { return m##name; } \
+c_type Get##name() const { return m##name; }
 
-#define OBJECT_SETACCESSOR(type, name) void name(type name) { m_##name = name; }
+#define OBJECT_SETACCESSOR(type, name) void Set##name(type name) { m##name = name; }
 
 #define OBJECT_GETACCESSOR_DYNAMIC(type, c_type, name, state, ...) \
-type name() { return state(__VA_ARGS__); } \
-c_type name() const { return state(__VA_ARGS__); }
+type Get##name() { return state(__VA_ARGS__); } \
+c_type Get##name() const { return state(__VA_ARGS__); }
 
-#define OBJECT_SETACCESSOR_DYNAMIC(type, name, state) void name(type value) { state(value); }
+#define OBJECT_SETACCESSOR_DYNAMIC(type, name, state) void Set##name(type value) { state(value); }
 
 #define OBJECT_ACCESSOR(type, c_type, name) \
 OBJECT_SETACCESSOR(type, name) \

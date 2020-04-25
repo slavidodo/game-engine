@@ -25,12 +25,12 @@ public:
 
 	Model_ptr loadModel(std::string filename);
 
-	OBJECT_GETACCESSOR(bool, bool, initialized);
+	OBJECT_GETACCESSOR(bool, bool, Initialized);
 
 private:
-	bool m_initialized = false;
+	bool mInitialized = false;
 
-	std::map<std::string, Model_ptr> m_modelCache;
+	std::map<std::string, Model_ptr> mModelCache;
 };
 
 #endif // ENGINE_FILESYSTEM_RESOURCEMANAGER_H
