@@ -7,7 +7,7 @@ Window g_window;
 
 Window::~Window()
 {
-	terminate();
+	Terminate();
 }
 
 bool Window::Init(std::string title, int32_t width, int32_t height)

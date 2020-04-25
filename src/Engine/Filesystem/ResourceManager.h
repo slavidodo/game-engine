@@ -17,13 +17,13 @@ public:
 	bool Init();
 	void Terminate();
 
-	bool mount(std::string directory /* dir/zip/... */);
-	bool exists(std::string directory);
+	bool Mount(std::string directory /* dir/zip/... */);
+	bool Exists(std::string directory);
 
-	File_ptr openRead(std::string filename);
-	File_ptr openWrite(std::string filename);
+	File_ptr OpenRead(std::string filename);
+	File_ptr OpenWrite(std::string filename);
 
-	Model_ptr loadModel(std::string filename);
+	Model_ptr LoadModel(std::string filename);
 
 	OBJECT_GETACCESSOR(bool, bool, Initialized);
 

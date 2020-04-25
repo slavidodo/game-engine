@@ -16,18 +16,19 @@ class Model : public std::enable_shared_from_this<Model>
 {
 public:
 	Model(std::string filePath, const aiScene* sceneObject) {
-		std::string folderPath = filePath.substr(0, filePath.find_last_of('/') + 1);
-		processNode(sceneObject->mRootNode, sceneObject, folderPath);
+		mFolderPath = filePath.substr(0, filePath.find_last_of('/') + 1);
+		ProcessNode(sceneObject->mRootNode, sceneObject);
 	}
 
 private:
 	std::vector<Mesh_ptr> mMeshes;
+	std::string mFolderPath;
 
-	void processNode(const aiNode* node, const aiScene* sceneObject, std::string folderPath);
+	void ProcessNode(const aiNode* node, const aiScene* sceneObject);
 
 	//std::vector<Vertex1P1D1S1M1UV> getMeshVertices(aiMesh* pMesh);
-	std::vector<int> getMeshIndices(aiMesh* pMesh);
-	std::vector<RHITexture_ptr> loadMeshTextures(aiMaterial* pMaterial, aiTextureType textureType, std::string folderPath);
+	std::vector<int32_t> GetMeshIndices(aiMesh* pMesh);
+	std::vector<RHITexture_ptr> LoadMeshTextures(aiMaterial* pMaterial, aiTextureType textureType, std::string folderPath);
 };
 
 #endif // ENGINE_CORE_MODEL_H

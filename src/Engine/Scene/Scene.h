@@ -13,7 +13,7 @@ class Scene
 public:
 	void Render();
 
-private:
+protected:
 	Camera_ptr mMainCamera;
 	SceneNode_ptr mRootNode;
 };

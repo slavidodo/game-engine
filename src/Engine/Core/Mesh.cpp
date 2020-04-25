@@ -3,9 +3,9 @@
 
 #include "Mesh.h"
 
-SubMesh_ptr Mesh::createSubMesh()
+SubMesh_ptr Mesh::CreateSubMesh()
 {
-	auto subMesh = mSubMeshes.emplace_back();
+	SubMesh_ptr subMesh = mSubMeshes.emplace_back();
 	subMesh->SetParent(weak_from_this());
 
 	return subMesh;

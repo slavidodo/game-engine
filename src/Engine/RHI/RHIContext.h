@@ -7,6 +7,9 @@
 #include "../Core/Mesh.h"
 #include "RHIBuffer.h"
 
+/*
+ * represepnts a dynamic RHI
+ */
 class RHIContext
 {
 public:

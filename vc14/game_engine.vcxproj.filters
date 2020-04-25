@@ -13,9 +13,6 @@
     <Filter Include="Engine\Core\Math">
       <UniqueIdentifier>{0c97da2d-41ac-45b1-aefa-f2a66b102724}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Core\RHI">
-      <UniqueIdentifier>{6e56c101-688b-4c10-b03a-73aa7a0c1679}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\UI">
       <UniqueIdentifier>{cdcebabe-3b03-4a32-a608-21aca377cf87}</UniqueIdentifier>
     </Filter>
@@ -247,5 +244,6 @@
     <ClInclude Include="..\src\Engine\Core\Math\AABB.h">
       <Filter>Engine\Core\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\pch.h" />
   </ItemGroup>
 </Project>

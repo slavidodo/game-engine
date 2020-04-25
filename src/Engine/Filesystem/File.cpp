@@ -12,10 +12,10 @@ File::File(PHYSFS_File* handle)
 
 File::~File()
 {
-	close();
+	Close();
 }
 
-bool File::close()
+bool File::Close()
 {
 	int success = 0;
 	if (mHandle && PHYSFS_isInit()) {
@@ -26,32 +26,32 @@ bool File::close()
 	return success != 0;
 }
 
-bool File::flush()
+bool File::Flush()
 {
 	return PHYSFS_flush(mHandle) != 0;
 }
 
-bool File::seek(uint64_t position)
+bool File::Seek(uint64_t position)
 {
 	return PHYSFS_seek(mHandle, position) != 0;
 }
 
-uint64_t File::tell()
+uint64_t File::Tell()
 {
 	return PHYSFS_tell(mHandle);
 }
 
-uint64_t File::length()
+uint64_t File::Length()
 {
 	return PHYSFS_fileLength(mHandle);
 }
 
-uint64_t File::read(void* buf, uint32_t len, uint32_t count /* = 1*/)
+uint64_t File::Read(void* buf, uint32_t len, uint32_t count /* = 1*/)
 {
 	return PHYSFS_read(mHandle, buf, len, count);
 }
 
-uint64_t File::write(const void* buf, uint32_t len, uint32_t count /* = 1*/)
+uint64_t File::Write(const void* buf, uint32_t len, uint32_t count /* = 1*/)
 {
 	return PHYSFS_write(mHandle, buf, len, count);
 }

@@ -235,6 +235,7 @@
     <ClInclude Include="..\src\Engine\Scene\SceneNode.h" />
     <ClInclude Include="..\src\Engine\StaticMeshGenerator.h" />
     <ClInclude Include="..\src\Engine\Utils.h" />
+    <ClInclude Include="..\src\pch.h" />
     <ClInclude Include="..\src\Tests\ExampleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

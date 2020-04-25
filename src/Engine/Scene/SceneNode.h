@@ -20,13 +20,13 @@ class SceneManager;
 class SceneNode : public std::enable_shared_from_this<SceneNode>
 {
 public:
-    Object_ptr attachObject(Object_ptr&& obj);
-    Object_ptr attachObject(Object* obj);
+    Object_ptr AttachObject(Object_ptr&& obj);
+    Object_ptr AttachObject(Object* obj);
 
     OBJECT_GETACCESSOR(Transform_ptr, const Transform_ptr, Transform);
 
     template<typename T>
-    std::shared_ptr<T> getAttachedObject() const {
+    std::shared_ptr<T> GetAttachedObject() const {
         auto it = mAttachedObjects.begin();
         auto end = mAttachedObjects.end();
         while (it != end) {
@@ -42,12 +42,12 @@ public:
     }
 
     template<>
-    Transform_ptr getAttachedObject() const {
+    Transform_ptr GetAttachedObject() const {
         return mTransform;
     }
 
 private:
-    Object_ptr attachObjectInternal(Object_ptr&& obj);
+    Object_ptr AttachObjectInternal(Object_ptr&& obj);
 
     std::vector<SceneNode_ptr> mChildren;
     mutable std::vector<Object_ptr> mAttachedObjects;

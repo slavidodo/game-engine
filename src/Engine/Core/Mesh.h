@@ -7,7 +7,7 @@
 class Mesh : public std::enable_shared_from_this<Mesh>
 {
 public:
-	SubMesh_ptr createSubMesh();
+	SubMesh_ptr CreateSubMesh();
 
 	//OBJECT_ACCESSOR(VertexData_ptr, const VertexData_ptr, SharedVertexData);
 

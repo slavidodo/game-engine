@@ -4,6 +4,9 @@
 
 #include "RHIResource.h"
 
+// the actual render target used by the specified interface
+// used generally to simulate frame buffers and things that
+// should be done on the gpu, i.e particles
 class RHITexture;
 typedef std::shared_ptr<RHITexture> RHITexture_ptr;
 

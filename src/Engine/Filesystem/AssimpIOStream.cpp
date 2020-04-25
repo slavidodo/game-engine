@@ -7,44 +7,44 @@
 
 AssimpIOStream::AssimpIOStream(std::string filename)
 {
-	mFile = ResourceManager::GetInstance().openRead(filename);
+	mFile = ResourceManager::GetInstance().OpenRead(filename);
 }
 
 AssimpIOStream::~AssimpIOStream()
 {
-	mFile->close();
+	mFile->Close();
 }
 
 size_t AssimpIOStream::Read(void* buffer, size_t pSize, size_t pCount) {
-	return (size_t)mFile->read(buffer, pCount, pSize);
+	return (size_t)mFile->Read(buffer, pCount, pSize);
 }
 
 size_t AssimpIOStream::Write(const void* pvBuffer, size_t pSize, size_t pCount) {
-	return (size_t)mFile->write(pvBuffer, pCount, pSize);
+	return (size_t)mFile->Write(pvBuffer, pCount, pSize);
 }
 
 size_t AssimpIOStream::FileSize() const {
-	return (size_t)mFile->length();
+	return (size_t)mFile->Length();
 }
 
 aiReturn AssimpIOStream::Seek(size_t pOffset, aiOrigin pOrigin) {
-	if (pOrigin == aiOrigin_SET && mFile->seek(pOffset) != NULL)
+	if (pOrigin == aiOrigin_SET && mFile->Seek(pOffset) != NULL)
 		return aiReturn::aiReturn_SUCCESS;
 	return aiReturn::aiReturn_FAILURE;
 }
 
 size_t AssimpIOStream::Tell() const {
-	return (size_t)mFile->tell();
+	return (size_t)mFile->Tell();
 }
 
 void AssimpIOStream::Flush() {
-	mFile->flush();
+	mFile->Flush();
 }
 
 ////////////////////////////////////////
 
 bool AssimpIOSystem::Exists(const char* fileName) const {
-	return ResourceManager::GetInstance().exists(fileName);
+	return ResourceManager::GetInstance().Exists(fileName);
 }
 
 char AssimpIOSystem::getOsSeparator() const {

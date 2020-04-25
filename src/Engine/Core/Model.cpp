@@ -5,7 +5,7 @@
 
 #include "../Filesystem/ResourceManager.h"
 
-void Model::processNode(const aiNode* node, const aiScene* sceneObject, std::string folderPath)
+void Model::ProcessNode(const aiNode* node, const aiScene* sceneObject)
 {
 	for (size_t meshIndex = 0; meshIndex < node->mNumMeshes; meshIndex++) {
 		uint32_t globalMeshIndex = node->mMeshes[meshIndex];
@@ -32,11 +32,11 @@ void Model::processNode(const aiNode* node, const aiScene* sceneObject, std::str
 	// process children nodes
 	for (uint32_t childIndex = 0; childIndex < node->mNumChildren; childIndex++) {
 		aiNode* pChildNode = node->mChildren[childIndex];
-		processNode(pChildNode, sceneObject, folderPath);
+		ProcessNode(pChildNode, sceneObject);
 	}
 }
 
-/*std::vector<Vertex1P1D1S1M1UV> Model::getMeshVertices(aiMesh* pMesh)
+/*std::vector<Vertex1P1D1S1M1UV> Model::GetMeshVertices(aiMesh* pMesh)
 {
 	std::vector<Vertex1P1D1S1M1UV> vertices(pMesh->mNumVertices);
 	for (size_t i = 0; i < pMesh->mNumVertices; i++) {
@@ -82,7 +82,7 @@ void Model::processNode(const aiNode* node, const aiScene* sceneObject, std::str
 	return vertices;
 }*/
 
-std::vector<int> Model::getMeshIndices(aiMesh* mesh)
+std::vector<int32_t> Model::GetMeshIndices(aiMesh* mesh)
 {
 	std::vector<int> indices;
 	for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++) {

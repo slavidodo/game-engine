@@ -3,17 +3,17 @@
 
 #include "SceneNode.h"
 
-Object_ptr SceneNode::attachObject(Object_ptr&& obj)
+Object_ptr SceneNode::AttachObject(Object_ptr&& obj)
 {
-	return attachObjectInternal(std::move(obj));
+	return AttachObjectInternal(std::move(obj));
 }
 
-Object_ptr SceneNode::attachObject(Object* obj)
+Object_ptr SceneNode::AttachObject(Object* obj)
 {
-	return attachObjectInternal(std::move(std::shared_ptr<Object>(obj)));
+	return AttachObjectInternal(std::move(std::shared_ptr<Object>(obj)));
 }
 
-Object_ptr SceneNode::attachObjectInternal(Object_ptr&& obj)
+Object_ptr SceneNode::AttachObjectInternal(Object_ptr&& obj)
 {
 	obj->mParent = weak_from_this();
 

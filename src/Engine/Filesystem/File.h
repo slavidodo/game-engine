@@ -13,14 +13,14 @@ public:
 	explicit File(PHYSFS_File* handle);
 	~File();
 
-	bool close();
-	bool flush();
+	bool Close();
+	bool Flush();
 
-	bool seek(uint64_t position);
-	uint64_t tell();
-	uint64_t length();
-	uint64_t read(void* buf, uint32_t len, uint32_t count = 1);
-	uint64_t write(const void* buf, uint32_t len, uint32_t count = 1);
+	bool Seek(uint64_t position);
+	uint64_t Tell();
+	uint64_t Length();
+	uint64_t Read(void* buf, uint32_t len, uint32_t count = 1);
+	uint64_t Write(const void* buf, uint32_t len, uint32_t count = 1);
 
 private:
 	PHYSFS_File* mHandle;

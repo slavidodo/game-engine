@@ -19,16 +19,16 @@ void ResourceManager::Terminate()
 	PHYSFS_deinit();
 }
 
-bool ResourceManager::mount(std::string directory)
+bool ResourceManager::Mount(std::string directory)
 {
 	return PHYSFS_mount(directory.c_str(), nullptr, 0) != 0;
 }
 
-bool ResourceManager::exists(std::string directory) {
+bool ResourceManager::Exists(std::string directory) {
 	return PHYSFS_exists(directory.c_str());
 }
 
-File_ptr ResourceManager::openRead(std::string filename)
+File_ptr ResourceManager::OpenRead(std::string filename)
 {
 	PHYSFS_File* file = PHYSFS_openRead(filename.c_str());
 	if (!file)
@@ -37,7 +37,7 @@ File_ptr ResourceManager::openRead(std::string filename)
 	return std::move(std::make_shared<File>(file));
 }
 
-File_ptr ResourceManager::openWrite(std::string filename)
+File_ptr ResourceManager::OpenWrite(std::string filename)
 {
 	PHYSFS_File* file = PHYSFS_openWrite(filename.c_str());
 	if (!file)
@@ -46,7 +46,7 @@ File_ptr ResourceManager::openWrite(std::string filename)
 	return std::move(std::make_shared<File>(file));
 }
 
-Model_ptr ResourceManager::loadModel(std::string filename)
+Model_ptr ResourceManager::LoadModel(std::string filename)
 {
 	// todo; store the importer instead of creating a new one for every model
 	Assimp::Importer importer;
