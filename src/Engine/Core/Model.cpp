@@ -5,34 +5,49 @@
 
 #include "../Filesystem/ResourceManager.h"
 
-void Model::ProcessNode(const aiNode* node, const aiScene* sceneObject)
+Model::Model(std::string path, const aiScene* pScene)
 {
-	for (size_t meshIndex = 0; meshIndex < node->mNumMeshes; meshIndex++) {
-		uint32_t globalMeshIndex = node->mMeshes[meshIndex];
-		aiMesh* pMesh = sceneObject->mMeshes[globalMeshIndex];
+	mPath = path;
+	mParentPath = mPath.substr(0, mPath.find_last_of('/') + 1);
+	mFilename = mPath.substr(mParentPath.length(), mPath.length() - 1);
+	Load(pScene);
+}
 
-		// obtain the within its descriptor to ensure how valid it's
-		//auto mesh = g_window.context()->makeMesh<Vertex1P1D1S1M1UV>(getMeshVertices(pMesh), getMeshIndices(pMesh));
+Model::~Model()
+{
+}
 
-		if (pMesh->mMaterialIndex >= 0) {
-			aiMaterial* pMaterial = sceneObject->mMaterials[pMesh->mMaterialIndex];
+void Model::Load(const aiScene* pScene)
+{
+	ProcessHierarchy(pScene->mRootNode, pScene);
 
-			//std::vector<Texture_ptr> ambientTextures = loadMeshTextures(pMaterial, aiTextureType_AMBIENT, folderPath);
-			//std::vector<Texture_ptr> diffuseTextures = loadMeshTextures(pMaterial, aiTextureType_DIFFUSE, folderPath);
-			//std::vector<Texture_ptr> specularTextures = loadMeshTextures(pMaterial, aiTextureType_SPECULAR, folderPath);
-			//std::vector<Texture_ptr> normalTextures = loadMeshTextures(pMaterial, aiTextureType_NORMALS, folderPath);
-			//std::vector<Texture_ptr> heightTextures = loadMeshTextures(pMaterial, aiTextureType_HEIGHT, folderPath);
+	// TODO
+	// process cameras (attach camera object to the specified node)
+	// process lights
 
-			// todo link to material
-		}
+	//std::cout
+	//	<< "        Path: " << mPath.substr(mBasePath.length(), mPath.length())
+	//	<< "\n    BasePath: " << mBasePath
+	//	<< "\n      Meshes: " << pScene->mNumMeshes
+	//	<< "\n  Animations: " << pScene->mNumAnimations
+	//	<< "\n   Materials: " << pScene->mNumMaterials
+	//	<< "\n      Lights: " << pScene->mNumLights
+	//	<< "\n     Cameras: " << pScene->mNumCameras
+	//	<< "\n  Textures_1: " << pScene->mNumTextures
+	//	<< "\n  Textures_2: " << nn << "\n" << std::endl;
+}
 
-		//mMeshes.push_back(std::move(mesh));
+void Model::ProcessHierarchy(const aiNode* pNode, const aiScene* pScene, const aiNode* pParentNode /* = nullptr */)
+{
+	// if pNode is parent, pParentNode = nullptr
+	for (size_t i = 0; i < pNode->mNumMeshes; ++i) {
+		size_t meshIndex = pNode->mMeshes[i];
+		const aiMesh* pMesh = pScene->mMeshes[meshIndex];
 	}
 
-	// process children nodes
-	for (uint32_t childIndex = 0; childIndex < node->mNumChildren; childIndex++) {
-		aiNode* pChildNode = node->mChildren[childIndex];
-		ProcessNode(pChildNode, sceneObject);
+	for (size_t childIndex = 0; childIndex < pNode->mNumChildren; childIndex++) {
+		const aiNode* pChildNode = pNode->mChildren[childIndex];
+		ProcessHierarchy(pChildNode, pScene, pNode);
 	}
 }
 

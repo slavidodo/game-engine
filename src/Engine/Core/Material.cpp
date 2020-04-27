@@ -5,25 +5,21 @@
 
 namespace {
 
-template <Material::MaterialTypedValueType type,
-	typename ValueType,
-	typename Allocator = std::allocator<ValueType>>
-void TypedValueUniformAssign(Material::TypedValuesMap& map, std::string uniform, ValueType* src, size_t size)
+template <typename ValueType>
+void TypedValueUniformAssign(Material::TypedValuesMap& map, std::string uniform, Material::MaterialTypedValueType type, ValueType* src, size_t size)
 {
-	Allocator alloc;
-
 	Material::TypedValuesMapIterator it;
 	if ((it = map.find(uniform)) != map.end()) {
 		auto&& mtv = (*it).second;
 		if (mtv.type != type) {
 			delete[] mtv.value;
 			mtv.type = type;
-			mtv.value = alloc.allocate(size);
+			mtv.value = (void*)new ValueType[size];
 		}
 
 		std::memcpy(mtv.value, (void*)src, size * sizeof(ValueType));
 	} else {
-		void* value = (void*)alloc.allocate(size);
+		void* value = (void*)new ValueType[size];
 		std::memcpy(value, (void*)src, size * sizeof(ValueType));
 		map.emplace(std::piecewise_construct, std::forward_as_tuple(uniform),
 					std::forward_as_tuple(type, value, size));
@@ -39,7 +35,7 @@ Material::~Material()
 
 void Material::SetBool(std::string uniform, bool value)
 {
-	TypedValueUniformAssign<MTV_TYPE_BOOL1>(mTypedValues, uniform, &value, 1);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_BOOL1, &value, 1);
 }
 
 void Material::SetBool(std::string uniform, glm::bvec1 value)
@@ -49,22 +45,22 @@ void Material::SetBool(std::string uniform, glm::bvec1 value)
 
 void Material::SetBool2(std::string uniform, glm::bvec2 value)
 {
-	TypedValueUniformAssign<MTV_TYPE_BOOL2>(mTypedValues, uniform, &value[0], 1);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_BOOL2 , &value[0], 1);
 }
 
 void Material::SetBool3(std::string uniform, glm::bvec3 value)
 {
-	TypedValueUniformAssign<MTV_TYPE_BOOL3>(mTypedValues, uniform, &value[0], 3);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_BOOL3 , &value[0], 3);
 }
 
 void Material::SetBool4(std::string uniform, glm::bvec4 value)
 {
-	TypedValueUniformAssign<MTV_TYPE_BOOL4>(mTypedValues, uniform, &value[0], 4);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_BOOL4 , &value[0], 4);
 }
 
 void Material::SetFloat(std::string uniform, float value)
 {
-	TypedValueUniformAssign<MTV_TYPE_FLOAT1>(mTypedValues, uniform, &value, 1);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_FLOAT1 , &value, 1);
 }
 
 void Material::SetFloat(std::string uniform, glm::fvec1 value)
@@ -74,48 +70,48 @@ void Material::SetFloat(std::string uniform, glm::fvec1 value)
 
 void Material::SetFloat2(std::string uniform, glm::fvec2 value)
 {
-	TypedValueUniformAssign<MTV_TYPE_FLOAT2>(mTypedValues, uniform, &value[0], 2);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_FLOAT2 , &value[0], 2);
 }
 
 void Material::SetFloat3(std::string uniform, glm::fvec3 value)
 {
-	TypedValueUniformAssign<MTV_TYPE_FLOAT3>(mTypedValues, uniform, &value[0], 3);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_FLOAT3 , &value[0], 3);
 }
 
 void Material::SetFloat4(std::string uniform, glm::fvec4 value)
 {
-	TypedValueUniformAssign<MTV_TYPE_FLOAT4>(mTypedValues, uniform, &value[0], 4);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_FLOAT4 , &value[0], 4);
 }
 
 void Material::SetInt(std::string uniform, int32_t value)
 {
-	TypedValueUniformAssign<MTV_TYPE_INT1>(mTypedValues, uniform, &value, 1);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_INT1 , &value, 1);
 }
 
 void Material::SetInt(std::string uniform, glm::ivec1 value)
 {
 	SetInt(uniform, value.x);
-	TypedValueUniformAssign<MTV_TYPE_INT1>(mTypedValues, uniform, &value[0], 1);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_INT1 , &value[0], 1);
 }
 
 void Material::SetInt2(std::string uniform, glm::ivec2 value)
 {
-	TypedValueUniformAssign<MTV_TYPE_INT2>(mTypedValues, uniform, &value[0], 3);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_INT2 , &value[0], 3);
 }
 
 void Material::SetInt3(std::string uniform, glm::ivec3 value)
 {
-	TypedValueUniformAssign<MTV_TYPE_INT3>(mTypedValues, uniform, &value[0], 3);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_INT3 , &value[0], 3);
 }
 
 void Material::SetInt4(std::string uniform, glm::ivec4 value)
 {
-	TypedValueUniformAssign<MTV_TYPE_INT4>(mTypedValues, uniform, &value[0], 4);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_INT4, &value[0], 4);
 }
 
 void Material::SetFloatArray(std::string uniform, float* value, size_t size)
 {
-	TypedValueUniformAssign<MTV_TYPE_FLOAT_ARRAY>(mTypedValues, uniform, value, size);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_FLOAT_ARRAY, value, size);
 }
 
 void Material::SetFloatArray(std::string uniform, glm::fvec1* value, size_t size)
@@ -125,17 +121,17 @@ void Material::SetFloatArray(std::string uniform, glm::fvec1* value, size_t size
 
 void Material::SetFloat2Array(std::string uniform, glm::fvec2* value, size_t size)
 {
-	TypedValueUniformAssign<MTV_TYPE_FLOAT_ARRAY>(mTypedValues, uniform, (float*)value, size * 2);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_FLOAT_ARRAY, (float*)value, size * 2);
 }
 
 void Material::SetFloat3Array(std::string uniform, glm::fvec3* value, size_t size)
 {
-	TypedValueUniformAssign<MTV_TYPE_FLOAT_ARRAY>(mTypedValues, uniform, (float*)value, size * 3);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_FLOAT_ARRAY, (float*)value, size * 3);
 }
 
 void Material::SetFloat4Array(std::string uniform, glm::fvec4* value, size_t size)
 {
-	TypedValueUniformAssign<MTV_TYPE_FLOAT_ARRAY>(mTypedValues, uniform, (float*)value, size * 4);
+	TypedValueUniformAssign(mTypedValues, uniform, MTV_TYPE_FLOAT_ARRAY, (float*)value, size * 4);
 }
 
 void Material::ShaderPass() const

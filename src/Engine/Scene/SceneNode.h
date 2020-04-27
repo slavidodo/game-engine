@@ -10,6 +10,7 @@ typedef std::shared_ptr<SceneNode> SceneNode_ptr;
 typedef std::shared_ptr<SceneNode> SceneNode_weakPtr;
 
 class SceneManager;
+class Scene;
 
 // TODO; abstract this into a node class
 /*

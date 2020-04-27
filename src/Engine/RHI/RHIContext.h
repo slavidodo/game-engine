@@ -5,7 +5,7 @@
 #include "../Core/Camera.h"
 #include "../Core/Material.h"
 #include "../Core/Mesh.h"
-#include "RHIBuffer.h"
+#include "RHIResource.h"
 
 /*
  * represepnts a dynamic RHI
@@ -32,7 +32,12 @@ public:
 
 	// hardware buffers
 	virtual RHIVertexBuffer_ptr CreateVertexBuffer(size_t verticesCount, size_t vertexSize, RHIHardwareBufferUsage usage) = 0;
+	virtual void* LockVertexBuffer(RHIVertexBuffer_ptr vertexBuffer, size_t offset, size_t size) = 0;
+	virtual void UnlockVertexBuffer(RHIVertexBuffer_ptr vertexBuffer) = 0;
+	
 	virtual RHIIndexBuffer_ptr CreateIndexBuffer(size_t indicesCount, RHIIndexBufferType type, RHIHardwareBufferUsage usage) = 0;
+	virtual void* LockIndexBuffer(RHIIndexBuffer_ptr indexBuffer, size_t offset, size_t size) = 0;
+	virtual void UnlockIndexBuffer(RHIIndexBuffer_ptr indexBuffer) = 0;
 
 	// utilize profiling, swap chain, ...
 	virtual void BeginRenderFrame() = 0;

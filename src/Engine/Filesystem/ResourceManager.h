@@ -30,6 +30,8 @@ public:
 private:
 	bool mInitialized = false;
 
+	std::unique_ptr<Assimp::Importer> mAssimpImporter;
+
 	std::map<std::string, Model_ptr> mModelCache;
 };
 

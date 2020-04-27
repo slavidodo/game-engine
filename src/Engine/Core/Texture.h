@@ -2,10 +2,8 @@
 #ifndef ENGINE_CORE_IMAGE_H
 #define ENGINE_CORE_IMAGE_H
 
-#include "../RHI/RHITexture.h"
-
-class Image;
-typedef std::shared_ptr<Image> Image_ptr;
+class Texture;
+typedef std::shared_ptr<Texture> Texture_ptr;
 
 enum textureType_t
 {
@@ -35,15 +33,13 @@ struct TextureSettings
 	textureFilterMode_t filterMode;
 };
 
-class Image
+class Texture
 {
 protected:
 	bool Load(uint8_t* buffer, size_t size);
 
 private:
 	TextureSettings mTextureSettings;
-
-	RHITexture_ptr mTexture;
 };
 
 #endif // ENGINE_CORE_IMAGE_H

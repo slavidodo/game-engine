@@ -3,6 +3,8 @@
 
 #include "Engine/Platform/CoreApplication.h"
 #include "Engine/Platform/Window.h"
+#include "Engine/Filesystem/ResourceManager.h"
+#include <physfs.h>
 
 const std::string WINDOW_TITLE = "Game Engine";
 constexpr int32_t WINDOW_WIDTH = 1024;

@@ -11,6 +11,13 @@ bool ResourceManager::Init()
 		return true;
 
 	mInitialized = PHYSFS_init(nullptr) != 0;
+
+	if (mInitialized) {
+		// initialize assimp importers
+		mAssimpImporter.reset(new Assimp::Importer);
+		mAssimpImporter->SetIOHandler(new AssimpIOSystem);
+	}
+
 	return mInitialized;
 }
 
@@ -48,17 +55,28 @@ File_ptr ResourceManager::OpenWrite(std::string filename)
 
 Model_ptr ResourceManager::LoadModel(std::string filename)
 {
-	// todo; store the importer instead of creating a new one for every model
-	Assimp::Importer importer;
-	importer.SetIOHandler(new AssimpIOSystem);
+	// todo; lock and do this on another thread
+	// the returned model should be owned again by main thread
+	// once the data is ready
 
-	uint32_t flags = aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType;
-	const aiScene* scene = importer.ReadFile(filename, flags); // TODO: give the user the choice of flags?
+	// todo; let user specify whether to modify the model in order
+	// to make it suitable for a specific situation
+
+	// todo: let rhi add its own flags
+	// D3D prefers left-handed coordinate space
+	uint32_t flags = aiProcess_CalcTangentSpace // calculate tangent if normals exist
+		| aiProcess_Triangulate // triangulate?
+		| aiProcess_JoinIdenticalVertices // get rid of duplicated vertices
+		| aiProcess_SortByPType // split primitives
+		| aiProcess_OptimizeGraph; // get rid of unnecessary nodes
+
+	const aiScene* scene = mAssimpImporter->ReadFile(filename, flags);
 	if (scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		return nullptr;
 	}
 
 	auto model = std::make_shared<Model>(filename, scene);
-	mModelCache.emplace(filename, model);
+	mModelCache.emplace(filename, model); // are we gonna load everything into memory? no?
+	mAssimpImporter->FreeScene();
 	return model;
 }

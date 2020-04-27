@@ -2,13 +2,13 @@
 #include "pch.h"
 
 #include "OpenGL3RHIContext.h"
-#include "OpenGL3RHIBuffer.h"
+#include "OpenGL3RHIResource.h"
 
 OpenGL3RHIContext::OpenGL3RHIContext(GLFWwindow* window)
 	: RHIContext(window)
 {
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
@@ -90,4 +90,15 @@ void OpenGL3RHIContext::EndRenderFrame()
 {
 	// swap buffers
 	glfwSwapBuffers(mWindow);
+}
+
+GLenum OpenGL3RHIContext::GetGLUsageForHardwareUsage(RHIHardwareBufferUsage hbUsage)
+{
+	if (hbUsage & RHIHardwareBufferUsage::HWBU_DISCARD) {
+		return GL_STREAM_DRAW;
+	} else if (hbUsage & RHIHardwareBufferUsage::HWBU_STATIC) {
+		return GL_STATIC_DRAW;
+	} else {
+		return GL_DYNAMIC_DRAW;
+	}
 }

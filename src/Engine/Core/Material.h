@@ -76,6 +76,7 @@ public:
 	void SetFloat4Array(std::string global, glm::fvec4* value, std::size_t size);
 
 protected:
+
 	/*
 	 * pass the typed values to the RTShader
 	 */

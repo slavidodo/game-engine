@@ -25,15 +25,18 @@ public:
 
 	void DrawMeshWithoutOptimization(Mesh_ptr mesh, Material_ptr shader, Camera_ptr camera) override final;
 
-	RHIVertexBuffer_ptr CreateVertexBuffer(size_t verticesCount, size_t vertexSize, RHIHardwareBufferUsage usage) override final {
-		return nullptr;
-	}
-	RHIIndexBuffer_ptr CreateIndexBuffer(size_t indicesCount, RHIIndexBufferType type, RHIHardwareBufferUsage usage) override final {
-		return nullptr;
-	}
+	RHIVertexBuffer_ptr CreateVertexBuffer(size_t verticesCount, size_t vertexSize, RHIHardwareBufferUsage usage) override final;
+	void* LockVertexBuffer(RHIVertexBuffer_ptr vertexBuffer, size_t offset, size_t size) override final;
+	void UnlockVertexBuffer(RHIVertexBuffer_ptr vertexBuffer) override final;
+
+	RHIIndexBuffer_ptr CreateIndexBuffer(size_t indicesCount, RHIIndexBufferType type, RHIHardwareBufferUsage usage) override final;
+	void* LockIndexBuffer(RHIIndexBuffer_ptr indexBuffer, size_t offset, size_t size) override final;
+	void UnlockIndexBuffer(RHIIndexBuffer_ptr indexBuffer) override final;
 
 	void BeginRenderFrame() override final;
 	void EndRenderFrame() override final;
+
+	GLenum GetGLUsageForHardwareUsage(RHIHardwareBufferUsage hbUsage);
 
 private:
 	GLFWwindow* mContext;

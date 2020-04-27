@@ -70,4 +70,6 @@ void StaticMeshGenerator::CreateCube(Mesh_ptr mesh, float edgeLength /* = 100 */
 
 		// back
 		20, 21, 22, 20, 22, 23 };
+
+
 }
