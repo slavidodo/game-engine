@@ -5,7 +5,7 @@
 #include "Object.h"
 #include "Camera.h"
 #include "Transform.h"
-#include "Mesh.h"
+#include "StaticMesh.h"
 #include "Texture.h"
 
 #include "../Scene/SceneNode.h"

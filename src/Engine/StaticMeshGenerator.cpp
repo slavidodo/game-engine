@@ -3,56 +3,54 @@
 
 #include "StaticMeshGenerator.h"
 
-Mesh_ptr StaticMeshGenerator::CreateCube(float edgeLength /* = 100 */)
-{
-	auto mesh = std::make_shared<Mesh>();
-	CreateCube(mesh, edgeLength);
-	return mesh;
-}
+#include "Platform/Window.h"
 
-void StaticMeshGenerator::CreateCube(Mesh_ptr mesh, float edgeLength /* = 100 */)
+StaticMesh_ptr StaticMeshGenerator::CreateCube(float edgeLength /* = 1.0f */)
 {
-	const size_t totalVertices = 24; // 4 per face * 6 faces
-	const size_t vertexEntrySize = 8; // pos(3) + normal(3) + uv(2)
-	const float vertices[totalVertices * vertexEntrySize] = {
+	auto mesh = std::make_shared<StaticMesh>();
+
+	// initial information
+	const size_t NumVertices = 4 * 6;
+	const size_t NumIndices = 2 * 6 * 3;
+
+	StaticVertexFilter Vertices[NumVertices] = {
 		// front side
-		-edgeLength, -edgeLength,  edgeLength,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f,
-		 edgeLength, -edgeLength,  edgeLength,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
-		 edgeLength,  edgeLength,  edgeLength,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f,
-		-edgeLength,  edgeLength,  edgeLength,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
+		{glm::fvec3(-edgeLength, -edgeLength,  edgeLength),  glm::fvec3(0.0f,  0.0f,  1.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3( edgeLength, -edgeLength,  edgeLength),  glm::fvec3(0.0f,  0.0f,  1.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3( edgeLength,  edgeLength,  edgeLength),  glm::fvec3(0.0f,  0.0f,  1.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength,  edgeLength),  glm::fvec3(0.0f,  0.0f,  1.0f), glm::fvec2(0.0f, 0.0f)},
 
 		// back side
-		 edgeLength, -edgeLength, -edgeLength,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
-		-edgeLength, -edgeLength, -edgeLength,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
-		-edgeLength,  edgeLength, -edgeLength,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
-		 edgeLength,  edgeLength, -edgeLength,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
+		{glm::fvec3( edgeLength, -edgeLength, -edgeLength),  glm::fvec3(0.0f,  0.0f, -1.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3(-edgeLength, -edgeLength, -edgeLength),  glm::fvec3(0.0f,  0.0f, -1.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength, -edgeLength),  glm::fvec3(0.0f,  0.0f, -1.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3( edgeLength,  edgeLength, -edgeLength),  glm::fvec3(0.0f,  0.0f, -1.0f), glm::fvec2(0.0f, 0.0f)},
 
 		// left side
-		-edgeLength, -edgeLength, -edgeLength, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-		-edgeLength, -edgeLength,  edgeLength, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-		-edgeLength,  edgeLength,  edgeLength, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-		-edgeLength,  edgeLength, -edgeLength, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+		{glm::fvec3(-edgeLength, -edgeLength, -edgeLength), glm::fvec3(-1.0f,  0.0f,  0.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3(-edgeLength, -edgeLength,  edgeLength), glm::fvec3(-1.0f,  0.0f,  0.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength,  edgeLength), glm::fvec3(-1.0f,  0.0f,  0.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength, -edgeLength), glm::fvec3(-1.0f,  0.0f,  0.0f), glm::fvec2(0.0f, 0.0f)},
 
 		// right side
-		 edgeLength, -edgeLength,  edgeLength,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-		 edgeLength, -edgeLength, -edgeLength,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-		 edgeLength,  edgeLength, -edgeLength,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-		 edgeLength,  edgeLength,  edgeLength,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+		{glm::fvec3( edgeLength, -edgeLength,  edgeLength), glm::fvec3( 1.0f,  0.0f,  0.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3( edgeLength, -edgeLength, -edgeLength), glm::fvec3( 1.0f,  0.0f,  0.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3( edgeLength,  edgeLength, -edgeLength), glm::fvec3( 1.0f,  0.0f,  0.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3( edgeLength,  edgeLength,  edgeLength), glm::fvec3( 1.0f,  0.0f,  0.0f), glm::fvec2(0.0f, 0.0f)},
 
 		// up side
-		-edgeLength,  edgeLength,  edgeLength,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
-		 edgeLength,  edgeLength,  edgeLength,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
-		 edgeLength,  edgeLength, -edgeLength,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
-		-edgeLength,  edgeLength, -edgeLength,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
+		{glm::fvec3(-edgeLength,  edgeLength,  edgeLength), glm::fvec3( 0.0f,  1.0f,  0.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3( edgeLength,  edgeLength,  edgeLength), glm::fvec3( 0.0f,  1.0f,  0.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3( edgeLength,  edgeLength, -edgeLength), glm::fvec3( 0.0f,  1.0f,  0.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength, -edgeLength), glm::fvec3( 0.0f,  1.0f,  0.0f), glm::fvec2(0.0f, 0.0f)},
 
 		// down side
-		-edgeLength, -edgeLength, -edgeLength,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
-		 edgeLength, -edgeLength, -edgeLength,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
-		 edgeLength, -edgeLength,  edgeLength,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
-		-edgeLength, -edgeLength,  edgeLength,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f };
+		{glm::fvec3(-edgeLength, -edgeLength, -edgeLength), glm::fvec3( 0.0f, -1.0f,  0.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3( edgeLength, -edgeLength, -edgeLength), glm::fvec3( 0.0f, -1.0f,  0.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3( edgeLength, -edgeLength,  edgeLength), glm::fvec3( 0.0f, -1.0f,  0.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLength, -edgeLength,  edgeLength), glm::fvec3( 0.0f, -1.0f,  0.0f), glm::fvec2(0.0f, 0.0f)} };
 
-	const size_t totalIndices = 36; // 3 per trig * 2 per face * 6 faces (triangles)
-	const float indices[totalIndices] = {
+	uint16_t Indices[NumIndices] = {
 		// front
 		0, 1, 2, 0, 2, 3,
 		
@@ -71,5 +69,37 @@ void StaticMeshGenerator::CreateCube(Mesh_ptr mesh, float edgeLength /* = 100 */
 		// back
 		20, 21, 22, 20, 22, 23 };
 
+	StaticMeshCreateInfo createInfo;
+	createInfo.NumVertices = NumVertices;
+	createInfo.NumIndices = NumIndices;
+	createInfo.Vertices = Vertices;
+	createInfo.Indices = Indices;
+	createInfo.IndexType = RHIIndexBufferType::IBT_16;
 
+	CreateStaticMeshWithDefaultFilter(mesh, createInfo);
+	return mesh;
+}
+
+
+void StaticMeshGenerator::CreateStaticMeshWithDefaultFilter(StaticMesh_ptr mesh, StaticMeshCreateInfo& info)
+{
+	RHIContext* DynamicRHI = g_window.GetContext();
+
+	mesh->mVertexBuffer = DynamicRHI->CreateVertexBuffer(info.NumVertices,
+																	  sizeof(StaticVertexFilter),
+																	  RHIHardwareBufferUsage::HWBU_STATIC_WRITE_ONLY);
+	mesh->mIndexBuffer = DynamicRHI->CreateIndexBuffer(info.NumIndices,
+																   info.IndexType,
+																   RHIHardwareBufferUsage::HWBU_STATIC_WRITE_ONLY);
+
+	void* pVoidVertices = DynamicRHI->LockVertexBuffer(mesh->mVertexBuffer, 0, mesh->mVertexBuffer->GetSize(), RHIResourceLockMode::RLM_WRITE_ONLY);
+	void* pVoidIndices = DynamicRHI->LockIndexBuffer(mesh->mIndexBuffer, 0, mesh->mIndexBuffer->GetSize(), RHIResourceLockMode::RLM_WRITE_ONLY);
+	std::memcpy(pVoidVertices, (void*)info.Vertices, mesh->mVertexBuffer->GetSize());
+	std::memcpy(pVoidIndices, (void*)info.Indices, mesh->mIndexBuffer->GetSize());
+	DynamicRHI->UnlockVertexBuffer(mesh->mVertexBuffer);
+	DynamicRHI->UnlockIndexBuffer(mesh->mIndexBuffer);
+
+	mesh->mNumVertices = info.NumVertices;
+	mesh->mNumIndices = info.NumIndices;
+	mesh->mNumTriangles = mesh->mNumIndices / 3;
 }

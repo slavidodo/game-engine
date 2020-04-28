@@ -4,7 +4,8 @@
 
 #include "../Core/Camera.h"
 #include "../Core/Material.h"
-#include "../Core/Mesh.h"
+#include "../Core/StaticMesh.h"
+#include "../Core/Transform.h"
 #include "RHIResource.h"
 
 /*
@@ -28,15 +29,15 @@ public:
 	virtual void ClearColor(glm::fvec4 color) = 0;
 
 	// drawing functionality
-	virtual void DrawMeshWithoutOptimization(Mesh_ptr mesh, Material_ptr material, Camera_ptr camera) = 0;
 
 	// hardware buffers
 	virtual RHIVertexBuffer_ptr CreateVertexBuffer(size_t verticesCount, size_t vertexSize, RHIHardwareBufferUsage usage) = 0;
-	virtual void* LockVertexBuffer(RHIVertexBuffer_ptr vertexBuffer, size_t offset, size_t size) = 0;
+	virtual void* LockVertexBuffer(RHIVertexBuffer_ptr vertexBuffer, size_t offset, size_t size, RHIResourceLockMode lockMode) = 0;
 	virtual void UnlockVertexBuffer(RHIVertexBuffer_ptr vertexBuffer) = 0;
-	
+	virtual void CopyVertexBuffer(RHIVertexBuffer_ptr sourceBuffer, RHIVertexBuffer_ptr destBuffer) = 0;
+
 	virtual RHIIndexBuffer_ptr CreateIndexBuffer(size_t indicesCount, RHIIndexBufferType type, RHIHardwareBufferUsage usage) = 0;
-	virtual void* LockIndexBuffer(RHIIndexBuffer_ptr indexBuffer, size_t offset, size_t size) = 0;
+	virtual void* LockIndexBuffer(RHIIndexBuffer_ptr indexBuffer, size_t offset, size_t size, RHIResourceLockMode lockMode) = 0;
 	virtual void UnlockIndexBuffer(RHIIndexBuffer_ptr indexBuffer) = 0;
 
 	// utilize profiling, swap chain, ...

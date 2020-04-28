@@ -62,25 +62,6 @@ void OpenGL3RHIContext::ClearColor(glm::fvec4 color)
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void OpenGL3RHIContext::DrawMeshWithoutOptimization(Mesh_ptr mesh, Material_ptr material, Camera_ptr camera)
-{
-	/*
-	// obtain descriptor and upload gpu data if not yet
-	auto descriptor = std::dynamic_pointer_cast<OpenGLMeshDescriptor>(mesh->descriptor());
-	descriptor->update();
-
-	// put the shader to use
-	shader->use();
-	shader->setMat4x4("GameEngine_MVP", mvp);
-
-	// bind vao and issue a draw call
-	glBindVertexArray(descriptor->VAO());
-	glDrawElements(GL_TRIANGLES, (GLsizei)descriptor->mesh()->indices().size(), GL_UNSIGNED_INT, 0);
-
-	// reset vao binding
-	glBindVertexArray(0);*/
-}
-
 void OpenGL3RHIContext::BeginRenderFrame()
 {
 

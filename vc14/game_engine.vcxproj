@@ -168,7 +168,7 @@
     <ClCompile Include="..\src\Engine\Core\Camera.cpp" />
     <ClCompile Include="..\src\Engine\Core\Material.cpp" />
     <ClCompile Include="..\src\Engine\Core\Math\AABB.cpp" />
-    <ClCompile Include="..\src\Engine\Core\Mesh.cpp" />
+    <ClCompile Include="..\src\Engine\Core\StaticMesh.cpp" />
     <ClCompile Include="..\src\Engine\Core\Model.cpp" />
     <ClCompile Include="..\src\Engine\Core\Texture.cpp" />
     <ClCompile Include="..\src\Engine\Core\Object.cpp" />
@@ -208,7 +208,7 @@
     <ClInclude Include="..\src\Engine\Core\Camera.h" />
     <ClInclude Include="..\src\Engine\Core\Material.h" />
     <ClInclude Include="..\src\Engine\Core\Math\AABB.h" />
-    <ClInclude Include="..\src\Engine\Core\Mesh.h" />
+    <ClInclude Include="..\src\Engine\Core\StaticMesh.h" />
     <ClInclude Include="..\src\Engine\Core\Model.h" />
     <ClInclude Include="..\src\Engine\Core\Texture.h" />
     <ClInclude Include="..\src\Engine\Core\Object.h" />

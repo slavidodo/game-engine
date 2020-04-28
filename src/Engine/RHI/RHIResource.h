@@ -23,6 +23,14 @@ typedef std::shared_ptr<RHITexture> RHITexture_ptr;
 typedef std::shared_ptr<RHITexture2D> RHITexture2D_ptr;
 typedef std::shared_ptr<RHITexture3D> RHITexture3D_ptr;
 
+enum class RHIResourceLockMode : uint8_t
+{
+	RLM_NORMAL,
+	RLM_READ_ONLY,
+	RLM_WRITE_ONLY,
+	RLM_WRITE_NO_OVERWRITE,
+};
+
 enum RHIHardwareBufferUsage : uint8_t
 {
 	// we could specify general uses, such as STREAM_DRAW
@@ -51,6 +59,7 @@ public:
 
 protected:
 	RHIResource() = default;
+	virtual ~RHIResource() = default;
 
 private:
 };
@@ -65,6 +74,11 @@ public:
 
 	OBJECT_GETACCESSOR(RHIHardwareBufferUsage, RHIHardwareBufferUsage, Usage);
 	OBJECT_GETACCESSOR(size_t, size_t, Size);
+
+	bool CanBeDiscarded() const {
+		return (mUsage & RHIHardwareBufferUsage::HWBU_DISCARD) != 0
+			|| (mUsage & RHIHardwareBufferUsage::HWBU_DYNAMIC) != 0;
+	}
 
 protected:
 	RHIHardwareBufferUsage mUsage;

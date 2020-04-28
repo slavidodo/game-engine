@@ -11,7 +11,7 @@ typedef std::shared_ptr<Scene> Scene_ptr;
 class Scene
 {
 public:
-	void Render();
+	virtual void Render();
 
 protected:
 	Camera_ptr mMainCamera;

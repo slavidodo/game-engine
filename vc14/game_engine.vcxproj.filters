@@ -80,9 +80,6 @@
     <ClCompile Include="..\src\Engine\Core\SubMesh.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Engine\Core\Mesh.cpp">
-      <Filter>Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Engine\Filesystem\File.cpp">
       <Filter>Engine\Filesystem</Filter>
     </ClCompile>
@@ -146,6 +143,9 @@
     <ClCompile Include="..\src\Engine\Core\Texture.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Engine\Core\StaticMesh.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Tests\ExampleScene.h">
@@ -174,9 +174,6 @@
     </ClInclude>
     <ClInclude Include="..\src\Engine\StaticMeshGenerator.h">
       <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Engine\Core\Mesh.h">
-      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Engine\Core\SubMesh.h">
       <Filter>Engine\Core</Filter>
@@ -234,6 +231,9 @@
       <Filter>Engine\RHI</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Engine\Core\Texture.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Core\StaticMesh.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
   </ItemGroup>
