@@ -3,25 +3,9 @@
 #define ENGINE_RHI_RHIRESOURCE_H
 
 class RHIResource;
-class RHIHardwareBuffer;
-class RHIVertexBuffer;
-class RHIIndexBuffer;
-class RHIUniformBuffer;
-class RHIStructuredBuffer;
-class RHITexture;
-class RHITexture2D;
-class RHITexture3D;
 typedef std::unique_ptr<RHIResource> Resource_uPtr;
 typedef std::shared_ptr<RHIResource> Resource_ptr;
 typedef std::weak_ptr<RHIResource> Resource_weakPtr;
-typedef std::shared_ptr<RHIHardwareBuffer> RHIHardwareBuffer_ptr;
-typedef std::shared_ptr<RHIVertexBuffer> RHIVertexBuffer_ptr;
-typedef std::shared_ptr<RHIIndexBuffer> RHIIndexBuffer_ptr;
-typedef std::shared_ptr<RHIUniformBuffer> RHIUniformBuffer_ptr;
-typedef std::shared_ptr<RHIStructuredBuffer> RHIStructuredBuffer_ptr;
-typedef std::shared_ptr<RHITexture> RHITexture_ptr;
-typedef std::shared_ptr<RHITexture2D> RHITexture2D_ptr;
-typedef std::shared_ptr<RHITexture3D> RHITexture3D_ptr;
 
 enum class RHIResourceLockMode : uint8_t
 {
@@ -53,6 +37,46 @@ enum RHIIndexBufferType {
 	IBT_32,
 };
 
+enum VertexElementType
+{
+	VET_None,
+	VET_Float1,
+	VET_Float2,
+	VET_Float3,
+	VET_Float4,
+	VET_PackedNormal,	// FPackedNormal
+	VET_UByte4,
+	VET_UByte4N,
+	VET_Color,
+	VET_Short2,
+	VET_Short4,
+	VET_Short2N,		// 16 bit word normalized to (value/32767.0,value/32767.0,0,0,1)
+	VET_Half2,			// 16 bit float using 1 bit sign, 5 bit exponent, 10 bit mantissa 
+	VET_Half4,
+	VET_Short4N,		// 4 X 16 bit word, normalized 
+	VET_UShort2,
+	VET_UShort4,
+	VET_UShort2N,		// 16 bit word normalized to (value/65535.0,value/65535.0,0,0,1)
+	VET_UShort4N,		// 4 X 16 bit word unsigned, normalized 
+	VET_URGB10A2N,		// 10 bit r, g, b and 2 bit a normalized to (value/1023.0f, value/1023.0f, value/1023.0f, value/3.0f)
+	VET_UInt,
+	VET_MAX,
+};
+
+enum class RasterizerFillMode
+{
+	FM_Point,
+	FM_Wireframe,
+	FM_Solid,
+};
+
+enum class RasterizerCullMode
+{
+	CM_None,
+	CM_ClockWise,
+	CM_CounterClockWise,
+};
+
 class RHIResource : std::enable_shared_from_this<RHIResource>
 {
 public:
@@ -63,6 +87,52 @@ protected:
 
 private:
 };
+
+// Vertex elements
+struct VertexElement
+{
+	uint8_t StreamIndex;
+	uint8_t Offset;
+	VertexElementType Type;
+	uint8_t AttributeIndex;
+	uint16_t Stride;
+	/**
+	 * Whether to use instance index or vertex index to consume the element.
+	 * eg if bUseInstanceIndex is 0, the element will be repeated for every instance.
+	 */
+	bool UseInstanceIndex;
+
+	VertexElement() {}
+	VertexElement(uint8_t streamIndex, uint8_t offset, VertexElementType type, uint8_t attributeIndex, uint16_t stride, bool useInstanceIndex = false) :
+		StreamIndex(streamIndex),
+		Offset(offset),
+		Type(type),
+		AttributeIndex(attributeIndex),
+		Stride(stride),
+		UseInstanceIndex(useInstanceIndex)
+	{}
+
+	void operator=(const VertexElement& Other)
+	{
+		StreamIndex = Other.StreamIndex;
+		Offset = Other.Offset;
+		Type = Other.Type;
+		AttributeIndex = Other.AttributeIndex;
+		UseInstanceIndex = Other.UseInstanceIndex;
+	}
+};
+
+// Buffers
+class RHIHardwareBuffer;
+class RHIVertexBuffer;
+class RHIIndexBuffer;
+class RHIUniformBuffer;
+class RHIStructuredBuffer;
+typedef std::shared_ptr<RHIHardwareBuffer> RHIHardwareBuffer_ptr;
+typedef std::shared_ptr<RHIVertexBuffer> RHIVertexBuffer_ptr;
+typedef std::shared_ptr<RHIIndexBuffer> RHIIndexBuffer_ptr;
+typedef std::shared_ptr<RHIUniformBuffer> RHIUniformBuffer_ptr;
+typedef std::shared_ptr<RHIStructuredBuffer> RHIStructuredBuffer_ptr;
 
 class RHIHardwareBuffer : public RHIResource
 {
@@ -132,6 +202,14 @@ public:
 private:
 };
 
+/// Textures
+class RHITexture;
+class RHITexture2D;
+class RHITexture3D;
+typedef std::shared_ptr<RHITexture> RHITexture_ptr;
+typedef std::shared_ptr<RHITexture2D> RHITexture2D_ptr;
+typedef std::shared_ptr<RHITexture3D> RHITexture3D_ptr;
+
 class RHITexture : public RHIResource
 {
 public:
@@ -183,5 +261,92 @@ private:
 	uint32_t mDepth;
 };
 
+/// State Blocks
+struct RasterizerStateInitializerRHI
+{
+	RasterizerFillMode FillMode;
+	RasterizerCullMode CullMode;
+	float DepthBias;
+	float SlopeScaleDepthBias;
+	bool bAllowMSAA;
+	bool bEnableLineAA;
+};
+
+class RHISamplerState : public RHIResource
+{
+public:
+	virtual bool IsImmutable() const { return false; }
+};
+
+class RHIRasterizerState : public RHIResource
+{
+public:
+	virtual bool GetInitializer(struct RasterizerStateInitializerRHI& Init) { return false; }
+};
+
+/// Shader Bindings
+class RHIVertexDeclaration;
+class RHIBoundShaderState;
+typedef std::shared_ptr<RHIVertexDeclaration> RHIVertexDeclaration_ptr;
+typedef std::shared_ptr<RHIBoundShaderState> RHIBoundShaderState_ptr;
+
+typedef std::vector<struct VertexElement> VertexDeclarationElementList;
+class RHIVertexDeclaration : public RHIResource
+{
+public:
+	virtual bool GetInitializer(VertexDeclarationElementList& Init) { return false; }
+};
+
+class RHIBoundShaderState : public RHIResource {};
+
+/// Shaders
+// this is using DirectX naming convention
+class RHIShader;
+class RHIVertexShader;
+class RHIHullShader; // [OGL] TCS
+class RHIDomainShader; // [OGL] TES
+class RHIPixelShader; // [OGL] Fragment shader
+class RHIGeometryShader;
+typedef std::shared_ptr<RHIShader> RHIShader_ptr;
+typedef std::shared_ptr<RHIVertexShader> RHIVertexShader_ptr;
+typedef std::shared_ptr<RHIHullShader> RHIHullShader_ptr;
+typedef std::shared_ptr<RHIDomainShader> RHIDomainShader_ptr;
+typedef std::shared_ptr<RHIPixelShader> RHIPixelShader_ptr;
+typedef std::shared_ptr<RHIGeometryShader> RHIGeometryShader_ptr;
+
+class RHIShader : public RHIResource {};
+
+class RHIVertexShader : public RHIShader {};
+class RHIHullShader : public RHIShader {};
+class RHIDomainShader : public RHIShader {};
+class RHIPixelShader : public RHIShader {};
+class RHIGeometryShader : public RHIShader {};
+
+/// Pipelines
+class RHIGraphicsPipelineState;
+class RHIGraphicsPipelineStateFallBack;
+typedef std::shared_ptr<RHIGraphicsPipelineState> RHIGraphicsPipelineState_ptr;
+typedef std::shared_ptr<RHIGraphicsPipelineStateFallBack> RHIGraphicsPipelineStateFallBack_ptr;
+
+class RHIGraphicsPipelineState : public RHIResource {};
+class RHIGraphicsPipelineStateFallBack : public RHIGraphicsPipelineState {};
+
+/// Render Target
+
+/*
+ * TODO: in the context here, we refer to multipass rendering and using multiple
+ * render targets, atm we are just defining a single render target bound to a
+ * texture, which in our case is where the drawn data will be
+ */
+struct RHIRenderPassInfo
+{
+	RHITexture_ptr RenderTarget;
+
+	explicit RHIRenderPassInfo(RHITexture_ptr InRenderTarget) {
+		RenderTarget = InRenderTarget;
+	}
+
+	explicit RHIRenderPassInfo() = default;
+};
 
 #endif // ENGINE_RHI_RHIRESOURCE_H

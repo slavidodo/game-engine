@@ -6,8 +6,9 @@
 
 #include "../Filesystem/ResourceManager.h"
 #include "../Scene/SceneManager.h"
+#include "../RHI/RHICommandList.h"
 
-CoreApplication g_app;
+CoreApplication gApplication;
 
 bool CoreApplication::Init()
 {
@@ -38,21 +39,20 @@ void CoreApplication::Terminate()
 
 void CoreApplication::RunMainLoop()
 {
-	GLFWwindow* window = g_window.GetGlfwWindow();
-	RHIContext* context = g_window.GetContext();
+	GLFWwindow* glfwWindow = gWindow.GetGlfwWindow();
 
-	glfwSetKeyCallback(window, &CoreApplication::onKeyCallback);
-	glfwSetFramebufferSizeCallback(window, &CoreApplication::onFramebufferSizeCallback);
+	glfwSetKeyCallback(glfwWindow, &CoreApplication::onKeyCallback);
+	glfwSetFramebufferSizeCallback(glfwWindow, &CoreApplication::onFramebufferSizeCallback);
 
-	while (!glfwWindowShouldClose(g_window.GetGlfwWindow())) {
-		// begin frame data
-		context->BeginRenderFrame();
-
-		// render current scene
-		SceneManager::GetInstance().Render();
-
-		// end frame
-		context->EndRenderFrame();
+	// todo: this is just temporary, since we don't really support async commands
+	// moreover, we don't really track the sequence of commands
+	auto& RHICmdList = RHICommandListExecutor::GetImmediateCommandList();
+	while (!glfwWindowShouldClose(gWindow.GetGlfwWindow())) {
+		RHICmdList.BeginFrame();
+		{
+			SceneManager::GetInstance().Render(RHICmdList);
+		}
+		RHICmdList.EndFrame();
 
 		// poll events
 		glfwPollEvents();
@@ -61,10 +61,10 @@ void CoreApplication::RunMainLoop()
 
 void CoreApplication::onKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	//g_inputManager.onKeyCallback(key, scancode, action, mods);
+	//gInputManager.onKeyCallback(key, scancode, action, mods);
 }
 
 void CoreApplication::onFramebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
-	g_window.setWindowSize(glm::uvec2(width, height));
+	gWindow.setWindowSize(glm::uvec2(width, height));
 }

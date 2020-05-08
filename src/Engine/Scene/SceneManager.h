@@ -12,8 +12,11 @@ public:
 		return instance;
 	}
 
-	void Render();
+	void Render(RHICommandList& RHICmdList);
 
+	void SetCurrentScene(Scene_ptr scene) {
+		mCurrentScene = scene;
+	}
 private:
 	Scene_ptr mCurrentScene;
 };

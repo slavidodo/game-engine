@@ -4,6 +4,7 @@
 
 #include "SceneNode.h"
 #include "../Core/Camera.h"
+#include "../RHI/RHICommandList.h"
 
 class Scene;
 typedef std::shared_ptr<Scene> Scene_ptr;
@@ -11,7 +12,7 @@ typedef std::shared_ptr<Scene> Scene_ptr;
 class Scene
 {
 public:
-	virtual void Render();
+	virtual void Render(RHICommandList& RHICmdList);
 
 protected:
 	Camera_ptr mMainCamera;

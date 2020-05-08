@@ -3,7 +3,9 @@
 
 #include "Window.h"
 
-Window g_window;
+#include "../RHI/DynamicRHI.h"
+
+Window gWindow;
 
 Window::~Window()
 {
@@ -53,14 +55,7 @@ void Window::hide()
 void Window::setWindowSize(glm::uvec2 size)
 {
 	mSize = size;
-	GetContext()->SetViewport(glm::uvec2(0), size);
-}
-
-void Window::updateWindowSize()
-{
-	glm::ivec2 size;
-	glfwGetWindowSize(mGlfwWindow, &size.x, &size.y);
-	setWindowSize(glm::uvec2(size));
+	gDynamicRHI->RHISetViewport(glm::uvec2(0), size);
 }
 
 void Window::resize(glm::uvec2 size)

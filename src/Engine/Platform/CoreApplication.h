@@ -22,6 +22,6 @@ private:
 	bool mInitialized = false;
 };
 
-extern CoreApplication g_app;
+extern CoreApplication gApplication;
 
 #endif // ENGINE_PLATFORM_COREAPPLICATION_H

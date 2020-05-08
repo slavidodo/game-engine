@@ -118,7 +118,7 @@ std::vector<int32_t> Model::GetMeshIndices(aiMesh* mesh)
 		
 		// load the texture
 		std::string fullPath = folderPath + texturePath.C_Str();
-		textures.push_back(std::move(g_resourceManager.loadTexture(fullPath)));
+		textures.push_back(std::move(gResourceManager.loadTexture(fullPath)));
 	}
 
 	return std::move(textures);

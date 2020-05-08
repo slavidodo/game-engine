@@ -8,8 +8,8 @@
 
 struct StaticMeshCreateInfo
 {
-	StaticVertexFilter* Vertices;
-	uint16_t* Indices;
+	void* Vertices;
+	void* Indices;
 	size_t NumVertices;
 	size_t NumIndices;
 	RHIIndexBufferType IndexType;
@@ -18,9 +18,11 @@ struct StaticMeshCreateInfo
 class StaticMeshGenerator
 {
 public:
+	static StaticMesh_ptr CreateTriangle(float edgeLength = 1.0f);
+	static StaticMesh_ptr CreateQuad(float edgeLength = 1.0f);
 	static StaticMesh_ptr CreateCube(float edgeLength = 1.0f);
 	static StaticMesh_ptr CreateSphere(float radius = 1.0f);
-	static StaticMesh_ptr CreatePlane(float width = 1.0f, float height = 1.0f);
+	static StaticMesh_ptr CreatePlane(float width = 1.0f, float height = 1.0f, size_t division = 1U);
 
 private:
 	// TODO: Add more flexibity to choose vertex size, supplied information, ..

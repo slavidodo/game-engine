@@ -2,8 +2,6 @@
 #ifndef ENGINE_PLATFORM_WINDOW_H
 #define ENGINE_PLATFORM_WINDOW_H
 
-#include "../RHI/RHIContext.h"
-
 class Window
 {
 public:
@@ -21,7 +19,6 @@ public:
 
 	void setWindowSize(glm::uvec2 size);
 	glm::uvec2 getWindowSize() { return mSize; }
-	void updateWindowSize();
 	void resize(glm::uvec2 size);
 
 	void title(std::string value);
@@ -30,11 +27,9 @@ public:
 	}
 
 	OBJECT_GETACCESSOR(GLFWwindow*, const GLFWwindow* , GlfwWindow);
-	OBJECT_ACCESSOR(RHIContext*, const RHIContext* , Context);
 
 private:
 	GLFWwindow* mGlfwWindow;
-	RHIContext* mContext;
 	std::string mTitle;
 
 	glm::uvec2 mSize;
@@ -42,6 +37,6 @@ private:
 	bool mInitialized = false;
 };
 
-extern Window g_window;
+extern Window gWindow;
 
 #endif // ENGINE_PLATFORM_WINDOW_H

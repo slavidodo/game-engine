@@ -28,7 +28,7 @@ size_t AssimpIOStream::FileSize() const {
 }
 
 aiReturn AssimpIOStream::Seek(size_t pOffset, aiOrigin pOrigin) {
-	if (pOrigin == aiOrigin_SET && mFile->Seek(pOffset) != NULL)
+	if (pOrigin == aiOrigin_SET && mFile->Seek(pOffset))
 		return aiReturn::aiReturn_SUCCESS;
 	return aiReturn::aiReturn_FAILURE;
 }

@@ -14,6 +14,7 @@
 #include <ostream>
 #include <array>
 #include <tuple>
+#include <functional>
 
 #if __has_include("vulkan/vulkan.h")
 #define GLFW_INCLUDE_VULKAN
@@ -23,6 +24,8 @@
 #include <GLFW/glfw3.h>
 
 // todo get rid of these
+#define GLM_FORCE_SWIZZLE
+#define GLM_FORCE_SSE2
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 

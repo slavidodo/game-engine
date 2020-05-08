@@ -39,7 +39,7 @@ glm::fmat3x4 Camera::GetProjMatrix()
 
 float Camera::GetAspectRatio()
 {
-	glm::uvec2 size = g_window.getWindowSize();
+	glm::uvec2 size = gWindow.getWindowSize();
 	return (float)size.x / (float)size.y;
 }
 

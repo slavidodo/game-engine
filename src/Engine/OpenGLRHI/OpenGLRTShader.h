@@ -1,16 +1,16 @@
 
-#ifndef ENGINE_OPENGL3RHI_OPENGL3RTSHADER_H
-#define ENGINE_OPENGL3RHI_OPENGL3RTSHADER_H
+#ifndef ENGINE_OPENGLRHI_OPENGLRTSHADER_H
+#define ENGINE_OPENGLRHI_OPENGLRTSHADER_H
 
 #include "../core/shader.h"
 
-class OpenGL3RTShader : public Shader
+class OpenGLRTShader : public Shader
 {
 public:
-	~OpenGL3RTShader();
+	~OpenGLRTShader();
 
-	explicit OpenGL3RTShader(std::string vertexSource, std::string pixelSource);
-	explicit OpenGL3RTShader(std::string vertexSource, std::string pixelSource, std::string geometrySource);
+	explicit OpenGLRTShader(std::string vertexSource, std::string pixelSource);
+	explicit OpenGLRTShader(std::string vertexSource, std::string pixelSource, std::string geometrySource);
 
 	inline void SetBool(std::string global, glm::bvec1 value) override final;
 	inline void SetBool2(std::string global, glm::bvec2 value) override final;
@@ -38,7 +38,7 @@ public:
 	void Use() override final;
 
 protected:
-	OpenGL3RTShader() = default;
+	OpenGLRTShader() = default;
 
 private:
 	uint32_t mProgramId = -1;
@@ -49,4 +49,4 @@ private:
 	int32_t GetUniformLocation(const std::string& global);
 };
 
-#endif // ENGINE_OPENGL3RHI_OPENGL3RTSHADER_H
+#endif // ENGINE_OPENGLRHI_OPENGLRTSHADER_H

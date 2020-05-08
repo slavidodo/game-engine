@@ -3,10 +3,7 @@
 
 #include "Scene.h"
 
-void Scene::Render()
+void Scene::Render(RHICommandList& RHICmdList)
 {
-	if (!mMainCamera)
-		return;
-
-	// determine the frustum of the camera and get all active scene objects
+	// TODO
 }

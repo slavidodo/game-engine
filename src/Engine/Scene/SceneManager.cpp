@@ -3,9 +3,9 @@
 
 #include "SceneManager.h"
 
-void SceneManager::Render()
+void SceneManager::Render(RHICommandList& RHICmdList)
 {
 	if (mCurrentScene) {
-		mCurrentScene->Render();
+		mCurrentScene->Render(RHICmdList);
 	}
 }
