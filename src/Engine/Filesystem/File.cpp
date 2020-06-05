@@ -46,12 +46,12 @@ uint64_t File::Length()
 	return PHYSFS_fileLength(mHandle);
 }
 
-uint64_t File::Read(void* buf, uint32_t len, uint32_t count /* = 1*/)
+uint64_t File::Read(void* buf, size_t len, size_t count /* = 1*/)
 {
 	return PHYSFS_read(mHandle, buf, len, count);
 }
 
-uint64_t File::Write(const void* buf, uint32_t len, uint32_t count /* = 1*/)
+uint64_t File::Write(const void* buf, size_t len, size_t count /* = 1*/)
 {
 	return PHYSFS_write(mHandle, buf, len, count);
 }

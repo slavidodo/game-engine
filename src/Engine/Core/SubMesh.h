@@ -8,12 +8,12 @@ typedef std::shared_ptr<SubMesh> SubMesh_ptr;
 class SubMesh : public std::enable_shared_from_this<SubMesh>
 {
 public:
-	//OBJECT_ACCESSOR(VertexData_ptr, const VertexData_ptr, VertexData);
-	//OBJECT_ACCESSOR(IndexData_ptr, const IndexData_ptr, IndexData);
-	OBJECT_ACCESSOR(bool, bool, UseSharedVertices);
+	//VertexData_ptr GetVertexData() { return mVertexData; }
+	//IndexData_ptr GetIndexData() { return mIndexData; }
+	bool IsUsingSharedVertices() { return mUsingSharedVertices; }
 
 private:
-	bool mUseSharedVertices = false;
+	bool mUsingSharedVertices = false;
 };
 
 #endif // ENGINE_CORE_SUBMESH_H

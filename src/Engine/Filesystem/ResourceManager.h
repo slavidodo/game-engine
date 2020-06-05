@@ -25,7 +25,7 @@ public:
 
 	Model_ptr LoadModel(std::string filename);
 
-	OBJECT_GETACCESSOR(bool, bool, Initialized);
+	bool IsInitialized() const { return mInitialized; }
 
 private:
 	bool mInitialized = false;

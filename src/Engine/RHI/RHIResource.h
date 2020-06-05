@@ -2,97 +2,20 @@
 #ifndef ENGINE_RHI_RHIRESOURCE_H
 #define ENGINE_RHI_RHIRESOURCE_H
 
-class RHIResource;
-typedef std::unique_ptr<RHIResource> Resource_uPtr;
-typedef std::shared_ptr<RHIResource> Resource_ptr;
-typedef std::weak_ptr<RHIResource> Resource_weakPtr;
+#include "RHIDefinitions.h"
 
-enum class RHIResourceLockMode : uint8_t
+class RHIResource : public ThreadSafeRefCountedObject
 {
-	RLM_NORMAL,
-	RLM_READ_ONLY,
-	RLM_WRITE_ONLY,
-	RLM_WRITE_NO_OVERWRITE,
-};
-
-enum RHIHardwareBufferUsage : uint8_t
-{
-	// we could specify general uses, such as STREAM_DRAW
-	HWBU_STATIC = 1 << 0, // to be filled once
-	HWBU_DYNAMIC = 1 << 2, // to be modified more often
-	HWBU_DISCARD = 1 << 3, // to be streamed every frame
-
-	// other uses with buffer data
-	HWBU_WRITE_ONLY = 1 << 4, // contents are not read back
-	HWBU_READ_ONLY = 1 << 5, // contents are to be read from the gpu, often RT usage
-
-	HWBU_STATIC_WRITE_ONLY = HWBU_STATIC | HWBU_WRITE_ONLY, // optimal buffer usage
-	HWBU_DYNAMIC_WRITE_ONLY = HWBU_DYNAMIC | HWBU_WRITE_ONLY, // write only dynamic
-
-	HWBU_DYNAMIC_WRITE_ONLY_DISCARD = HWBU_DYNAMIC_WRITE_ONLY | HWBU_DISCARD, // dyanmic, write only discardable buffer for regular refilling
-};
-
-enum RHIIndexBufferType {
-	IBT_16,
-	IBT_32,
-};
-
-enum VertexElementType
-{
-	VET_None,
-	VET_Float1,
-	VET_Float2,
-	VET_Float3,
-	VET_Float4,
-	VET_PackedNormal,	// FPackedNormal
-	VET_UByte4,
-	VET_UByte4N,
-	VET_Color,
-	VET_Short2,
-	VET_Short4,
-	VET_Short2N,		// 16 bit word normalized to (value/32767.0,value/32767.0,0,0,1)
-	VET_Half2,			// 16 bit float using 1 bit sign, 5 bit exponent, 10 bit mantissa 
-	VET_Half4,
-	VET_Short4N,		// 4 X 16 bit word, normalized 
-	VET_UShort2,
-	VET_UShort4,
-	VET_UShort2N,		// 16 bit word normalized to (value/65535.0,value/65535.0,0,0,1)
-	VET_UShort4N,		// 4 X 16 bit word unsigned, normalized 
-	VET_URGB10A2N,		// 10 bit r, g, b and 2 bit a normalized to (value/1023.0f, value/1023.0f, value/1023.0f, value/3.0f)
-	VET_UInt,
-	VET_MAX,
-};
-
-enum class RasterizerFillMode
-{
-	FM_Point,
-	FM_Wireframe,
-	FM_Solid,
-};
-
-enum class RasterizerCullMode
-{
-	CM_None,
-	CM_ClockWise,
-	CM_CounterClockWise,
-};
-
-class RHIResource : std::enable_shared_from_this<RHIResource>
-{
-public:
-
 protected:
 	RHIResource() = default;
 	virtual ~RHIResource() = default;
-
-private:
 };
 
 // Vertex elements
 struct VertexElement
 {
 	uint8_t StreamIndex;
-	uint8_t Offset;
+	uint8_t MemberOffset;
 	VertexElementType Type;
 	uint8_t AttributeIndex;
 	uint16_t Stride;
@@ -102,10 +25,17 @@ struct VertexElement
 	 */
 	bool UseInstanceIndex;
 
-	VertexElement() {}
+	VertexElement()
+		: StreamIndex(0)
+		, MemberOffset(0)
+		, Type(VertexElementType::VET_None)
+		, AttributeIndex(0)
+		, Stride(0)
+	{}
+
 	VertexElement(uint8_t streamIndex, uint8_t offset, VertexElementType type, uint8_t attributeIndex, uint16_t stride, bool useInstanceIndex = false) :
 		StreamIndex(streamIndex),
-		Offset(offset),
+		MemberOffset(offset),
 		Type(type),
 		AttributeIndex(attributeIndex),
 		Stride(stride),
@@ -115,7 +45,7 @@ struct VertexElement
 	void operator=(const VertexElement& Other)
 	{
 		StreamIndex = Other.StreamIndex;
-		Offset = Other.Offset;
+		MemberOffset = Other.MemberOffset;
 		Type = Other.Type;
 		AttributeIndex = Other.AttributeIndex;
 		UseInstanceIndex = Other.UseInstanceIndex;
@@ -128,11 +58,6 @@ class RHIVertexBuffer;
 class RHIIndexBuffer;
 class RHIUniformBuffer;
 class RHIStructuredBuffer;
-typedef std::shared_ptr<RHIHardwareBuffer> RHIHardwareBuffer_ptr;
-typedef std::shared_ptr<RHIVertexBuffer> RHIVertexBuffer_ptr;
-typedef std::shared_ptr<RHIIndexBuffer> RHIIndexBuffer_ptr;
-typedef std::shared_ptr<RHIUniformBuffer> RHIUniformBuffer_ptr;
-typedef std::shared_ptr<RHIStructuredBuffer> RHIStructuredBuffer_ptr;
 
 class RHIHardwareBuffer : public RHIResource
 {
@@ -142,10 +67,10 @@ public:
 
 	RHIHardwareBuffer(RHIHardwareBuffer&) = delete; // delete copy constructor
 
-	OBJECT_GETACCESSOR(RHIHardwareBufferUsage, RHIHardwareBufferUsage, Usage);
-	OBJECT_GETACCESSOR(size_t, size_t, Size);
+	RHIHardwareBufferUsage GetUsage() { return mUsage; }
+	size_t GetSize() { return mSize; }
 
-	bool CanBeDiscarded() const {
+	bool IsDynamicBuffer() const {
 		return (mUsage & RHIHardwareBufferUsage::HWBU_DISCARD) != 0
 			|| (mUsage & RHIHardwareBufferUsage::HWBU_DYNAMIC) != 0;
 	}
@@ -163,8 +88,8 @@ public:
 		mSize = verticesCount * vertexSize;
 	}
 
-	OBJECT_GETACCESSOR(size_t, size_t, VerticesCount);
-	OBJECT_GETACCESSOR(size_t, size_t, VertexSize);
+	size_t GetVerticesCount() { return mVerticesCount; }
+	size_t GetVertexSize() { return mVertexSize; }
 
 private:
 	size_t mVerticesCount;
@@ -182,18 +107,43 @@ public:
 		mSize = indicesCount * mIndexSize;
 	}
 
-	OBJECT_GETACCESSOR(size_t, size_t, IndicesCount);
-	OBJECT_GETACCESSOR(size_t, size_t, IndexSize);
+	size_t GetIndicesCount() const { return mIndicesCount; }
+	size_t GetIndexSize() const { return mIndexSize; }
 
 private:
 	size_t mIndicesCount;
 	size_t mIndexSize;
 };
 
-class RHIUniformBuffer : public RHIHardwareBuffer
+struct RHIUniformBufferLayout
+{
+	struct ResourceParameter
+	{
+		uint16_t MemberOffset;
+		EUniformBufferBaseType MemberType;
+	};
+
+	size_t ConstantBufferSize = 0;
+	std::vector<ResourceParameter> Resources;
+};
+
+class RHIUniformBuffer : public RHIResource
 {
 public:
+	RHIUniformBuffer(const RHIUniformBufferLayout& InLayout)
+		: mLayout(&InLayout), mLayourConstantBufferSize(InLayout.ConstantBufferSize)
+	{
+	}
+
+	uint32_t GetSize() const {
+		return mLayourConstantBufferSize;
+	}
+
+	const RHIUniformBufferLayout& GetLayout() const { return *mLayout; }
+
 private:
+	const RHIUniformBufferLayout* mLayout;
+	size_t mLayourConstantBufferSize;
 };
 
 class RHIStructuredBuffer : public RHIHardwareBuffer
@@ -203,13 +153,6 @@ private:
 };
 
 /// Textures
-class RHITexture;
-class RHITexture2D;
-class RHITexture3D;
-typedef std::shared_ptr<RHITexture> RHITexture_ptr;
-typedef std::shared_ptr<RHITexture2D> RHITexture2D_ptr;
-typedef std::shared_ptr<RHITexture3D> RHITexture3D_ptr;
-
 class RHITexture : public RHIResource
 {
 public:
@@ -284,12 +227,7 @@ public:
 	virtual bool GetInitializer(struct RasterizerStateInitializerRHI& Init) { return false; }
 };
 
-/// Shader Bindings
-class RHIVertexDeclaration;
-class RHIBoundShaderState;
-typedef std::shared_ptr<RHIVertexDeclaration> RHIVertexDeclaration_ptr;
-typedef std::shared_ptr<RHIBoundShaderState> RHIBoundShaderState_ptr;
-
+// Shader Bindings
 typedef std::vector<struct VertexElement> VertexDeclarationElementList;
 class RHIVertexDeclaration : public RHIResource
 {
@@ -301,19 +239,6 @@ class RHIBoundShaderState : public RHIResource {};
 
 /// Shaders
 // this is using DirectX naming convention
-class RHIShader;
-class RHIVertexShader;
-class RHIHullShader; // [OGL] TCS
-class RHIDomainShader; // [OGL] TES
-class RHIPixelShader; // [OGL] Fragment shader
-class RHIGeometryShader;
-typedef std::shared_ptr<RHIShader> RHIShader_ptr;
-typedef std::shared_ptr<RHIVertexShader> RHIVertexShader_ptr;
-typedef std::shared_ptr<RHIHullShader> RHIHullShader_ptr;
-typedef std::shared_ptr<RHIDomainShader> RHIDomainShader_ptr;
-typedef std::shared_ptr<RHIPixelShader> RHIPixelShader_ptr;
-typedef std::shared_ptr<RHIGeometryShader> RHIGeometryShader_ptr;
-
 class RHIShader : public RHIResource {};
 
 class RHIVertexShader : public RHIShader {};
@@ -325,8 +250,6 @@ class RHIGeometryShader : public RHIShader {};
 /// Pipelines
 class RHIGraphicsPipelineState;
 class RHIGraphicsPipelineStateFallBack;
-typedef std::shared_ptr<RHIGraphicsPipelineState> RHIGraphicsPipelineState_ptr;
-typedef std::shared_ptr<RHIGraphicsPipelineStateFallBack> RHIGraphicsPipelineStateFallBack_ptr;
 
 class RHIGraphicsPipelineState : public RHIResource {};
 class RHIGraphicsPipelineStateFallBack : public RHIGraphicsPipelineState {};
@@ -340,9 +263,9 @@ class RHIGraphicsPipelineStateFallBack : public RHIGraphicsPipelineState {};
  */
 struct RHIRenderPassInfo
 {
-	RHITexture_ptr RenderTarget;
+	RHITexture* RenderTarget;
 
-	explicit RHIRenderPassInfo(RHITexture_ptr InRenderTarget) {
+	explicit RHIRenderPassInfo(RHITexture* InRenderTarget) {
 		RenderTarget = InRenderTarget;
 	}
 

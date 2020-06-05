@@ -75,7 +75,7 @@ Model_ptr ResourceManager::LoadModel(std::string filename)
 		return nullptr;
 	}
 
-	auto model = std::make_shared<Model>(filename, scene);
+	Model_ptr model = std::make_shared<Model>(filename, scene);
 	mModelCache.emplace(filename, model); // are we gonna load everything into memory? no?
 	mAssimpImporter->FreeScene();
 	return model;

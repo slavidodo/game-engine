@@ -7,6 +7,7 @@
 #include "../Core/StaticMesh.h"
 #include "../Core/Transform.h"
 #include "RHIResource.h"
+#include "RHIDefinitions.h"
 
 class DynamicRHI
 {
@@ -24,37 +25,53 @@ public:
 
 	// drawing functionality
 	virtual void RHIDrawPrimitive(uint32_t BaseVertexIndex, uint32_t NumPrimitives, uint32_t NumInstances) = 0;
-	virtual void RHIDrawIndexedPrimitive(RHIIndexBuffer_ptr IndexBufferRHI, uint32_t BaseVertexIndex, uint32_t FirstInstance, uint32_t NumVertices, uint32_t StartIndex, uint32_t NumPrimitives, uint32_t NumInstances) = 0;
+	virtual void RHIDrawIndexedPrimitive(RHIIndexBuffer* IndexBufferRHI, uint32_t BaseVertexIndex, uint32_t FirstInstance, uint32_t NumVertices, uint32_t StartIndex, uint32_t NumPrimitives, uint32_t NumInstances) = 0;
 
-	virtual void RHISetStreamSource(uint32_t StreamIndex, RHIVertexBuffer_ptr VertexBufferRHI, uint32_t Offset) = 0;
+	virtual void RHISetStreamSource(uint32_t StreamIndex, RHIVertexBuffer* VertexBufferRHI, uint32_t MemberOffset) = 0;
 	virtual void RHISetViewport(glm::uvec2 Minimum, glm::uvec2 Maximum) = 0;
 	virtual void RHISetDepth(float MinimumZ, float MaximumZ) = 0;
 	virtual void RHISetScissorRect(bool Enable, glm::uvec2 Minimum, glm::uvec2 Maximum) = 0;
-	virtual void RHISetBoundShaderState(RHIBoundShaderState_ptr BoundShaderStateRHI) = 0;
+	virtual void RHISetBoundShaderState(RHIBoundShaderState* BoundShaderStateRHI) = 0;
 	virtual void RHISetGraphicsPipelineState(RHIGraphicsPipelineState GraphicsState) = 0;
 
 	// resources
-	virtual RHIVertexDeclaration_ptr RHICreateVertexDeclaration(const VertexDeclarationElementList& Elements) = 0;
+	virtual RHIVertexDeclarationRef RHICreateVertexDeclaration(const VertexDeclarationElementList& Elements) = 0;
 
 	// shaders
-	virtual RHIVertexShader_ptr RHICreateVertexShader(const std::vector<uint8_t>& Code) = 0;
-	virtual RHIPixelShader_ptr RHICreatePixelShader(const std::vector<uint8_t>& Code) = 0;
+	virtual RHIVertexShaderRef RHICreateVertexShader(const std::vector<uint8_t>& Code) = 0;
+	virtual RHIPixelShaderRef RHICreatePixelShader(const std::vector<uint8_t>& Code) = 0;
+
+	// shader params
+	virtual void RHISetShaderUniformBuffer(RHIVertexShader* VertexShaderRHI, uint32_t BufferIndex, RHIUniformBuffer* BufferRHI) = 0;
+	virtual void RHISetShaderUniformBuffer(RHIHullShader* HullShaderRHI, uint32_t BufferIndex, RHIUniformBuffer* BufferRHI) = 0;
+	virtual void RHISetShaderUniformBuffer(RHIDomainShader* DomainShaderRHI, uint32_t BufferIndex, RHIUniformBuffer* BufferRHI) = 0;
+	virtual void RHISetShaderUniformBuffer(RHIGeometryShader* GeometryShaderRHI, uint32_t BufferIndex, RHIUniformBuffer* BufferRHI) = 0;
+	virtual void RHISetShaderUniformBuffer(RHIPixelShader* PixelShaderRHI, uint32_t BufferIndex, RHIUniformBuffer* BufferRHI) = 0;
+
+	virtual void RHISetShaderParameter(RHIVertexShader* VertexShaderRHI, uint32_t BufferIndex, uint32_t BaseIndex, uint32_t NumBytes, const void* NewValue) = 0;
+	virtual void RHISetShaderParameter(RHIHullShader* HullShaderRHI, uint32_t BufferIndex, uint32_t BaseIndex, uint32_t NumBytes, const void* NewValue) = 0;
+	virtual void RHISetShaderParameter(RHIDomainShader* DomainShaderRHI, uint32_t BufferIndex, uint32_t BaseIndex, uint32_t NumBytes, const void* NewValue) = 0;
+	virtual void RHISetShaderParameter(RHIGeometryShader* GeometryShaderRHI, uint32_t BufferIndex, uint32_t BaseIndex, uint32_t NumBytes, const void* NewValue) = 0;
+	virtual void RHISetShaderParameter(RHIPixelShader* PixelShaderRHI, uint32_t BufferIndex, uint32_t BaseIndex, uint32_t NumBytes, const void* NewValue) = 0;
 
 	// states
-	virtual RHIBoundShaderState_ptr RHICreateBoundShaderState(
-		RHIVertexDeclaration_ptr VertexDeclarationRHI,
-		RHIVertexShader_ptr VertexShaderRHI,
-		RHIPixelShader_ptr PixelShaderRHI) = 0;
+	virtual RHIBoundShaderStateRef RHICreateBoundShaderState(
+		RHIVertexDeclaration* VertexDeclarationRHI,
+		RHIVertexShader* VertexShaderRHI,
+		RHIPixelShader* PixelShaderRHI) = 0;
 
 	// hardware buffers
-	virtual RHIVertexBuffer_ptr RHICreateVertexBuffer(size_t VerticesCount, size_t VertexSize, RHIHardwareBufferUsage Usage) = 0;
-	virtual void* RHILockVertexBuffer(RHIVertexBuffer_ptr VertexBufferRHI, size_t Offset, size_t Size, RHIResourceLockMode LockMode) = 0;
-	virtual void RHIUnlockVertexBuffer(RHIVertexBuffer_ptr VertexBufferRHI) = 0;
-	virtual void RHICopyVertexBuffer(RHIVertexBuffer_ptr SourceBufferRHI, RHIVertexBuffer_ptr DestBufferRHI) = 0;
+	virtual RHIVertexBufferRef RHICreateVertexBuffer(size_t VerticesCount, size_t VertexSize, RHIHardwareBufferUsage Usage) = 0;
+	virtual void* RHILockVertexBuffer(RHIVertexBuffer* VertexBufferRHI, size_t MemberOffset, size_t Size, RHIResourceLockMode LockMode) = 0;
+	virtual void RHIUnlockVertexBuffer(RHIVertexBuffer* VertexBufferRHI) = 0;
+	virtual void RHICopyVertexBuffer(RHIVertexBuffer* SourceBufferRHI, RHIVertexBuffer* DestBufferRHI) = 0;
 
-	virtual RHIIndexBuffer_ptr RHICreateIndexBuffer(size_t IndicesCount, RHIIndexBufferType Type, RHIHardwareBufferUsage Usage) = 0;
-	virtual void* RHILockIndexBuffer(RHIIndexBuffer_ptr IndexBufferRHI, size_t Offset, size_t Size, RHIResourceLockMode LockMode) = 0;
-	virtual void RHIUnlockIndexBuffer(RHIIndexBuffer_ptr IndexBufferRHI) = 0;
+	virtual RHIIndexBufferRef RHICreateIndexBuffer(size_t IndicesCount, RHIIndexBufferType Type, RHIHardwareBufferUsage Usage) = 0;
+	virtual void* RHILockIndexBuffer(RHIIndexBuffer* IndexBufferRHI, size_t MemberOffset, size_t Size, RHIResourceLockMode LockMode) = 0;
+	virtual void RHIUnlockIndexBuffer(RHIIndexBuffer* IndexBufferRHI) = 0;
+
+	virtual RHIUniformBufferRef RHICreateUniformBuffer(const void* Contents, const RHIUniformBufferLayout& Layout, EUniformBufferUsage Usage, EUniformBufferValidation Validation) = 0;
+	virtual void RHIUpdateUniformBuffer(RHIUniformBuffer* UniformBufferRHI, const void* Contents) = 0;
 
 	// scenes
 	virtual void RHIBeginScene() = 0;

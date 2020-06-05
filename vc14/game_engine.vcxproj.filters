@@ -46,10 +46,18 @@
     <Filter Include="Engine\OpenGLRHI">
       <UniqueIdentifier>{a4329d9e-d289-4056-9684-17534a5609fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\OpenGLRHI\Desktop">
+      <UniqueIdentifier>{8f5f3093-18c9-461c-89c5-47ca59e5366a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering">
+      <UniqueIdentifier>{e7dc7641-afbf-4008-8b10-a219a122ff10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Atomic">
+      <UniqueIdentifier>{c83c2889-a95e-42a8-abdd-2e226f8bd1b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
-    <ClCompile Include="..\src\pch.cpp" />
     <ClCompile Include="..\src\Tests\ExampleScene.cpp">
       <Filter>TESTS</Filter>
     </ClCompile>
@@ -137,9 +145,6 @@
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLIndexBuffer.cpp">
       <Filter>Engine\OpenGLRHI</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLRTShader.cpp">
-      <Filter>Engine\OpenGLRHI</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLTexture.cpp">
       <Filter>Engine\OpenGLRHI</Filter>
     </ClCompile>
@@ -153,6 +158,28 @@
       <Filter>Engine\OpenGLRHI</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLShaders.cpp">
+      <Filter>Engine\OpenGLRHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLUniformBuffer.cpp">
+      <Filter>Engine\OpenGLRHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Globals.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\SceneRenderer.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLSpecs.cpp">
+      <Filter>Engine\OpenGLRHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Pch.cpp" />
+    <ClCompile Include="..\src\Engine\OpenGLRHI\Desktop\OpenGLDesktop.cpp">
+      <Filter>Engine\OpenGLRHI\Desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLCommands.cpp">
+      <Filter>Engine\OpenGLRHI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLShaderCompiler.cpp">
       <Filter>Engine\OpenGLRHI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -220,7 +247,6 @@
     <ClInclude Include="..\src\Engine\Core\Math\AABB.h">
       <Filter>Engine\Core\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\pch.h" />
     <ClInclude Include="..\src\Engine\RHI\RHIResource.h">
       <Filter>Engine\RHI</Filter>
     </ClInclude>
@@ -245,11 +271,43 @@
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLResource.h">
       <Filter>Engine\OpenGLRHI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLRTShader.h">
-      <Filter>Engine\OpenGLRHI</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Engine\Core\Math\Rect.h">
       <Filter>Engine\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Definitions.h" />
+    <ClInclude Include="..\src\Engine\Globals.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\RHI\RHIDefinitions.h">
+      <Filter>Engine\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Scene\SceneRenderer.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLSpecs.h">
+      <Filter>Engine\OpenGLRHI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Pch.h" />
+    <ClInclude Include="..\src\Engine\OpenGLRHI\Desktop\OpenGLDesktop.h">
+      <Filter>Engine\OpenGLRHI\Desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLDefinitions.h">
+      <Filter>Engine\OpenGLRHI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLShaderCompiler.h">
+      <Filter>Engine\OpenGLRHI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Rendering\ShaderParameterMacros.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Atomic\TRefCountPtr.h">
+      <Filter>Engine\Atomic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Atomic\RefCountedObject.h">
+      <Filter>Engine\Atomic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Atomic\ThreadSafeRefCountedObject.h">
+      <Filter>Engine\Atomic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

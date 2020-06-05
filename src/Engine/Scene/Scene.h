@@ -14,8 +14,12 @@ class Scene
 public:
 	virtual void Render(RHICommandList& RHICmdList);
 
+	Camera_ptr GetMainCamera() const {
+		return mMainaCmera;
+	}
+
 protected:
-	Camera_ptr mMainCamera;
+	Camera_ptr mMainaCmera;
 	SceneNode_ptr mRootNode;
 };
 

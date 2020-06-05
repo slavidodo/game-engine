@@ -4,20 +4,22 @@
 #include "OpenGLDynamicRHI.h"
 #include "OpenGLResource.h"
 
-RHIIndexBuffer_ptr OpenGLDynamicRHI::RHICreateIndexBuffer(size_t IndicesCount, RHIIndexBufferType Type, RHIHardwareBufferUsage Usage)
+RHIIndexBufferRef OpenGLDynamicRHI::RHICreateIndexBuffer(size_t IndicesCount, RHIIndexBufferType Type, RHIHardwareBufferUsage Usage)
 {
-	RHIIndexBuffer_ptr IndexBuffer(new OpenGLIndexBuffer(IndicesCount, Usage, Type));
+	RHIIndexBufferRef IndexBuffer(new OpenGLIndexBuffer(IndicesCount, Usage, Type));
 	return IndexBuffer;
 }
 
-void* OpenGLDynamicRHI::RHILockIndexBuffer(RHIIndexBuffer_ptr IndexBuffer, size_t Offset, size_t Size, RHIResourceLockMode LockMode)
+void* OpenGLDynamicRHI::RHILockIndexBuffer(RHIIndexBuffer* IndexBuffer, size_t MemberOffset, size_t Size, RHIResourceLockMode LockMode)
 {
-	return std::dynamic_pointer_cast<OpenGLIndexBuffer>(IndexBuffer)
-		->Lock(Size, Offset, LockMode, IndexBuffer->CanBeDiscarded());
+	RHI_THREAD_BEGIN_COMMAND();
+	return StaticResourceCast(IndexBuffer)->Lock(Size, MemberOffset, LockMode, IndexBuffer->IsDynamicBuffer());
+	RHI_THREAD_END_COMMAND_RETURN(void*);
 }
 
-void OpenGLDynamicRHI::RHIUnlockIndexBuffer(RHIIndexBuffer_ptr indexBuffer)
+void OpenGLDynamicRHI::RHIUnlockIndexBuffer(RHIIndexBuffer* indexBuffer)
 {
-	return std::dynamic_pointer_cast<OpenGLIndexBuffer>(indexBuffer)
-		->Unlock();
+	RHI_THREAD_BEGIN_COMMAND();
+	return StaticResourceCast(indexBuffer)->Unlock();
+	RHI_THREAD_END_COMMAND();
 }

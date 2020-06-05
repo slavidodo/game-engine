@@ -8,30 +8,33 @@
 
 bool Camera::IsViewOutdated()
 {
-	if (auto parent = mParent.lock()) {
-		auto transform = parent->GetTransform();
-
-		glm::fvec3 pTranslation = transform->GetTranslation();
-		glm::fquat pRotation = transform->GetRotation();
-		if (mViewOutdated || pTranslation != mParentTranslation || pRotation != mParentRotation) {
-			mParentTranslation = pTranslation;
-			mParentRotation = pRotation;
-			mViewOutdated = true;
-		}
+	glm::fvec3 DesiredTranslation;
+	glm::fquat DesiredRotation;
+	if (SceneNode_ptr parent = mParent.lock()) {
+		Transform_ptr transform = parent->GetTransform(); // any scene node is guaranteed to have a transform
+		DesiredTranslation = transform->GetTranslation();
+		DesiredRotation = transform->GetRotation();
+	} else {
+		DesiredTranslation = mEditorTranslation;
+		DesiredRotation = mEditorRotation;
 	}
 
-	// editor camera should update its own values
-	// and will not rely on its parent
+	if (mViewOutdated || DesiredTranslation != mParentTranslation || DesiredRotation != mParentRotation) {
+		mParentTranslation = DesiredTranslation;
+		mParentRotation = DesiredRotation;
+		mViewOutdated = true;
+	}
+
 	return mViewOutdated;
 }
 
-glm::fmat3x4 Camera::GetViewMatrix()
+glm::fmat4x4 Camera::GetViewMatrix()
 {
 	UpdateView();
 	return mViewMatrix;
 }
 
-glm::fmat3x4 Camera::GetProjMatrix()
+glm::fmat4x4 Camera::GetProjMatrix()
 {
 	UpdateProjection();
 	return mProjMatrix;
@@ -106,7 +109,9 @@ void Camera::UpdateProjection()
 	}
 }
 
-glm::fmat3x4 Camera::GetPerspectiveProjMatrix()
+glm::fmat4x4 Camera::GetPerspectiveProjMatrix()
 {
-	return glm::perspective(GetFovY(), GetAspectRatio(), mZNear, mZFar);
+	std::cout << "Updating Proj: " << GetFovY() << ", " << glm::radians(GetFovY()) << ", " << GetAspectRatio()
+		<< ", " << mZNear << ", " << mZFar << std::endl;
+	return glm::perspective(glm::radians(GetFovY()), GetAspectRatio(), mZNear, mZFar);
 }

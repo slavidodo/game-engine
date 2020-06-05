@@ -7,7 +7,7 @@
 
 StaticMesh_ptr StaticMeshGenerator::CreateTriangle(float edgeLength)
 {
-	auto mesh = std::make_shared<StaticMesh>();
+	StaticMesh_ptr mesh = std::make_shared<StaticMesh>();
 
 	const size_t NumVertices = 4 * 6;
 	const size_t NumIndices = 3;
@@ -37,7 +37,7 @@ StaticMesh_ptr StaticMeshGenerator::CreateTriangle(float edgeLength)
 
 StaticMesh_ptr StaticMeshGenerator::CreateQuad(float edgeLength)
 {
-	auto mesh = std::make_shared<StaticMesh>();
+	StaticMesh_ptr mesh = std::make_shared<StaticMesh>();
 
 	const size_t NumVertices = 4 * 6;
 	const size_t NumIndices = 6;
@@ -69,7 +69,7 @@ StaticMesh_ptr StaticMeshGenerator::CreateQuad(float edgeLength)
 
 StaticMesh_ptr StaticMeshGenerator::CreateCube(float edgeLength /* = 1.0f */)
 {
-	auto mesh = std::make_shared<StaticMesh>();
+	StaticMesh_ptr mesh = std::make_shared<StaticMesh>();
 
 	// initial information
 	const size_t NumVertices = 4 * 6;
@@ -77,40 +77,40 @@ StaticMesh_ptr StaticMeshGenerator::CreateCube(float edgeLength /* = 1.0f */)
 
 	StaticMeshVertex Vertices[NumVertices] = {
 		// front side
-		{glm::fvec3(-edgeLength, -edgeLength,  edgeLength),  glm::fvec3(0.0f,  0.0f,  1.0f), glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3( edgeLength, -edgeLength,  edgeLength),  glm::fvec3(0.0f,  0.0f,  1.0f), glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3( edgeLength,  edgeLength,  edgeLength),  glm::fvec3(0.0f,  0.0f,  1.0f), glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3(-edgeLength,  edgeLength,  edgeLength),  glm::fvec3(0.0f,  0.0f,  1.0f), glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(-edgeLength, -edgeLength,  edgeLength), glm::fvec3(1.0f, 0.0f, 0.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3( edgeLength, -edgeLength,  edgeLength), glm::fvec3(0.0f, 1.0f, 0.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3( edgeLength,  edgeLength,  edgeLength), glm::fvec3(0.0f, 0.0f, 1.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength,  edgeLength), glm::fvec3(0.0f, 1.0f, 1.0f), glm::fvec2(0.0f, 0.0f)},
 
 		// back side
-		{glm::fvec3( edgeLength, -edgeLength, -edgeLength),  glm::fvec3(0.0f,  0.0f, -1.0f), glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3(-edgeLength, -edgeLength, -edgeLength),  glm::fvec3(0.0f,  0.0f, -1.0f), glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3(-edgeLength,  edgeLength, -edgeLength),  glm::fvec3(0.0f,  0.0f, -1.0f), glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3( edgeLength,  edgeLength, -edgeLength),  glm::fvec3(0.0f,  0.0f, -1.0f), glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3( edgeLength, -edgeLength, -edgeLength), glm::fvec3(0.0f, 0.0f, 1.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3(-edgeLength, -edgeLength, -edgeLength), glm::fvec3(0.0f, 0.0f, 1.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength, -edgeLength), glm::fvec3(0.0f, 0.0f, 1.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3( edgeLength,  edgeLength, -edgeLength), glm::fvec3(0.0f, 0.0f, 1.0f), glm::fvec2(0.0f, 0.0f)},
 
 		// left side
-		{glm::fvec3(-edgeLength, -edgeLength, -edgeLength), glm::fvec3(-1.0f,  0.0f,  0.0f), glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3(-edgeLength, -edgeLength,  edgeLength), glm::fvec3(-1.0f,  0.0f,  0.0f), glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3(-edgeLength,  edgeLength,  edgeLength), glm::fvec3(-1.0f,  0.0f,  0.0f), glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3(-edgeLength,  edgeLength, -edgeLength), glm::fvec3(-1.0f,  0.0f,  0.0f), glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(-edgeLength, -edgeLength, -edgeLength), glm::fvec3(1.0f, 0.0f, 0.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3(-edgeLength, -edgeLength,  edgeLength), glm::fvec3(1.0f, 0.0f, 0.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength,  edgeLength), glm::fvec3(1.0f, 0.0f, 0.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength, -edgeLength), glm::fvec3(1.0f, 0.0f, 0.0f), glm::fvec2(0.0f, 0.0f)},
 
 		// right side
-		{glm::fvec3( edgeLength, -edgeLength,  edgeLength), glm::fvec3( 1.0f,  0.0f,  0.0f), glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3( edgeLength, -edgeLength, -edgeLength), glm::fvec3( 1.0f,  0.0f,  0.0f), glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3( edgeLength,  edgeLength, -edgeLength), glm::fvec3( 1.0f,  0.0f,  0.0f), glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3( edgeLength,  edgeLength,  edgeLength), glm::fvec3( 1.0f,  0.0f,  0.0f), glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3( edgeLength, -edgeLength,  edgeLength), glm::fvec3(1.0f, 0.0f, 0.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3( edgeLength, -edgeLength, -edgeLength), glm::fvec3(1.0f, 0.0f, 0.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3( edgeLength,  edgeLength, -edgeLength), glm::fvec3(1.0f, 0.0f, 0.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3( edgeLength,  edgeLength,  edgeLength), glm::fvec3(1.0f, 0.0f, 0.0f), glm::fvec2(0.0f, 0.0f)},
 
 		// up side
-		{glm::fvec3(-edgeLength,  edgeLength,  edgeLength), glm::fvec3( 0.0f,  1.0f,  0.0f), glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3( edgeLength,  edgeLength,  edgeLength), glm::fvec3( 0.0f,  1.0f,  0.0f), glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3( edgeLength,  edgeLength, -edgeLength), glm::fvec3( 0.0f,  1.0f,  0.0f), glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3(-edgeLength,  edgeLength, -edgeLength), glm::fvec3( 0.0f,  1.0f,  0.0f), glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength,  edgeLength), glm::fvec3(0.0f, 1.0f, 0.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3( edgeLength,  edgeLength,  edgeLength), glm::fvec3(0.0f, 1.0f, 0.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3( edgeLength,  edgeLength, -edgeLength), glm::fvec3(0.0f, 1.0f, 0.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLength,  edgeLength, -edgeLength), glm::fvec3(0.0f, 1.0f, 0.0f), glm::fvec2(0.0f, 0.0f)},
 
 		// down side
-		{glm::fvec3(-edgeLength, -edgeLength, -edgeLength), glm::fvec3( 0.0f, -1.0f,  0.0f), glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3( edgeLength, -edgeLength, -edgeLength), glm::fvec3( 0.0f, -1.0f,  0.0f), glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3( edgeLength, -edgeLength,  edgeLength), glm::fvec3( 0.0f, -1.0f,  0.0f), glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3(-edgeLength, -edgeLength,  edgeLength), glm::fvec3( 0.0f, -1.0f,  0.0f), glm::fvec2(0.0f, 0.0f)} };
+		{glm::fvec3(-edgeLength, -edgeLength, -edgeLength), glm::fvec3(0.0f, 1.0f, 0.0f), glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3( edgeLength, -edgeLength, -edgeLength), glm::fvec3(0.0f, 1.0f, 0.0f), glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3( edgeLength, -edgeLength,  edgeLength), glm::fvec3(0.0f, 1.0f, 0.0f), glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLength, -edgeLength,  edgeLength), glm::fvec3(0.0f, 1.0f, 0.0f), glm::fvec2(0.0f, 0.0f)} };
 
 	uint16_t Indices[NumIndices] = {
 		// front
@@ -165,16 +165,18 @@ void StaticMeshGenerator::CreateStaticMeshWithDefaultFilter(StaticMesh_ptr mesh,
 	mesh->NumTriangles = mesh->NumIndices / 3;
 	assert(mesh->NumIndices == mesh->NumTriangles * 3);
 
-	auto& RHICommandList = RHICommandListExecutor::GetImmediateCommandList();
-	mesh->VertexBuffer = RHICommandList.CreateVertexBuffer(info.NumVertices,
-														   sizeof(StaticMeshVertex),
-														   RHIHardwareBufferUsage::HWBU_STATIC_WRITE_ONLY);
-	mesh->IndexBuffer = RHICommandList.CreateIndexBuffer(info.NumIndices,
-														 info.IndexType,
-														 RHIHardwareBufferUsage::HWBU_STATIC_WRITE_ONLY);
+	void* VerticesPtr = nullptr;
+	void* IndicesPtr = nullptr;
 
-	void* VerticesPtr = RHICommandList.LockVertexBuffer(mesh->VertexBuffer, 0, mesh->VertexBuffer->GetSize(), RHIResourceLockMode::RLM_WRITE_ONLY);
-	void* IndicesPtr = RHICommandList.LockIndexBuffer(mesh->IndexBuffer, 0, mesh->IndexBuffer->GetSize(), RHIResourceLockMode::RLM_WRITE_ONLY);
+	RHICommandListImmediate& RHICommandList = RHICommandListExecutor::GetImmediateCommandList();
+	mesh->VertexBuffer = RHICommandList.CreateAndLockVertexBuffer(info.NumVertices,
+														   sizeof(StaticMeshVertex),
+														   RHIHardwareBufferUsage::HWBU_STATIC_WRITE_ONLY,
+														   VerticesPtr);
+	mesh->IndexBuffer = RHICommandList.CreateAndLockIndexBuffer(info.NumIndices,
+														 info.IndexType,
+														 RHIHardwareBufferUsage::HWBU_STATIC_WRITE_ONLY,
+														 IndicesPtr);
 
 	memcpy(VerticesPtr, info.Vertices, mesh->VertexBuffer->GetSize());
 	memcpy(IndicesPtr, info.Indices, mesh->IndexBuffer->GetSize());

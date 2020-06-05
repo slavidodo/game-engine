@@ -22,6 +22,7 @@ void OpenGLDynamicRHI::BindPendingFramebuffer(OpenGLContextState& ContextState)
 
 void OpenGLDynamicRHI::RHIBeginRenderPass(RHIRenderPassInfo& Info)
 {
+	// TODO(slavi) what the hell?
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	ClearColor(glm::fvec4(1.0f, 1.0f, 0.0f, 1.0f));
 }

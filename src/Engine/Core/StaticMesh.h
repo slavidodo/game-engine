@@ -10,13 +10,13 @@ typedef std::shared_ptr<StaticMesh> StaticMesh_ptr;
 struct StaticMeshVertex
 {
 	StaticMeshVertex()
-		: position(0), normal(0), uv(0) {}
+		: position(0), color(0), uv(0) {}
 
-	StaticMeshVertex(glm::fvec3 position, glm::fvec3 normal, glm::fvec2 uv)
-		: position(position), normal(normal), uv(uv) {}
+	StaticMeshVertex(glm::fvec3 position, glm::fvec3 color, glm::fvec2 uv)
+		: position(position), color(color), uv(uv) {}
 
 	glm::fvec3 position;
-	glm::fvec3 normal;
+	glm::fvec3 color;
 	glm::fvec2 uv;
 };
 
@@ -29,8 +29,8 @@ public:
 	
 	// todo: should wrap rhi into a buffer object
 	// so we don't actually have to work with RHI at all
-	RHIVertexBuffer_ptr VertexBuffer;
-	RHIIndexBuffer_ptr IndexBuffer;
+	RHIVertexBufferRef VertexBuffer;
+	RHIIndexBufferRef IndexBuffer;
 	size_t NumVertices;
 	size_t NumIndices;
 	size_t NumTriangles;

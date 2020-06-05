@@ -7,6 +7,7 @@
 #include "../Filesystem/ResourceManager.h"
 #include "../Scene/SceneManager.h"
 #include "../RHI/RHICommandList.h"
+#include "../Globals.h"
 
 CoreApplication gApplication;
 
@@ -46,7 +47,7 @@ void CoreApplication::RunMainLoop()
 
 	// todo: this is just temporary, since we don't really support async commands
 	// moreover, we don't really track the sequence of commands
-	auto& RHICmdList = RHICommandListExecutor::GetImmediateCommandList();
+	RHICommandListImmediate& RHICmdList = RHICommandListExecutor::GetImmediateCommandList();
 	while (!glfwWindowShouldClose(gWindow.GetGlfwWindow())) {
 		RHICmdList.BeginFrame();
 		{
@@ -56,6 +57,8 @@ void CoreApplication::RunMainLoop()
 
 		// poll events
 		glfwPollEvents();
+
+		gFrameNumber++;
 	}
 }
 

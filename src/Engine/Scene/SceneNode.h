@@ -24,14 +24,14 @@ public:
     Object_ptr AttachObject(Object_ptr&& obj);
     Object_ptr AttachObject(Object* obj);
 
-    OBJECT_GETACCESSOR(Transform_ptr, const Transform_ptr, Transform);
+    Transform_ptr GetTransform() const { return mTransform; }
 
     template<typename T>
     std::shared_ptr<T> GetAttachedObject() const {
         auto it = mAttachedObjects.begin();
         auto end = mAttachedObjects.end();
         while (it != end) {
-            std::shared_ptr<T> p = std::dynamic_pointer_cast<T>(*it);
+            std::shared_ptr<T> p = std::static_pointer_cast<T>(*it);
             if (p != nullptr) {
                 return *p;
             }

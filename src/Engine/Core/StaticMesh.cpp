@@ -8,8 +8,8 @@
 void StaticMesh::Release()
 {
 	// TODO: is this safe?
-	VertexBuffer.reset();
-	IndexBuffer.reset();
+	VertexBuffer.SafeRelease();
+	IndexBuffer.SafeRelease();
 	NumVertices = 0;
 	NumIndices = 0;
 	NumTriangles = 0;

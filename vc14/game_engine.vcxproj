@@ -141,7 +141,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -179,13 +179,18 @@
     <ClCompile Include="..\src\Engine\Filesystem\AssimpIOStream.cpp" />
     <ClCompile Include="..\src\Engine\Filesystem\File.cpp" />
     <ClCompile Include="..\src\Engine\Filesystem\ResourceManager.cpp" />
+    <ClCompile Include="..\src\Engine\Globals.cpp" />
     <ClCompile Include="..\src\Engine\Input\InputManager.cpp" />
+    <ClCompile Include="..\src\Engine\OpenGLRHI\Desktop\OpenGLDesktop.cpp" />
+    <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLCommands.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLIndexBuffer.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLRenderTarget.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLDynamicRHI.cpp" />
+    <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLShaderCompiler.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLShaders.cpp" />
+    <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLSpecs.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLVertexBuffer.cpp" />
-    <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLRTShader.cpp" />
+    <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLTexture.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLState.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLVertexDeclaration.cpp" />
@@ -196,9 +201,10 @@
     <ClCompile Include="..\src\Engine\Scene\Scene.cpp" />
     <ClCompile Include="..\src\Engine\Scene\SceneManager.cpp" />
     <ClCompile Include="..\src\Engine\Scene\SceneNode.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\SceneRenderer.cpp" />
     <ClCompile Include="..\src\Engine\StaticMeshGenerator.cpp" />
     <ClCompile Include="..\src\Engine\Utils.cpp" />
-    <ClCompile Include="..\src\pch.cpp">
+    <ClCompile Include="..\src\Pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -207,6 +213,10 @@
     <ClCompile Include="..\src\Tests\ExampleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Definitions.h" />
+    <ClInclude Include="..\src\Engine\Atomic\RefCountedObject.h" />
+    <ClInclude Include="..\src\Engine\Atomic\ThreadSafeRefCountedObject.h" />
+    <ClInclude Include="..\src\Engine\Atomic\TRefCountPtr.h" />
     <ClInclude Include="..\src\Engine\Audio\AudioManager.h" />
     <ClInclude Include="..\src\Engine\Core\Camera.h" />
     <ClInclude Include="..\src\Engine\Core\Material.h" />
@@ -222,22 +232,29 @@
     <ClInclude Include="..\src\Engine\Filesystem\AssimpIOStream.h" />
     <ClInclude Include="..\src\Engine\Filesystem\File.h" />
     <ClInclude Include="..\src\Engine\Filesystem\ResourceManager.h" />
+    <ClInclude Include="..\src\Engine\Globals.h" />
     <ClInclude Include="..\src\Engine\Input\InputManager.h" />
+    <ClInclude Include="..\src\Engine\OpenGLRHI\Desktop\OpenGLDesktop.h" />
+    <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLDefinitions.h" />
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLResource.h" />
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLDynamicRHI.h" />
-    <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLRTShader.h" />
+    <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLShaderCompiler.h" />
+    <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLSpecs.h" />
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLState.h" />
     <ClInclude Include="..\src\Engine\platform\CoreApplication.h" />
     <ClInclude Include="..\src\Engine\Platform\Window.h" />
+    <ClInclude Include="..\src\Engine\Rendering\ShaderParameterMacros.h" />
     <ClInclude Include="..\src\Engine\RHI\RHICommandList.h" />
+    <ClInclude Include="..\src\Engine\RHI\RHIDefinitions.h" />
     <ClInclude Include="..\src\Engine\RHI\RHIResource.h" />
     <ClInclude Include="..\src\Engine\RHI\DynamicRHI.h" />
     <ClInclude Include="..\src\Engine\Scene\Scene.h" />
     <ClInclude Include="..\src\Engine\Scene\SceneManager.h" />
     <ClInclude Include="..\src\Engine\Scene\SceneNode.h" />
+    <ClInclude Include="..\src\Engine\Scene\SceneRenderer.h" />
     <ClInclude Include="..\src\Engine\StaticMeshGenerator.h" />
     <ClInclude Include="..\src\Engine\Utils.h" />
-    <ClInclude Include="..\src\pch.h" />
+    <ClInclude Include="..\src\Pch.h" />
     <ClInclude Include="..\src\Tests\ExampleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

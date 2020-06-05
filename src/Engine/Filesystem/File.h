@@ -19,8 +19,8 @@ public:
 	bool Seek(uint64_t position);
 	uint64_t Tell();
 	uint64_t Length();
-	uint64_t Read(void* buf, uint32_t len, uint32_t count = 1);
-	uint64_t Write(const void* buf, uint32_t len, uint32_t count = 1);
+	uint64_t Read(void* buf, size_t len, size_t count = 1);
+	uint64_t Write(const void* buf, size_t len, size_t count = 1);
 
 private:
 	PHYSFS_File* mHandle;

@@ -4,6 +4,14 @@
 
 #include "../RHI/DynamicRHI.h"
 #include "OpenGLState.h"
+#include "OpenGLSpecs.h"
+
+// used 
+#define RHI_THREAD_BEGIN_COMMAND() auto OpenGLCommand = [&]() {
+#define RHI_THREAD_END_COMMAND() };\
+	return OpenGLCommand();
+#define RHI_THREAD_END_COMMAND_RETURN(x) };\
+	return OpenGLCommand();
 
 class OpenGLDynamicRHI : public DynamicRHI
 {
@@ -23,37 +31,53 @@ public:
 	void ClearScreen(bool color, bool depth) override final;
 	void ClearColor(glm::fvec4 color) override final;
 
-	RHIVertexDeclaration_ptr RHICreateVertexDeclaration(const VertexDeclarationElementList& Elements) override final;
+	RHIVertexDeclarationRef RHICreateVertexDeclaration(const VertexDeclarationElementList& Elements) override final;
 
 	// shaders
-	RHIVertexShader_ptr RHICreateVertexShader(const std::vector<uint8_t>& Code) override final;
-	RHIPixelShader_ptr RHICreatePixelShader(const std::vector<uint8_t>& Code) override final;
+	RHIVertexShaderRef RHICreateVertexShader(const std::vector<uint8_t>& Code) override final;
+	RHIPixelShaderRef RHICreatePixelShader(const std::vector<uint8_t>& Code) override final;
 
 	// states
-	RHIBoundShaderState_ptr RHICreateBoundShaderState(
-		RHIVertexDeclaration_ptr VertexDeclarationRHI,
-		RHIVertexShader_ptr VertexShaderRHI,
-		RHIPixelShader_ptr PixelShaderRHI) override final;
+	RHIBoundShaderStateRef RHICreateBoundShaderState(
+		RHIVertexDeclaration* VertexDeclarationRHI,
+		RHIVertexShader* VertexShaderRHI,
+		RHIPixelShader* PixelShaderRHI) override final;
 
 	// buffers
-	RHIVertexBuffer_ptr RHICreateVertexBuffer(size_t VerticesCount, size_t VertexSize, RHIHardwareBufferUsage Usage) override final;
-	void* RHILockVertexBuffer(RHIVertexBuffer_ptr VertexBufferRHI, size_t Offset, size_t Size, RHIResourceLockMode LockMode) override final;
-	void RHIUnlockVertexBuffer(RHIVertexBuffer_ptr VertexBufferRHI) override final;
-	void RHICopyVertexBuffer(RHIVertexBuffer_ptr SourceBufferRHI, RHIVertexBuffer_ptr DestBufferRHI) override final;
+	RHIVertexBufferRef RHICreateVertexBuffer(size_t VerticesCount, size_t VertexSize, RHIHardwareBufferUsage Usage) override final;
+	void* RHILockVertexBuffer(RHIVertexBuffer* VertexBufferRHI, size_t MemberOffset, size_t Size, RHIResourceLockMode LockMode) override final;
+	void RHIUnlockVertexBuffer(RHIVertexBuffer* VertexBufferRHI) override final;
+	void RHICopyVertexBuffer(RHIVertexBuffer* SourceBufferRHI, RHIVertexBuffer* DestBufferRHI) override final;
 
-	RHIIndexBuffer_ptr RHICreateIndexBuffer(size_t IndicesCount, RHIIndexBufferType Type, RHIHardwareBufferUsage Usage) override final;
-	void* RHILockIndexBuffer(RHIIndexBuffer_ptr IndexBufferRHI, size_t Offset, size_t Size, RHIResourceLockMode LockMode) override final;
-	void RHIUnlockIndexBuffer(RHIIndexBuffer_ptr IndexBufferRHI) override final;
+	RHIIndexBufferRef RHICreateIndexBuffer(size_t IndicesCount, RHIIndexBufferType Type, RHIHardwareBufferUsage Usage) override final;
+	void* RHILockIndexBuffer(RHIIndexBuffer* IndexBufferRHI, size_t MemberOffset, size_t Size, RHIResourceLockMode LockMode) override final;
+	void RHIUnlockIndexBuffer(RHIIndexBuffer* IndexBufferRHI) override final;
+
+	RHIUniformBufferRef RHICreateUniformBuffer(const void* Contents, const RHIUniformBufferLayout& Layout, EUniformBufferUsage Usage, EUniformBufferValidation Validation) override final;
+	void RHIUpdateUniformBuffer(RHIUniformBuffer* UniformBufferRHI, const void* Contents) override final;
+
+	// shader params
+	void RHISetShaderUniformBuffer(RHIVertexShader* VertexShaderRHI, uint32_t BufferIndex, RHIUniformBuffer* BufferRHI) override final;
+	void RHISetShaderUniformBuffer(RHIHullShader* HullShaderRHI, uint32_t BufferIndex, RHIUniformBuffer* BufferRHI) override final;
+	void RHISetShaderUniformBuffer(RHIDomainShader* DomainShaderRHI, uint32_t BufferIndex, RHIUniformBuffer* BufferRHI) override final;
+	void RHISetShaderUniformBuffer(RHIGeometryShader* GeometryShaderRHI, uint32_t BufferIndex, RHIUniformBuffer* BufferRHI) override final;
+	void RHISetShaderUniformBuffer(RHIPixelShader* PixelShaderRHI, uint32_t BufferIndex, RHIUniformBuffer* BufferRHI) override final;
+
+	void RHISetShaderParameter(RHIVertexShader* VertexShaderRHI, uint32_t BufferIndex, uint32_t BaseIndex, uint32_t NumBytes, const void* NewValue) override final;
+	void RHISetShaderParameter(RHIHullShader* HullShaderRHI, uint32_t BufferIndex, uint32_t BaseIndex, uint32_t NumBytes, const void* NewValue) override final;
+	void RHISetShaderParameter(RHIDomainShader* DomainShaderRHI, uint32_t BufferIndex, uint32_t BaseIndex, uint32_t NumBytes, const void* NewValue) override final;
+	void RHISetShaderParameter(RHIGeometryShader* GeometryShaderRHI, uint32_t BufferIndex, uint32_t BaseIndex, uint32_t NumBytes, const void* NewValue) override final;
+	void RHISetShaderParameter(RHIPixelShader* PixelShaderRHI, uint32_t BufferIndex, uint32_t BaseIndex, uint32_t NumBytes, const void* NewValue) override final;
 
 	// drawing
 	void RHIDrawPrimitive(uint32_t BaseVertexIndex, uint32_t NumPrimitives, uint32_t NumInstances) override final;
-	void RHIDrawIndexedPrimitive(RHIIndexBuffer_ptr IndexBufferRHI, uint32_t BaseVertexIndex, uint32_t FirstInstance, uint32_t NumVertices, uint32_t StartIndex, uint32_t NumPrimitives, uint32_t NumInstances) override final;
+	void RHIDrawIndexedPrimitive(RHIIndexBuffer* IndexBufferRHI, uint32_t BaseVertexIndex, uint32_t FirstInstance, uint32_t NumVertices, uint32_t StartIndex, uint32_t NumPrimitives, uint32_t NumInstances) override final;
 
-	void RHISetStreamSource(uint32_t StreamIndex, RHIVertexBuffer_ptr VertexBufferRHI, uint32_t Offset) override final;
+	void RHISetStreamSource(uint32_t StreamIndex, RHIVertexBuffer* VertexBufferRHI, uint32_t MemberOffset) override final;
 	void RHISetViewport(glm::uvec2 Minimum, glm::uvec2 Maximum) override final;
 	void RHISetDepth(float MinimumZ, float MaximumZ) override final;
 	void RHISetScissorRect(bool Enable, glm::uvec2 Minimum, glm::uvec2 Maximum) override final;
-	void RHISetBoundShaderState(RHIBoundShaderState_ptr BoundShaderStateRHI) override final;
+	void RHISetBoundShaderState(RHIBoundShaderState* BoundShaderStateRHI) override final;
 	void RHISetGraphicsPipelineState(RHIGraphicsPipelineState GraphicsState) override final {
 		// TODO: extract bound shader state information
 		// this includes all shader stages & vertex declaration
@@ -75,22 +99,33 @@ public:
 								   void* Pointer, GLuint Buffer);
 	void CachedBindArrayBuffer(OpenGLContextState& ContextState, GLuint Buffer);
 	void CachedBindElementArrayBuffer(OpenGLContextState& ContextState, GLuint Buffer);
+	void CachedBindUniformBuffer(OpenGLContextState& ContextState, GLuint Buffer);
+
+	OpenGLContextState& GetContextStateForCurrentContext();
 
 private:
-	OpenGLContextState& GetContextStateForCurrentContext();
 	void BindPendingFramebuffer(OpenGLContextState& ContextState);
+	void SetPendingBlendStateForActiveRenderTargets(OpenGLContextState& ContextState);
 	void UpdateViewportInOpenGLContext(OpenGLContextState& ContextState);
 	void UpdateScissorRectInOpenGLContext(OpenGLContextState& ContextState);
 	void UpdateRasterizerStateInOpenGLContext(OpenGLContextState& ContextState);
 	void BindPendingShaderState(OpenGLContextState& ContextState);
+	void CommitNonComputeShaderConstants(OpenGLContextState& ContextState);
+	void BindUniformBufferBase(OpenGLContextState& ContextState, int32_t NumUniformBuffers, RHIUniformBufferRef* BoundUniformBuffers, uint32_t FirstUniformBuffer, bool ForceUpdate);
+
+	void InitializeStateResources();
 
 	friend class ExampleScene;
 
 	OpenGLRHIState mPendingState;
+	OpenGLContextState mInvalidContextState;
+	OpenGLContextState mSharedContextState;
 	OpenGLContextState mRenderingContextState;
 
 	bool mVsync = false;
 	uint32_t mVertexArrayObject = 0;
 };
+
+extern void OpenGLDynamicRHICleanVertexBuffer();
 
 #endif // ENGINE_OPENGLRHI_OPENGLDYNAMICRHI_H

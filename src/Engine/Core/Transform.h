@@ -18,10 +18,6 @@ public:
 	{
 	}
 
-	OBJECT_GETACCESSOR(glm::fvec3, glm::fvec3, Translation);
-	OBJECT_GETACCESSOR(glm::fquat, glm::fquat, Rotation);
-	OBJECT_GETACCESSOR(glm::fvec3, glm::fvec3, Scale);
-
 	void SetTranslation(glm::fvec3 value);
 	void SetRotation(glm::fvec3 eulerAngles);
 	void SetRotation(glm::fquat value);
@@ -37,12 +33,16 @@ public:
 	}
 
 	// local/world matrices should be updated internally
-	OBJECT_GETACCESSOR(glm::fmat4, glm::fmat4, LocalToWorld);
-	OBJECT_GETACCESSOR(glm::fmat4, glm::fmat4, WorldToLocal);
+	glm::fvec3 GetTranslation() const { return mTranslation; }
+	glm::fquat GetRotation() const { return mRotation; }
+	glm::fvec3 GetScale() const { return mScale; }
 
-	OBJECT_GETACCESSOR(glm::fvec3, glm::fvec3, Forward);
-	OBJECT_GETACCESSOR(glm::fvec3, glm::fvec3, Right);
-	OBJECT_GETACCESSOR(glm::fvec3, glm::fvec3, Up);
+	glm::fmat4 GetLocalToWorld() const { return mLocalToWorld; }
+	glm::fmat4 GetWorldToLocal() const { return mWorldToLocal; }
+
+	glm::fvec3 GetForward() const { return mForward; }
+	glm::fvec3 GetRight() const { return mRight; }
+	glm::fvec3 GetUp() const { return mUp; }
 
 	void EnsureUpdated();
 

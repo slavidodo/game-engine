@@ -26,7 +26,7 @@ public:
 		return mTitle;
 	}
 
-	OBJECT_GETACCESSOR(GLFWwindow*, const GLFWwindow* , GlfwWindow);
+	GLFWwindow* GetGlfwWindow() const { return mGlfwWindow; }
 
 private:
 	GLFWwindow* mGlfwWindow;

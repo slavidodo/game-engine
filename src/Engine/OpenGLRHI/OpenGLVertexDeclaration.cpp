@@ -16,7 +16,7 @@ static inline void SetupGLElement(OpenGLVertexElement& GLElement, GLenum Type, G
 struct OpenGLVertexDeclarationKey
 {
 	OpenGLVertexElements VertexElements;
-	uint32_t Hash;
+	size_t Hash;
 
 	uint16_t StreamStrides[OpenGLVertexDeclaration::MaxVertexElementCount];
 
@@ -26,11 +26,12 @@ struct OpenGLVertexDeclarationKey
 		uint16_t UsedStreamsMask = 0;
 		memset(StreamStrides, 0, sizeof(StreamStrides));
 
+		VertexElements.reserve(elements.size());
 		for (size_t i = 0; i < elements.size(); i++) {
 			const VertexElement& Element = elements[i];
 			OpenGLVertexElement GLElement;
 			GLElement.StreamIndex = Element.StreamIndex;
-			GLElement.Offset = Element.Offset;
+			GLElement.MemberOffset = Element.MemberOffset;
 			GLElement.Divisor = Element.UseInstanceIndex ? 1 : 0;
 			GLElement.AttributeIndex = Element.AttributeIndex;
 			GLElement.HashStride = Element.Stride;
@@ -88,10 +89,10 @@ struct OpenGLVertexDeclarationKey
 				if (A.StreamIndex > B.StreamIndex) {
 					return false;
 				}
-				if (A.Offset < B.Offset) {
+				if (A.MemberOffset < B.MemberOffset) {
 					return true;
 				}
-				if (A.Offset > B.Offset) {
+				if (A.MemberOffset > B.MemberOffset) {
 					return false;
 				}
 				if (A.AttributeIndex < B.AttributeIndex) {
@@ -122,7 +123,7 @@ struct hash<OpenGLVertexElement>
 		std::size_t seed = 0;
 		boost::hash_combine(seed, c.Type);
 		boost::hash_combine(seed, c.StreamIndex);
-		boost::hash_combine(seed, c.Offset);
+		boost::hash_combine(seed, c.MemberOffset);
 		boost::hash_combine(seed, c.Size);
 		boost::hash_combine(seed, c.Divisor);
 		boost::hash_combine(seed, c.HashStride);
@@ -171,7 +172,7 @@ void OpenGLVertexDeclarationKey::GenerateHash()
 
 bool operator==(const OpenGLVertexElement& A, const OpenGLVertexElement& B)
 {
-	return A.Type == B.Type && A.StreamIndex == B.StreamIndex && A.Offset == B.Offset && A.Size == B.Size
+	return A.Type == B.Type && A.StreamIndex == B.StreamIndex && A.MemberOffset == B.MemberOffset && A.Size == B.Size
 		&& A.Divisor == B.Divisor && A.Normalized == B.Normalized && A.AttributeIndex == B.AttributeIndex
 		&& A.ShouldConvertToFloat == B.ShouldConvertToFloat && A.HashStride == B.HashStride;
 }
@@ -186,15 +187,10 @@ bool operator<(const OpenGLVertexDeclarationKey& A, const OpenGLVertexDeclaratio
 	return false;
 }
 
-std::unordered_map<OpenGLVertexDeclarationKey, RHIVertexDeclaration_ptr> gOpenGLVertexDeclarationCache;
+std::unordered_map<OpenGLVertexDeclarationKey, RHIVertexDeclarationRef> gOpenGLVertexDeclarationCache;
 
-RHIVertexDeclaration_ptr OpenGLDynamicRHI::RHICreateVertexDeclaration(const VertexDeclarationElementList& elements)
+RHIVertexDeclarationRef OpenGLDynamicRHI::RHICreateVertexDeclaration(const VertexDeclarationElementList& elements)
 {
-	/**
-	 * We cache declarations because  
-	 *
-	 **/
-
 	// the key is used to avoid multiple exact declarations
 	OpenGLVertexDeclarationKey key(elements);
 
@@ -203,7 +199,7 @@ RHIVertexDeclaration_ptr OpenGLDynamicRHI::RHICreateVertexDeclaration(const Vert
 		return (*it).second;
 	}
 
-	auto itt = gOpenGLVertexDeclarationCache.insert({ key, std::make_shared<OpenGLVertexDeclaration>(key.VertexElements, key.StreamStrides) });
+	auto itt = gOpenGLVertexDeclarationCache.insert({ key, new OpenGLVertexDeclaration(key.VertexElements, key.StreamStrides) });
 	return (*itt.first).second;
 }
 
@@ -213,7 +209,7 @@ bool OpenGLVertexDeclaration::GetInitializer(VertexDeclarationElementList& list)
 		OpenGLVertexElement const& GLElement = VertexElements[ElementIndex];
 		VertexElement Element;
 		Element.StreamIndex = GLElement.StreamIndex;
-		Element.Offset = GLElement.Offset;
+		Element.MemberOffset = GLElement.MemberOffset;
 		Element.UseInstanceIndex = GLElement.Divisor == 1; // a divisor of one hints per instance
 		Element.AttributeIndex = GLElement.AttributeIndex;
 		Element.Stride = GLElement.HashStride;

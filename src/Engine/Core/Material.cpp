@@ -10,7 +10,7 @@ void TypedValueUniformAssign(Material::TypedValuesMap& map, std::string uniform,
 {
 	Material::TypedValuesMapIterator it;
 	if ((it = map.find(uniform)) != map.end()) {
-		auto&& mtv = (*it).second;
+		Material::MaterialTypedValue& mtv = (*it).second;
 		if (mtv.type != type) {
 			delete[] mtv.value;
 			mtv.type = type;

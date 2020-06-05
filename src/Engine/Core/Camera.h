@@ -14,30 +14,47 @@ public:
 		PROJECTION_PERSPECTIVE,
 	};
 
+	static Camera_ptr CreatePerspectiveCamera(float InFovY, float InZNear, float InZFar) {
+		Camera_ptr Cam = std::make_shared<Camera>();
+		Cam->SetProjectionType(ProjectionType::PROJECTION_PERSPECTIVE);
+		Cam->SetFovY(InFovY);
+		Cam->SetZNear(InZNear);
+		Cam->SetZFar(InZFar);
+		return Cam;
+	}
+
 	virtual bool IsViewOutdated();
-	virtual glm::fmat3x4 GetViewMatrix();
-	virtual glm::fmat3x4 GetProjMatrix();
+	virtual glm::fmat4x4 GetViewMatrix();
+	virtual glm::fmat4x4 GetProjMatrix();
 
 	virtual float GetAspectRatio();
 
-	OBJECT_GETACCESSOR(ProjectionType, ProjectionType, ProjType);
-	OBJECT_GETACCESSOR(float, float, FovY);
-	OBJECT_GETACCESSOR(float, float, ZNear);
-	OBJECT_GETACCESSOR(float, float, ZFar);
+	ProjectionType GetProjectionType() { return mProjType; }
+	float GetFovY() { return mFovY; }
+	float GetZNear() { return mZNear; }
+	float GetZFar() { return mZFar; }
 
 	void SetProjectionType(ProjectionType type);
 	void SetFovY(float value);
 	void SetZNear(float zNear);
 	void SetZFar(float zFar);
 
+	void SetEditorTranslation(glm::fvec3 Value) { mEditorTranslation = Value; }
+	void SetEditorRotation(glm::fquat Value) { mEditorRotation = Value; }
+	void SetEditorRotation(glm::fvec3 EulerAngles) { mEditorRotation = glm::fquat(EulerAngles); }
+	void SetEditorRotationDegrees(glm::fvec3 EulerAngles) { SetEditorRotation(glm::radians(EulerAngles)); }
+
 protected:
 	virtual void UpdateView();
 	virtual void UpdateProjection();
 
-	virtual glm::fmat3x4 GetPerspectiveProjMatrix();
+	virtual glm::fmat4x4 GetPerspectiveProjMatrix();
 
-	glm::fmat3x4 mViewMatrix;
-	glm::fmat3x4 mProjMatrix;
+	glm::fmat4x4 mViewMatrix;
+	glm::fmat4x4 mProjMatrix;
+
+	glm::fvec3 mEditorTranslation;
+	glm::fquat mEditorRotation;
 
 	glm::fvec3 mParentTranslation;
 	glm::fquat mParentRotation;
