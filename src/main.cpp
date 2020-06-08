@@ -29,8 +29,14 @@ constexpr int32_t WINDOW_HEIGHT = 768;
 
 using Context = RENDERING_BACKEND;
 
+#include "Engine/Physics/PhysicsTest.h"
+
 int main(int argc, char* argv[])
 {
+	/* Physics tests (run without errors)*/
+	//PhysicsTester pt;
+	//pt.RunTests();
+
 	std::vector<std::string> args(argv, argv + argc);
 
 	// initialize core app

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.props" Condition="Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -194,6 +195,18 @@
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLTexture.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLState.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLVertexDeclaration.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PActor.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PAllocator.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PCollider.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PCollisionFilterCallback.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PEventCallback.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PGeometry.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PhysicsEngine.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PJoint.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PMaterial.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PScene.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PSceneQuery.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PhysicsTest.cpp" />
     <ClCompile Include="..\src\Engine\Platform\CoreApplication.cpp" />
     <ClCompile Include="..\src\Engine\Platform\Window.cpp" />
     <ClCompile Include="..\src\Engine\RHI\RHICommandList.cpp" />
@@ -241,6 +254,18 @@
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLShaderCompiler.h" />
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLSpecs.h" />
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLState.h" />
+    <ClInclude Include="..\src\Engine\Physics\PActor.h" />
+    <ClInclude Include="..\src\Engine\Physics\PAllocator.h" />
+    <ClInclude Include="..\src\Engine\Physics\PCollider.h" />
+    <ClInclude Include="..\src\Engine\Physics\PCollisionFilterCallback.h" />
+    <ClInclude Include="..\src\Engine\Physics\PEventCallback.h" />
+    <ClInclude Include="..\src\Engine\Physics\PGeometry.h" />
+    <ClInclude Include="..\src\Engine\Physics\PhysicsEngine.h" />
+    <ClInclude Include="..\src\Engine\Physics\PhysicsTest.h" />
+    <ClInclude Include="..\src\Engine\Physics\PJoint.h" />
+    <ClInclude Include="..\src\Engine\Physics\PMaterial.h" />
+    <ClInclude Include="..\src\Engine\Physics\PScene.h" />
+    <ClInclude Include="..\src\Engine\Physics\PSceneQuery.h" />
     <ClInclude Include="..\src\Engine\platform\CoreApplication.h" />
     <ClInclude Include="..\src\Engine\Platform\Window.h" />
     <ClInclude Include="..\src\Engine\Rendering\ShaderParameterMacros.h" />
@@ -257,7 +282,18 @@
     <ClInclude Include="..\src\Pch.h" />
     <ClInclude Include="..\src\Tests\ExampleScene.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets" Condition="Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.props'))" />
+    <Error Condition="!Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets'))" />
+  </Target>
 </Project>
