@@ -26,79 +26,79 @@
 #include "Pch.h"
 #include"PhysicsEngine.h"
 
-PCollider::PCollider(physx::PxShape* pShape) : m_pShape(pShape) {
-	setCollisionCategory(0);
+PCollider::PCollider(physx::PxShape* pShape) : mShape(pShape) {
+	SetCollisionCategory(0);
 }
 PCollider::~PCollider() {
-	if (!m_pShape) return;
+	if (!mShape) return;
 	
-	PAlignedAllocator::deallocate(m_pShape->userData);
-	m_pShape->release();
+	PAlignedAllocator::deallocate(mShape->userData);
+	mShape->release();
 }
 
-PCollider_ptr PCollider::createCollider(const PGeometry_ptr geometry, const PMaterial_ptr material) {
-	if (geometry->getSdkGeometry()->getType() == physx::PxGeometryType::eHEIGHTFIELD) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "This constructor overload is not suitable for height fields", __FILE__, __LINE__);
+PCollider_ptr PCollider::CreateCollider(const PGeometry_ptr geometry, const PMaterial_ptr material) {
+	if (geometry->GetSdkGeometry()->getType() == physx::PxGeometryType::eHEIGHTFIELD) {
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "This constructor overload is not suitable for height fields", __FILE__, __LINE__);
 		return nullptr;
 	}
 
-	physx::PxShape* pShape = g_pPhysicsEngine->m_pPhysics->createShape(*geometry->getSdkGeometry(), *material->getSdkMaterial());
+	physx::PxShape* pShape = PhysicsEngine::GetInstance().mPhysics->createShape(*geometry->GetSdkGeometry(), *material->GetSdkMaterial());
 	if (!pShape) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating phsyx shape", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating phsyx shape", __FILE__, __LINE__);
 		return nullptr;
 	}
 	
 	PCollider_ptr collider = std::make_shared<PCollider>(pShape);
-	collider->m_pShape->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PCollider>>()) std::weak_ptr<PCollider>(collider);
+	collider->mShape->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PCollider>>()) std::weak_ptr<PCollider>(collider);
 
 	return std::move(collider);
 }
-PCollider_ptr PCollider::createCollider(const PGeometry_ptr geometry, const PMaterialSet_ptr materialSet) {
-	physx::PxShape* pShape = g_pPhysicsEngine->m_pPhysics->createShape(*geometry->getSdkGeometry(), materialSet->getSdkMaterialsArray(), materialSet->getNumOfMaterials());
+PCollider_ptr PCollider::CreateCollider(const PGeometry_ptr geometry, const PMaterialSet_ptr materialSet) {
+	physx::PxShape* pShape = PhysicsEngine::GetInstance().mPhysics->createShape(*geometry->GetSdkGeometry(), materialSet->GetSdkMaterialsArray(), materialSet->GetNumOfMaterials());
 	if (!pShape) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating phsyx shape", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating phsyx shape", __FILE__, __LINE__);
 		return nullptr;
 	}
 
 	PCollider_ptr collider = std::make_shared<PCollider>(pShape);
-	collider->m_pShape->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PCollider>>()) std::weak_ptr<PCollider>(collider);
+	collider->mShape->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PCollider>>()) std::weak_ptr<PCollider>(collider);
 
 	return std::move(collider);
 }
 
-physx::PxShape* PCollider::getSdkShape() const {
-	return m_pShape;
+physx::PxShape* PCollider::GetSdkShape() const {
+	return mShape;
 }
 
-void PCollider::setLocalPosition(glm::vec3 position) {
-	m_pShape->setLocalPose(physx::PxTransform(position.x, position.y, position.z));
+void PCollider::SetLocalPosition(glm::vec3 position) {
+	mShape->setLocalPose(physx::PxTransform(position.x, position.y, position.z));
 }
-glm::vec3 PCollider::getLocalPosition() const {
-	physx::PxTransform transform = m_pShape->getLocalPose();
+glm::vec3 PCollider::GetLocalPosition() const {
+	physx::PxTransform transform = mShape->getLocalPose();
 	return glm::vec3(transform.p.x, transform.p.y, transform.p.z);
 }
 
-void PCollider::rotate(float angleRadian, glm::vec3 axis) {
+void PCollider::Rotate(float angleRadian, glm::vec3 axis) {
 	physx::PxVec3 rotationAxis = physx::PxVec3(axis.x, axis.y, axis.z).getNormalized();
-	m_pShape->setLocalPose(physx::PxTransform(physx::PxQuat(angleRadian, rotationAxis)));
+	mShape->setLocalPose(physx::PxTransform(physx::PxQuat(angleRadian, rotationAxis)));
 }
 
-void PCollider::setTrigger(bool value) {
-	m_pShape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, value);
+void PCollider::SetTrigger(bool value) {
+	mShape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, value);
 }
-void PCollider::setSimulation(bool value) {
-	m_pShape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, value);
+void PCollider::SetSimulation(bool value) {
+	mShape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, value);
 }
-void PCollider::setVisualization(bool value) {
-	m_pShape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, value);
+void PCollider::SetVisualization(bool value) {
+	mShape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, value);
 }
-void PCollider::setCollisionCategory(uint8_t categoryNum) {
+void PCollider::SetCollisionCategory(uint8_t categoryNum) {
 	if (categoryNum > 126) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "trying to assign category number higher than max (126)", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "trying to assign category number higher than max (126)", __FILE__, __LINE__);
 		return;
 	}
 
 	uint32_t words[4] = {0};
 	words[categoryNum / 32] = 1 << (categoryNum % 32);
-	m_pShape->setSimulationFilterData(physx::PxFilterData(words[0], words[1], words[2], words[3]));		
+	mShape->setSimulationFilterData(physx::PxFilterData(words[0], words[1], words[2], words[3]));		
 }

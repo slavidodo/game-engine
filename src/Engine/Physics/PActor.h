@@ -41,63 +41,63 @@ class PActor {
 public:
 	~PActor();
 
-	physx::PxRigidActor* getSdkActor() const;
+	physx::PxRigidActor* GetSdkActor() const;
 	
-	void addCollider(PCollider_ptr collider);
-	void removeCollider(PCollider_ptr pCollider);
+	void AddCollider(PCollider_ptr collider);
+	void RemoveCollider(PCollider_ptr pCollider);
 
 
 protected:
 	// For non-specific physics operations
-	physx::PxRigidActor* m_pActor = nullptr;
+	physx::PxRigidActor* mActor = nullptr;
 
-	std::list<PCollider_ptr> m_pColliders;
+	std::list<PCollider_ptr> mColliders;
 };
 class PStaticActor : public PActor {
 public:
 	PStaticActor(physx::PxRigidStatic* pStaticActor);
 
-	static PStaticActor_ptr createActor(glm::vec3 position = glm::vec3(0.0f));
+	static PStaticActor_ptr CreateActor(glm::vec3 position = glm::vec3(0.0f), glm::vec3 rotation = glm::vec3(0.0f));
 	
 private:
 	// For specific physics operations
-	physx::PxRigidStatic* m_pStaticActor = nullptr;
+	physx::PxRigidStatic* mStaticActor = nullptr;
 };
 class PDynamicActor : public PActor {
 public:
 	PDynamicActor(physx::PxRigidDynamic* pDynamicActor);
 
-	static PDynamicActor_ptr createActor(glm::vec3 position = glm::vec3(0.0f));
+	static PDynamicActor_ptr CreateActor(glm::vec3 position = glm::vec3(0.0f), glm::vec3 rotation = glm::vec3(0.0f));
 
-	void applyForce(glm::vec3 force);
-	void applyImpulse(glm::vec3 impulse);
-	void applyTorque(glm::vec3 torque);
+	void ApplyForce(glm::vec3 force);
+	void ApplyImpulse(glm::vec3 impulse);
+	void ApplyTorque(glm::vec3 torque);
 	
 	void UpdateMassAndInertia(float density);
 
 	#pragma region Getter Functions
-	glm::vec3 getPosition() const;
-	float getMass() const;
-	glm::vec3  getInertiaTensor() const;
-	glm::vec3  getLinearVelocity() const;
-	float getLinearDamping() const;
-	glm::vec3  getAngularVelocity() const;
-	float getAngularDamping() const;
+	glm::vec3 GetPosition() const;
+	float GetMass() const;
+	glm::vec3  GetInertiaTensor() const;
+	glm::vec3  GetLinearVelocity() const;
+	float GetLinearDamping() const;
+	glm::vec3  GetAngularVelocity() const;
+	float GetAngularDamping() const;
 	#pragma endregion
 
 	#pragma region Setter Functions
-	void setPosition(glm::vec3 position);
-	void setMass(float mass);
-	void setInertiaTensor(glm::vec3 interiaTensor);
-	void setLinearVelocity(glm::vec3 velocity);
-	void setLinearDamping(float damping);
-	void setAngularVelocity(glm::vec3 velocity);
-	void setAngularDamping(float damping);
+	void SetPosition(glm::vec3 position);
+	void SetMass(float mass);
+	void SetInertiaTensor(glm::vec3 interiaTensor);
+	void SetLinearVelocity(glm::vec3 velocity);
+	void SetLinearDamping(float damping);
+	void SetAngularVelocity(glm::vec3 velocity);
+	void SetAngularDamping(float damping);
 	#pragma endregion
 
 	#pragma region Utility Functions
-	void setGravity(bool value);
-	void setKinematic(bool value);
+	void SetGravity(bool value);
+	void SetKinematic(bool value);
 
 	enum class MotionAxis { 
 		LINEAR_X  = (1 << 0), 
@@ -107,11 +107,11 @@ public:
 		ANGULAR_Y = (1 << 4), 
 		ANGULAR_Z = (1 << 5)
 	};
-	void lockMotion(MotionAxis axis);
-	void unlockMotion(MotionAxis axis);
+	void LockMotion(MotionAxis axis);
+	void UnlockMotion(MotionAxis axis);
 	#pragma endregion
 
 private:
 	// For specific physics operations
-	physx::PxRigidDynamic* m_pDynamicActor = nullptr;
+	physx::PxRigidDynamic* mDynamicActor = nullptr;
 };

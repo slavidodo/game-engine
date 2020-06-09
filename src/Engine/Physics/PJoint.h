@@ -45,59 +45,59 @@ class PJoint {
 public:
 	~PJoint();
 
-	bool isBroken();
-	void setThresholdForceAndTorque(float forceMagnitude, float torqueMagnitude);
-	void setVisualization(bool value); // Joint visualization doesn't work for some reason?
+	bool IsBroken();
+	void SetThresholdForceAndTorque(float forceMagnitude, float torqueMagnitude);
+	void SetVisualization(bool value); // Joint visualization doesn't work for some reason?
 
 protected:
-	physx::PxJoint* m_pJoint;
+	physx::PxJoint* mJoint;
 };
 
 class PFixedJoint : public PJoint {
 public:
 	PFixedJoint(physx::PxFixedJoint* pFixedJoint);
-	static PFixedJoint_ptr createJoint(PActor_ptr actor1, PActor_ptr actor2);
+	static PFixedJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
 
 private:
-	physx::PxFixedJoint* m_pFixedJoint;
+	physx::PxFixedJoint* mFixedJoint;
 };
 class PDistanceJoint : public PJoint {
 public:
 	PDistanceJoint(physx::PxDistanceJoint* pDistanceJoint);
-	static PDistanceJoint_ptr createJoint(PActor_ptr actor1, PActor_ptr actor2);
+	static PDistanceJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
 
-	void setLimits(float minDistance, float maxDistance, float tolerance = -1.0f);
+	void SetLimits(float minDistance, float maxDistance, float tolerance = -1.0f);
 
 private:
-	physx::PxDistanceJoint* m_pDistanceJoint;
+	physx::PxDistanceJoint* mDistanceJoint;
 };
 class PSphericalJoint : public PJoint {
 public:
 	PSphericalJoint(physx::PxSphericalJoint* pSphericalJoint);
-	static PSphericalJoint_ptr createJoint(PActor_ptr actor1, PActor_ptr actor2);
+	static PSphericalJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
 
-	void setLimits(float yMaxAngleRadians, float zMaxAngleRadians, float tolerance = -1.0f);
+	void SetLimits(float yMaxAngleRadians, float zMaxAngleRadians, float tolerance = -1.0f);
 
 private:
-	physx::PxSphericalJoint* m_pSphericalJoint;
+	physx::PxSphericalJoint* mSphericalJoint;
 };
 class PRevoluteJoint : public PJoint {
 public:
 	PRevoluteJoint(physx::PxRevoluteJoint* pRevoluteJoint);
-	static PRevoluteJoint_ptr createJoint(PActor_ptr actor1, PActor_ptr actor2);
+	static PRevoluteJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
 
-	void setLimits(float minAngleRadian, float maxAngleRadian, float tolerance = -1.0f);
+	void SetLimits(float minAngleRadian, float maxAngleRadian, float tolerance = -1.0f);
 
 private:
-	physx::PxRevoluteJoint* m_pRevoluteJoint;
+	physx::PxRevoluteJoint* mRevoluteJoint;
 };
 class PPrismaticJoint : public PJoint {
 public:
 	PPrismaticJoint(physx::PxPrismaticJoint* pPrismaticJoint);
-	static PPrismaticJoint_ptr createJoint(PActor_ptr actor1, PActor_ptr actor2);
+	static PPrismaticJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
 
-	void setLimits(float minDistance, float maxDistance, float tolerance = -1.0f);
+	void SetLimits(float minDistance, float maxDistance, float tolerance = -1.0f);
 
 private:
-	physx::PxPrismaticJoint* m_pPrismaticJoint;
+	physx::PxPrismaticJoint* mPrismaticJoint;
 };

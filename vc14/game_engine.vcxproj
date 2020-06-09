@@ -205,6 +205,7 @@
     <ClCompile Include="..\src\Engine\Physics\PJoint.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PMaterial.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PScene.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PSceneManager.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PSceneQuery.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PhysicsTest.cpp" />
     <ClCompile Include="..\src\Engine\Platform\CoreApplication.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="..\src\Engine\Physics\PJoint.h" />
     <ClInclude Include="..\src\Engine\Physics\PMaterial.h" />
     <ClInclude Include="..\src\Engine\Physics\PScene.h" />
+    <ClInclude Include="..\src\Engine\Physics\PSceneManager.h" />
     <ClInclude Include="..\src\Engine\Physics\PSceneQuery.h" />
     <ClInclude Include="..\src\Engine\platform\CoreApplication.h" />
     <ClInclude Include="..\src\Engine\Platform\Window.h" />

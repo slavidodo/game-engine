@@ -3,7 +3,7 @@
 #define ENGINE_CORE_TRANSFORM_H
 
 class Transform;
-typedef std::shared_ptr<Transform> Transform_ptr;
+typedef std::shared_ptr<Transform> Transformtr;
 
 class Transform
 {
@@ -32,7 +32,7 @@ public:
 		LookAt(other.GetTranslation());
 	}
 
-	// local/world matrices should be updated internally
+	// local/world matrices should be Updated internally
 	glm::fvec3 GetTranslation() const { return mTranslation; }
 	glm::fquat GetRotation() const { return mRotation; }
 	glm::fvec3 GetScale() const { return mScale; }

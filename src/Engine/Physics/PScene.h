@@ -38,14 +38,14 @@ public:
 	PSceneDescriptor();
 	~PSceneDescriptor();
 
-	physx::PxSceneDesc* getSdkDescriptor() const;
+	physx::PxSceneDesc* GetSdkDescriptor() const;
 
-	void setGravityForce(float x, float y, float z);
-	void setCpuDispatcher(physx::PxCpuDispatcher* cpuDispatcher);
+	void SetGravityForce(glm::vec3 force = glm::vec3(0.0f, -9.8f, 0.0f));
+	void SetCpuDispatcher(physx::PxCpuDispatcher* cpuDispatcher);
 	void setFilterShader(physx::PxSimulationFilterShader filterShader);
 
 private:
-	physx::PxSceneDesc* m_pDescriptor;
+	physx::PxSceneDesc* mDescriptor;
 };
 
 class PScene {
@@ -53,22 +53,22 @@ public:
 	PScene(physx::PxScene* pScene);
 	~PScene();
 
-	static PScene_ptr createScene(const PSceneDescriptor& pPSceneDesc);
+	static PScene_ptr CreateScene(const PSceneDescriptor& pPSceneDesc);
 
-	void addActor(PActor_ptr pActor);
-	void removeActor(PActor_ptr pActor);
+	void AddActor(PActor_ptr pActor);
+	void RemoveActor(PActor_ptr pActor);
 
-	void update(float dt);
-	void applyUpdateResults(bool bSleep);
+	void Update(float dt);
+	void ApplyUpdateResults(bool bSleep);
 
-	void shiftOrigin(glm::vec3 translation);
+	void ShiftOrigin(glm::vec3 translation);
 
-	bool raycast(glm::vec3 origin, glm::vec3 direction, float maxDistance, PRaycastHit_ptr hit = nullptr);
-	bool raycast(glm::vec3 origin, glm::vec3 direction, float maxDistance, std::vector<PRaycastHit_ptr>& hits);
-	bool sweep(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, glm::vec3 direction, float maxDistance, PSweepHit_ptr hit = nullptr);
-	bool sweep(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, glm::vec3 direction, float maxDistance, std::vector<PSweepHit_ptr>& hit);
-	bool overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, POverlapHit_ptr hit = nullptr);
-	bool overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, std::vector<POverlapHit_ptr>& hit);
+	bool Raycast(glm::vec3 origin, glm::vec3 direction, float maxDistance, PRaycastHit_ptr hit = nullptr);
+	bool Raycast(glm::vec3 origin, glm::vec3 direction, float maxDistance, std::vector<PRaycastHit_ptr>& hits);
+	bool Sweep(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, glm::vec3 direction, float maxDistance, PSweepHit_ptr hit = nullptr);
+	bool Sweep(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, glm::vec3 direction, float maxDistance, std::vector<PSweepHit_ptr>& hit);
+	bool Overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, POverlapHit_ptr hit = nullptr);
+	bool Overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, std::vector<POverlapHit_ptr>& hit);
 
 	enum class CollisionHandle {
 		Default = physx::PxPairFlag::eCONTACT_DEFAULT,
@@ -81,15 +81,15 @@ public:
 		Callback = physx::PxFilterFlag::eCALLBACK, // invokes the filter callback PairFound().
 		Notify = physx::PxFilterFlag::eNOTIFY, // invokes the filter callback PairFound() when the pair falls in collision, and PairLost() when it falls out of collision.
 	};
-	void setCollisionRelationship(uint8_t categoryNum1, uint8_t categoryNum2, CollisionHandle collisionHandle, PairFlag pairFlag);
+	void SetCollisionRelationship(uint8_t categoryNum1, uint8_t categoryNum2, CollisionHandle collisionHandle, PairFlag pairFlag);
 
 	// Joint visualization doesn't work for some reason?
-	void setJointVisualization(bool value);
+	void SetJointVisualization(bool value);
 
 private:
-	physx::PxScene* m_pScene = nullptr;
+	physx::PxScene* mScene = nullptr;
 
-	std::list<PActor_ptr> m_pActors;
+	std::list<PActor_ptr> mActors;
 
-	std::pair<physx::PxPairFlag::Enum, physx::PxFilterFlag::Enum> m_collisionMatrix[128][128];
+	std::pair<physx::PxPairFlag::Enum, physx::PxFilterFlag::Enum> mCollisionMatrix[128][128];
 };

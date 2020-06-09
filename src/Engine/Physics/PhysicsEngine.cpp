@@ -26,116 +26,120 @@
 #include "Pch.h"
 #include "PhysicsEngine.h"
 
-PhysicsEngine* g_pPhysicsEngine;
-
 #pragma region Initializtion/Termination
-bool PhysicsEngine::init(const PhysicsSettings& settings) {
-	initAllocator(settings);
-	initErrorReporter(settings);
+bool PhysicsEngine::Init(const PhysicsSettings& settings) {
+	if (mInitialized)
+		return true;
 
-	if (!initFoundation())
+	InitAllocator(settings);
+	InitErrorReporter(settings);
+
+	if (!InitFoundation())
 		return false;
 	#ifdef _DEBUG
-	if (settings.bEnableVisualDebugger && !initVisualDebugger())
+	if (settings.bEnableVisualDebugger && !InitVisualDebugger())
 		return false;
 	#endif
-	if (!initPhysics(settings))
+	if (!InitPhysics(settings))
 		return false;
-	if (!initCooking(settings))
+	if (!InitCooking(settings))
 		return false;
-	if (!initExtensions())
+	if (!InitExtensions())
 		return false;
 
-	g_pDefaultMaterial = PMaterial::createMaterial(0.5f, 0.5f, 0.5f);
+	mInitialized = true;
+	gDefaultMaterial = PMaterial::CreateMaterial(0.5f, 0.5f, 0.5f);
 
 	return true;
 }
-void PhysicsEngine::terminate() {
-	g_pDefaultMaterial.reset();
+void PhysicsEngine::Terminate() {
+	PSceneManager::GetInstance().SetCurrentScene(nullptr);
+
+	gDefaultMaterial.reset();
 
 	PxCloseExtensions();
 	
-	if (m_pCooking)
-		m_pCooking->release();
-	if (m_pPhysics)
-		m_pPhysics->release();
+	if (mCooking)
+		mCooking->release();
+	if (mPhysics)
+		mPhysics->release();
 	#ifdef _DEBUG
-	if (m_pVisualDebugger)
-		m_pVisualDebugger->release();
+	if (mVisualDebugger)
+		mVisualDebugger->release();
 	#endif
-	if (m_pFoundation)
-		m_pFoundation->release();
+	if (mFoundation)
+		mFoundation->release();
 	
-	PAlignedAllocator::deallocate(m_pErrorReporter);
-	PAlignedAllocator::deallocate(m_pAllocator);
+	PAlignedAllocator::deallocate(mErrorReporter);
+	PAlignedAllocator::deallocate(mAllocator);
 }
 
-bool PhysicsEngine::initAllocator(const PhysicsSettings& settings) {
-	m_pAllocator = new (PAlignedAllocator::allocate<SdkAllocator>()) SdkAllocator();
-	if (!m_pAllocator) {
-		m_pErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating allocator component", __FILE__, __LINE__);
+bool PhysicsEngine::InitAllocator(const PhysicsSettings& settings) {
+	mAllocator = new (PAlignedAllocator::allocate<SdkAllocator>()) SdkAllocator();
+	if (!mAllocator) {
+		mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating allocator component", __FILE__, __LINE__);
 		return false;
 	}
 	return true;
 }
-bool PhysicsEngine::initErrorReporter(const PhysicsSettings& settings) {
-	m_pErrorReporter = new (PAlignedAllocator::allocate<physx::PxDefaultErrorCallback>()) physx::PxDefaultErrorCallback();
-	if (!m_pErrorReporter) {
-		m_pErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating error callback component", __FILE__, __LINE__);
+bool PhysicsEngine::InitErrorReporter(const PhysicsSettings& settings) {
+	mErrorReporter = new (PAlignedAllocator::allocate<physx::PxDefaultErrorCallback>()) physx::PxDefaultErrorCallback();
+	if (!mErrorReporter) {
+		mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating error callback component", __FILE__, __LINE__);
 		return false;
 	}
 	return true;
 }
-bool PhysicsEngine::initFoundation() {
-	m_pFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *m_pAllocator, *m_pErrorReporter);
-	if (m_pFoundation == nullptr) {
-		m_pErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating foundation component", __FILE__, __LINE__);
+bool PhysicsEngine::InitFoundation() {
+	mFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *mAllocator, *mErrorReporter);
+	if (mFoundation == nullptr) {
+		mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating foundation component", __FILE__, __LINE__);
 		return false;
 	}
 	return true;
 }
-bool PhysicsEngine::initVisualDebugger() {
-	m_pVisualDebugger = physx::PxCreatePvd(*m_pFoundation);
-	if (!m_pVisualDebugger) return false;
+bool PhysicsEngine::InitVisualDebugger() {
+	mVisualDebugger = physx::PxCreatePvd(*mFoundation);
+	if (!mVisualDebugger) return false;
 
 	physx::PxPvdTransport* pTransport = physx::PxDefaultPvdSocketTransportCreate(PVD_HOST, PVD_PORT, 10);
-	m_pVisualDebugger->connect(*pTransport, physx::PxPvdInstrumentationFlag::eALL);
+	mVisualDebugger->connect(*pTransport, physx::PxPvdInstrumentationFlag::eALL);
 	
 	return true;
 }
-bool PhysicsEngine::initPhysics(const PhysicsSettings& settings) {
+bool PhysicsEngine::InitPhysics(const PhysicsSettings& settings) {
 	if (settings.CreateFullPhysics()) {
-		m_pPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_pFoundation, settings.toleranceScale, settings.bTrackMemoryAllocations, m_pVisualDebugger);
-		if (!m_pPhysics) {
-			m_pErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating physics component", __FILE__, __LINE__);
+		mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mFoundation, settings.toleranceScale, settings.bTrackMemoryAllocations, mVisualDebugger);
+		if (!mPhysics) {
+			mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating physics component", __FILE__, __LINE__);
 			return false;
 		}
 	} 
 	else {
-		m_pPhysics = PxCreateBasePhysics(PX_PHYSICS_VERSION, *m_pFoundation, settings.toleranceScale, settings.bTrackMemoryAllocations, m_pVisualDebugger);
-		if (!m_pPhysics) {
-			m_pErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating physics component", __FILE__, __LINE__);
+		mPhysics = PxCreateBasePhysics(PX_PHYSICS_VERSION, *mFoundation, settings.toleranceScale, settings.bTrackMemoryAllocations, mVisualDebugger);
+		if (!mPhysics) {
+			mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating physics component", __FILE__, __LINE__);
 			return false;
 		}
 
-		if (settings.bEnableHeightFields) PxRegisterHeightFields(*m_pPhysics);
-		if (settings.bEnableArticulations) PxRegisterArticulations(*m_pPhysics);
-		if (settings.bEnableArticulationsReducedCoordinates) PxRegisterArticulationsReducedCoordinate(*m_pPhysics);
+		if (settings.bEnableHeightFields) PxRegisterHeightFields(*mPhysics);
+		if (settings.bEnableArticulations) PxRegisterArticulations(*mPhysics);
+		if (settings.bEnableArticulationsReducedCoordinates) PxRegisterArticulationsReducedCoordinate(*mPhysics);
 	}
 	return true;
 }
-bool PhysicsEngine::initCooking(const PhysicsSettings& settings) {
-	m_pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pFoundation, physx::PxCookingParams(settings.toleranceScale));
-	if (!m_pCooking) {
-		m_pErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating cooking component", __FILE__, __LINE__);
+bool PhysicsEngine::InitCooking(const PhysicsSettings& settings) {
+	mCooking = PxCreateCooking(PX_PHYSICS_VERSION, *mFoundation, physx::PxCookingParams(settings.toleranceScale));
+	if (!mCooking) {
+		mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating cooking component", __FILE__, __LINE__);
 		return false;
 	}
 	return true;
 }
-bool PhysicsEngine::initExtensions() {
-	bool bSuccess = PxInitExtensions(*m_pPhysics, m_pVisualDebugger);
+bool PhysicsEngine::InitExtensions() {
+	bool bSuccess = PxInitExtensions(*mPhysics, mVisualDebugger);
 	if (!bSuccess) {
-		m_pErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error initializing extensions", __FILE__, __LINE__);
+		mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error Initializing extensions", __FILE__, __LINE__);
 		return false;
 	}	
 	return true;

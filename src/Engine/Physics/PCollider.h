@@ -40,22 +40,22 @@ public:
 	PCollider(physx::PxShape* shape);
 	~PCollider();
 
-	static PCollider_ptr createCollider(const PGeometry_ptr geometry, const PMaterial_ptr pMaterial = g_pDefaultMaterial);
+	static PCollider_ptr CreateCollider(const PGeometry_ptr geometry, const PMaterial_ptr pMaterial = gDefaultMaterial);
 	// This overload is mandatory for height fields
-	static PCollider_ptr createCollider(const PGeometry_ptr geometry, const PMaterialSet_ptr materialSet);
+	static PCollider_ptr CreateCollider(const PGeometry_ptr geometry, const PMaterialSet_ptr materialSet);
 
-	physx::PxShape* getSdkShape() const;
+	physx::PxShape* GetSdkShape() const;
 
-	void setLocalPosition(glm::vec3 position);
-	glm::vec3 getLocalPosition() const;
+	void SetLocalPosition(glm::vec3 position);
+	glm::vec3 GetLocalPosition() const;
 	
-	void rotate(float angleRadian, glm::vec3 axis);
+	void Rotate(float angleRadian, glm::vec3 axis);
 
-	void setTrigger(bool value);
-	void setSimulation(bool value);
-	void setVisualization(bool value);
-	void setCollisionCategory(uint8_t categoryNum);
+	void SetTrigger(bool value);
+	void SetSimulation(bool value);
+	void SetVisualization(bool value);
+	void SetCollisionCategory(uint8_t categoryNum);
 
 private:
-	physx::PxShape* m_pShape = nullptr;
+	physx::PxShape* mShape = nullptr;
 };

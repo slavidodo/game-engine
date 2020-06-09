@@ -27,6 +27,7 @@
 #include "physx/PxPhysicsAPI.h"
 #include "PAllocator.h"
 #include "PScene.h"
+#include "PSceneManager.h"
 #include "PActor.h"
 #include "PCollider.h"
 #include "PGeometry.h"
@@ -44,7 +45,6 @@ struct PhysicsSettings {
 	physx::PxTolerancesScale toleranceScale = physx::PxTolerancesScale();
 
 	/// Miscellaneous
-	//bool bEnableExtensions = false;
 	bool bEnableVisualDebugger = false;
 	bool bTrackMemoryAllocations = false;
 
@@ -56,32 +56,37 @@ struct PhysicsSettings {
 
 class PhysicsEngine {
 public:
+	static PhysicsEngine& GetInstance() {
+		static PhysicsEngine instance;
+		return instance;
+	}
+
 	// Singleton used for PhysX initialization
-	physx::PxFoundation* m_pFoundation = nullptr;
+	physx::PxFoundation* mFoundation = nullptr;
 	// Singleton used for configuring the visual debugger
-	physx::PxPvd* m_pVisualDebugger = nullptr;
+	physx::PxPvd* mVisualDebugger = nullptr;
 	// Singleton used for instancing objects in the Physics SDK
-	physx::PxPhysics* m_pPhysics = nullptr;
+	physx::PxPhysics* mPhysics = nullptr;
 	// Provides utilities for creating, converting & serializing bulk data.
-	physx::PxCooking* m_pCooking = nullptr;
+	physx::PxCooking* mCooking = nullptr;
 
 	// Provides memory allocation/deallocation functionality
-	physx::PxAllocatorCallback* m_pAllocator = nullptr;
+	physx::PxAllocatorCallback* mAllocator = nullptr;
 	// Provides error logging functionality
-	physx::PxErrorCallback* m_pErrorReporter = nullptr;
+	physx::PxErrorCallback* mErrorReporter = nullptr;
 
 
-	bool init(const PhysicsSettings& options);
-	void terminate();
+	bool Init(const PhysicsSettings& options);
+	void Terminate();
 
 private:
-	bool initAllocator(const PhysicsSettings& settings);
-	bool initErrorReporter(const PhysicsSettings& settings);
-	bool initFoundation();
-	bool initVisualDebugger();
-	bool initPhysics(const PhysicsSettings& options);
-	bool initCooking(const PhysicsSettings& options);
-	bool initExtensions();
-};
+	bool mInitialized = false;
 
-extern PhysicsEngine* g_pPhysicsEngine;
+	bool InitAllocator(const PhysicsSettings& settings);
+	bool InitErrorReporter(const PhysicsSettings& settings);
+	bool InitFoundation();
+	bool InitVisualDebugger();
+	bool InitPhysics(const PhysicsSettings& options);
+	bool InitCooking(const PhysicsSettings& options);
+	bool InitExtensions();
+};

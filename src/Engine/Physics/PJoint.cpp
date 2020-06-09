@@ -28,130 +28,130 @@
 
 #pragma region Joint Functions
 PJoint::~PJoint() {
-	if (!m_pJoint) return;
+	if (!mJoint) return;
 
-	PAlignedAllocator::deallocate(m_pJoint->userData);
-	m_pJoint->release();
+	PAlignedAllocator::deallocate(mJoint->userData);
+	mJoint->release();
 }
 
-bool PJoint::isBroken() {
-	return m_pJoint->getConstraintFlags() & physx::PxConstraintFlag::eBROKEN;
+bool PJoint::IsBroken() {
+	return mJoint->getConstraintFlags() & physx::PxConstraintFlag::eBROKEN;
 }
-void PJoint::setThresholdForceAndTorque(float forceMagnitude, float torqueMagnitude) {
-	m_pJoint->setBreakForce(forceMagnitude, torqueMagnitude);
+void PJoint::SetThresholdForceAndTorque(float forceMagnitude, float torqueMagnitude) {
+	mJoint->setBreakForce(forceMagnitude, torqueMagnitude);
 }
-void PJoint::setVisualization(bool value) {
-	m_pJoint->setConstraintFlag(physx::PxConstraintFlag::eVISUALIZATION, value);
+void PJoint::SetVisualization(bool value) {
+	mJoint->setConstraintFlag(physx::PxConstraintFlag::eVISUALIZATION, value);
 }
 #pragma endregion
 
 #pragma region Fixed Joint Functions
-PFixedJoint::PFixedJoint(physx::PxFixedJoint* pFixedJoint) : m_pFixedJoint(pFixedJoint) {
-	m_pJoint = static_cast<physx::PxJoint*>(m_pFixedJoint);
+PFixedJoint::PFixedJoint(physx::PxFixedJoint* pFixedJoint) : mFixedJoint(pFixedJoint) {
+	mJoint = static_cast<physx::PxJoint*>(mFixedJoint);
 }
-PFixedJoint_ptr PFixedJoint::createJoint(PActor_ptr actor1, PActor_ptr actor2) {
-	physx::PxFixedJoint* pFixedJoint = physx::PxFixedJointCreate(*g_pPhysicsEngine->m_pPhysics, actor1->getSdkActor(), actor1->getSdkActor()->getGlobalPose(), actor2->getSdkActor(), actor2->getSdkActor()->getGlobalPose());
+PFixedJoint_ptr PFixedJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
+	physx::PxFixedJoint* pFixedJoint = physx::PxFixedJointCreate(*PhysicsEngine::GetInstance().mPhysics, actor1->GetSdkActor(), actor1->GetSdkActor()->getGlobalPose(), actor2->GetSdkActor(), actor2->GetSdkActor()->getGlobalPose());
 	if (!pFixedJoint) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating fixed joint", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating fixed joint", __FILE__, __LINE__);
 		return nullptr;
 	}
 
 	PFixedJoint_ptr joint = std::make_shared<PFixedJoint>(pFixedJoint);
-	joint->m_pFixedJoint->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PFixedJoint>>()) std::weak_ptr<PFixedJoint>(joint);
+	joint->mFixedJoint->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PFixedJoint>>()) std::weak_ptr<PFixedJoint>(joint);
 
 	return std::move(joint);
 }
 #pragma endregion
 #pragma region Distance Joint Functions
-PDistanceJoint::PDistanceJoint(physx::PxDistanceJoint* pDistanceJoint) : m_pDistanceJoint(pDistanceJoint) {
-	m_pJoint = static_cast<physx::PxJoint*>(m_pDistanceJoint);
+PDistanceJoint::PDistanceJoint(physx::PxDistanceJoint* pDistanceJoint) : mDistanceJoint(pDistanceJoint) {
+	mJoint = static_cast<physx::PxJoint*>(mDistanceJoint);
 }
-PDistanceJoint_ptr PDistanceJoint::createJoint(PActor_ptr actor1, PActor_ptr actor2) {
-	physx::PxDistanceJoint* pDistanceJoint = physx::PxDistanceJointCreate(*g_pPhysicsEngine->m_pPhysics, actor1->getSdkActor(), actor1->getSdkActor()->getGlobalPose(), actor2->getSdkActor(), actor2->getSdkActor()->getGlobalPose());
+PDistanceJoint_ptr PDistanceJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
+	physx::PxDistanceJoint* pDistanceJoint = physx::PxDistanceJointCreate(*PhysicsEngine::GetInstance().mPhysics, actor1->GetSdkActor(), actor1->GetSdkActor()->getGlobalPose(), actor2->GetSdkActor(), actor2->GetSdkActor()->getGlobalPose());
 	if (!pDistanceJoint) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Distance joint", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Distance joint", __FILE__, __LINE__);
 		return nullptr;
 	}
 
 	PDistanceJoint_ptr joint = std::make_shared<PDistanceJoint>(pDistanceJoint);
-	joint->m_pDistanceJoint->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PDistanceJoint>>()) std::weak_ptr<PDistanceJoint>(joint);
+	joint->mDistanceJoint->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PDistanceJoint>>()) std::weak_ptr<PDistanceJoint>(joint);
 
 	return std::move(joint);
 }
 
-void PDistanceJoint::setLimits(float minDistance, float maxDistance, float tolerance) {
-	m_pDistanceJoint->setMinDistance(minDistance);
-	m_pDistanceJoint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMIN_DISTANCE_ENABLED, true);
+void PDistanceJoint::SetLimits(float minDistance, float maxDistance, float tolerance) {
+	mDistanceJoint->setMinDistance(minDistance);
+	mDistanceJoint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMIN_DISTANCE_ENABLED, true);
 	
-	m_pDistanceJoint->setMaxDistance(maxDistance);
-	m_pDistanceJoint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
+	mDistanceJoint->setMaxDistance(maxDistance);
+	mDistanceJoint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
 
-	m_pDistanceJoint->setTolerance(tolerance);
+	mDistanceJoint->setTolerance(tolerance);
 }
 #pragma endregion
 #pragma region Spherical Joint Functions
-PSphericalJoint::PSphericalJoint(physx::PxSphericalJoint* pSphericalJoint) : m_pSphericalJoint(pSphericalJoint) {
-	m_pJoint = static_cast<physx::PxJoint*>(m_pSphericalJoint);
+PSphericalJoint::PSphericalJoint(physx::PxSphericalJoint* pSphericalJoint) : mSphericalJoint(pSphericalJoint) {
+	mJoint = static_cast<physx::PxJoint*>(mSphericalJoint);
 }
-PSphericalJoint_ptr PSphericalJoint::createJoint(PActor_ptr actor1, PActor_ptr actor2) {
-	physx::PxSphericalJoint* pSphericalJoint = physx::PxSphericalJointCreate(*g_pPhysicsEngine->m_pPhysics, actor1->getSdkActor(), actor1->getSdkActor()->getGlobalPose(), actor2->getSdkActor(), actor2->getSdkActor()->getGlobalPose());
+PSphericalJoint_ptr PSphericalJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
+	physx::PxSphericalJoint* pSphericalJoint = physx::PxSphericalJointCreate(*PhysicsEngine::GetInstance().mPhysics, actor1->GetSdkActor(), actor1->GetSdkActor()->getGlobalPose(), actor2->GetSdkActor(), actor2->GetSdkActor()->getGlobalPose());
 	if (!pSphericalJoint) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Spherical joint", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Spherical joint", __FILE__, __LINE__);
 		return nullptr;
 	}
 
 	PSphericalJoint_ptr joint = std::make_shared<PSphericalJoint>(pSphericalJoint);
-	joint->m_pSphericalJoint->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PSphericalJoint>>()) std::weak_ptr<PSphericalJoint>(joint);
+	joint->mSphericalJoint->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PSphericalJoint>>()) std::weak_ptr<PSphericalJoint>(joint);
 
 	return std::move(joint);
 }
 
-void PSphericalJoint::setLimits(float yMaxAngleRadians, float zMaxAngleRadians, float tolerance) {
-	m_pSphericalJoint->setLimitCone(physx::PxJointLimitCone(yMaxAngleRadians, zMaxAngleRadians, tolerance));
-	m_pSphericalJoint->setSphericalJointFlag(physx::PxSphericalJointFlag::eLIMIT_ENABLED, true);
+void PSphericalJoint::SetLimits(float yMaxAngleRadians, float zMaxAngleRadians, float tolerance) {
+	mSphericalJoint->setLimitCone(physx::PxJointLimitCone(yMaxAngleRadians, zMaxAngleRadians, tolerance));
+	mSphericalJoint->setSphericalJointFlag(physx::PxSphericalJointFlag::eLIMIT_ENABLED, true);
 }
 #pragma endregion
 #pragma region Revolute Joint Functions
-PRevoluteJoint::PRevoluteJoint(physx::PxRevoluteJoint* pRevoluteJoint) : m_pRevoluteJoint(pRevoluteJoint) {
-	m_pJoint = static_cast<physx::PxJoint*>(m_pRevoluteJoint);
+PRevoluteJoint::PRevoluteJoint(physx::PxRevoluteJoint* pRevoluteJoint) : mRevoluteJoint(pRevoluteJoint) {
+	mJoint = static_cast<physx::PxJoint*>(mRevoluteJoint);
 }
-PRevoluteJoint_ptr PRevoluteJoint::createJoint(PActor_ptr actor1, PActor_ptr actor2) {
-	physx::PxRevoluteJoint* pRevoluteJoint = physx::PxRevoluteJointCreate(*g_pPhysicsEngine->m_pPhysics, actor1->getSdkActor(), actor1->getSdkActor()->getGlobalPose(), actor2->getSdkActor(), actor2->getSdkActor()->getGlobalPose());
+PRevoluteJoint_ptr PRevoluteJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
+	physx::PxRevoluteJoint* pRevoluteJoint = physx::PxRevoluteJointCreate(*PhysicsEngine::GetInstance().mPhysics, actor1->GetSdkActor(), actor1->GetSdkActor()->getGlobalPose(), actor2->GetSdkActor(), actor2->GetSdkActor()->getGlobalPose());
 	if (!pRevoluteJoint) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Revolute joint", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Revolute joint", __FILE__, __LINE__);
 		return nullptr;
 	}
 
 	PRevoluteJoint_ptr joint = std::make_shared<PRevoluteJoint>(pRevoluteJoint);
-	joint->m_pRevoluteJoint->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PRevoluteJoint>>()) std::weak_ptr<PRevoluteJoint>(joint);
+	joint->mRevoluteJoint->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PRevoluteJoint>>()) std::weak_ptr<PRevoluteJoint>(joint);
 
 	return std::move(joint);
 }
 
-void PRevoluteJoint::setLimits(float minAngleRadian, float maxAngleRadian, float tolerance) {
-	m_pRevoluteJoint->setLimit(physx::PxJointAngularLimitPair(minAngleRadian, maxAngleRadian, tolerance));
-	m_pRevoluteJoint->setRevoluteJointFlag(physx::PxRevoluteJointFlag::eLIMIT_ENABLED, true);
+void PRevoluteJoint::SetLimits(float minAngleRadian, float maxAngleRadian, float tolerance) {
+	mRevoluteJoint->setLimit(physx::PxJointAngularLimitPair(minAngleRadian, maxAngleRadian, tolerance));
+	mRevoluteJoint->setRevoluteJointFlag(physx::PxRevoluteJointFlag::eLIMIT_ENABLED, true);
 }
 #pragma endregion
 #pragma region Prismatic Joint Functions
-PPrismaticJoint::PPrismaticJoint(physx::PxPrismaticJoint* pPrismaticJoint) : m_pPrismaticJoint(pPrismaticJoint) {
-	m_pJoint = static_cast<physx::PxJoint*>(m_pPrismaticJoint);
+PPrismaticJoint::PPrismaticJoint(physx::PxPrismaticJoint* pPrismaticJoint) : mPrismaticJoint(pPrismaticJoint) {
+	mJoint = static_cast<physx::PxJoint*>(mPrismaticJoint);
 }
-PPrismaticJoint_ptr PPrismaticJoint::createJoint(PActor_ptr actor1, PActor_ptr actor2) {
-	physx::PxPrismaticJoint* pPrismaticJoint = physx::PxPrismaticJointCreate(*g_pPhysicsEngine->m_pPhysics, actor1->getSdkActor(), actor1->getSdkActor()->getGlobalPose(), actor2->getSdkActor(), actor2->getSdkActor()->getGlobalPose());
+PPrismaticJoint_ptr PPrismaticJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
+	physx::PxPrismaticJoint* pPrismaticJoint = physx::PxPrismaticJointCreate(*PhysicsEngine::GetInstance().mPhysics, actor1->GetSdkActor(), actor1->GetSdkActor()->getGlobalPose(), actor2->GetSdkActor(), actor2->GetSdkActor()->getGlobalPose());
 	if (!pPrismaticJoint) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Prismatic joint", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Prismatic joint", __FILE__, __LINE__);
 		return nullptr;
 	}
 
 	PPrismaticJoint_ptr joint = std::make_shared<PPrismaticJoint>(pPrismaticJoint);
-	joint->m_pPrismaticJoint->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PPrismaticJoint>>()) std::weak_ptr<PPrismaticJoint>(joint);
+	joint->mPrismaticJoint->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PPrismaticJoint>>()) std::weak_ptr<PPrismaticJoint>(joint);
 
 	return std::move(joint);
 }
 
-void PPrismaticJoint::setLimits(float minDistance, float maxDistance, float tolerance) {
-	m_pPrismaticJoint->setLimit(physx::PxJointLinearLimitPair(g_pPhysicsEngine->m_pPhysics->getTolerancesScale(), minDistance, maxDistance, tolerance));
-	m_pPrismaticJoint->setPrismaticJointFlag(physx::PxPrismaticJointFlag::eLIMIT_ENABLED, true);
+void PPrismaticJoint::SetLimits(float minDistance, float maxDistance, float tolerance) {
+	mPrismaticJoint->setLimit(physx::PxJointLinearLimitPair(PhysicsEngine::GetInstance().mPhysics->getTolerancesScale(), minDistance, maxDistance, tolerance));
+	mPrismaticJoint->setPrismaticJointFlag(physx::PxPrismaticJointFlag::eLIMIT_ENABLED, true);
 }
 #pragma endregion

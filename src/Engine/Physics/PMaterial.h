@@ -43,27 +43,27 @@ public:
 	PMaterial(physx::PxMaterial* pMaterial);
 	~PMaterial();
 
-	static PMaterial_ptr createMaterial(const PMaterialProperties& properties);
-	static PMaterial_ptr createMaterial(float staticFriction = 0.5f, float dynamicFriction = 0.5f, float restitution = 0.5f);
+	static PMaterial_ptr CreateMaterial(const PMaterialProperties& properties);
+	static PMaterial_ptr CreateMaterial(float staticFriction = 0.5f, float dynamicFriction = 0.5f, float restitution = 0.5f);
 
-	physx::PxMaterial* getSdkMaterial() const;
+	physx::PxMaterial* GetSdkMaterial() const;
 
 private:	
-	physx::PxMaterial* m_pMaterial = nullptr;
+	physx::PxMaterial* mMaterial = nullptr;
 };
 class PMaterialSet {
 public:
 	PMaterialSet(physx::PxMaterial** pMaterialArray, uint16_t numOfMaterials);
 	~PMaterialSet();
 
-	static PMaterialSet_ptr createMaterialSet(const std::vector<PMaterialProperties>& materialsProperties);
+	static PMaterialSet_ptr CreateMaterialSet(const std::vector<PMaterialProperties>& materialsProperties);
 
-	physx::PxMaterial** getSdkMaterialsArray() const;
-	uint16_t getNumOfMaterials() const;
+	physx::PxMaterial** GetSdkMaterialsArray() const;
+	uint16_t GetNumOfMaterials() const;
 
 private:
-	uint16_t m_numOfMaterials;
-	physx::PxMaterial** m_pMaterialsArray = nullptr;
+	uint16_t mNumOfMaterials;
+	physx::PxMaterial** mMaterialsArray = nullptr;
 };
 
-extern PMaterial_ptr g_pDefaultMaterial;
+extern PMaterial_ptr gDefaultMaterial;

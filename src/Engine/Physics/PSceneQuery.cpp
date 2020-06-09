@@ -28,18 +28,18 @@
 
 #pragma region Query Hit Functions
 PQueryHit::~PQueryHit() {
-	PAlignedAllocator::deallocate(m_pQueryHit);
+	PAlignedAllocator::deallocate(mQueryHit);
 }
 
-PActor_ptr PQueryHit::getActor() const {
-	physx::PxRigidActor* sdkActor = m_pQueryHit->actor;
+PActor_ptr PQueryHit::GetActor() const {
+	physx::PxRigidActor* sdkActor = mQueryHit->actor;
 	std::weak_ptr<PActor> wpActor = *static_cast<std::weak_ptr<PActor>*>(sdkActor->userData);
 	if (PActor_ptr spActor = wpActor.lock())
 		return std::move(spActor);
 	return nullptr;
 }
-PCollider_ptr PQueryHit::getCollider() const {
-	physx::PxShape* sdkCollider = m_pQueryHit->shape;
+PCollider_ptr PQueryHit::GetCollider() const {
+	physx::PxShape* sdkCollider = mQueryHit->shape;
 	std::weak_ptr<PCollider> wpCollider = *static_cast<std::weak_ptr<PCollider>*>(sdkCollider->userData);
 	if (PCollider_ptr spActor = wpCollider.lock())
 		return std::move(spActor);
@@ -48,63 +48,63 @@ PCollider_ptr PQueryHit::getCollider() const {
 #pragma endregion
 #pragma region Point Hit Functions
 PPointHit::~PPointHit() {
-	PAlignedAllocator::deallocate(m_pPointHit);
+	PAlignedAllocator::deallocate(mPointHit);
 }
 
-PActor_ptr PPointHit::getActor() const {
-	physx::PxRigidActor* sdkActor = m_pPointHit->actor;
+PActor_ptr PPointHit::GetActor() const {
+	physx::PxRigidActor* sdkActor = mPointHit->actor;
 	std::weak_ptr<PActor> wpActor = *static_cast<std::weak_ptr<PActor>*>(sdkActor->userData);
 	
 	if (PActor_ptr spActor = wpActor.lock())
 		return std::move(spActor);
 	return nullptr;
 }
-PCollider_ptr PPointHit::getCollider() const {
-	physx::PxShape* sdkCollider = m_pPointHit->shape;
+PCollider_ptr PPointHit::GetCollider() const {
+	physx::PxShape* sdkCollider = mPointHit->shape;
 	std::weak_ptr<PCollider> wpCollider = *static_cast<std::weak_ptr<PCollider>*>(sdkCollider->userData);
 	if (PCollider_ptr spActor = wpCollider.lock())
 		return std::move(spActor);
 	return nullptr;
 }
 
-glm::vec3 PPointHit::getPosition() const {
-	if (!(m_pPointHit->flags & physx::PxHitFlag::ePOSITION)) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "position flag was not risen for this scene query", __FILE__, __LINE__);
+glm::vec3 PPointHit::GetPosition() const {
+	if (!(mPointHit->flags & physx::PxHitFlag::ePOSITION)) {
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "position flag was not risen for this scene query", __FILE__, __LINE__);
 		return glm::vec3(0.0f);
 	}
 
-	physx::PxVec3 position = m_pPointHit->position;
+	physx::PxVec3 position = mPointHit->position;
 	return glm::vec3(position.x, position.y, position.z);
 }
-glm::vec3 PPointHit::getNormal() const {
-	if (!(m_pPointHit->flags & physx::PxHitFlag::eNORMAL)) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "normal flag was not risen for this scene query", __FILE__, __LINE__);
+glm::vec3 PPointHit::GetNormal() const {
+	if (!(mPointHit->flags & physx::PxHitFlag::eNORMAL)) {
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "normal flag was not risen for this scene query", __FILE__, __LINE__);
 		return glm::vec3(0.0f);
 	}
 
-	physx::PxVec3 normal = m_pPointHit->normal;
+	physx::PxVec3 normal = mPointHit->normal;
 	return glm::vec3(normal.x, normal.y, normal.z);
 }
-float PPointHit::getDistance() const {
-	return m_pPointHit->distance;
+float PPointHit::GetDistance() const {
+	return mPointHit->distance;
 }
 #pragma endregion
 
 #pragma region Raycast Functions
-void PRaycastHit::createHit(physx::PxRaycastHit* pRaycastHit) {
-	m_pRaycastHit = new (PAlignedAllocator::allocate<physx::PxRaycastHit>()) physx::PxRaycastHit(*pRaycastHit);
-	m_pPointHit = static_cast<physx::PxLocationHit*>(m_pRaycastHit);
+void PRaycastHit::CreateHit(physx::PxRaycastHit* pRaycastHit) {
+	mRaycastHit = new (PAlignedAllocator::allocate<physx::PxRaycastHit>()) physx::PxRaycastHit(*pRaycastHit);
+	mPointHit = static_cast<physx::PxLocationHit*>(mRaycastHit);
 }
 #pragma endregion
 #pragma region Sweep Functions
-void PSweepHit::createHit(physx::PxSweepHit* pSweepHit) {
-	m_pSweepHit = new (PAlignedAllocator::allocate<physx::PxSweepHit>()) physx::PxSweepHit(*pSweepHit);
-	m_pPointHit = static_cast<physx::PxLocationHit*>(m_pSweepHit);
+void PSweepHit::CreateHit(physx::PxSweepHit* pSweepHit) {
+	mSweepHit = new (PAlignedAllocator::allocate<physx::PxSweepHit>()) physx::PxSweepHit(*pSweepHit);
+	mPointHit = static_cast<physx::PxLocationHit*>(mSweepHit);
 }
 #pragma endregion
 #pragma region Overlap Functions
-void POverlapHit::createHit(physx::PxOverlapHit* pOverlapHit) {
-	m_pOverlapHit = new (PAlignedAllocator::allocate<physx::PxOverlapHit>()) physx::PxOverlapHit(*pOverlapHit);
-	m_pQueryHit = static_cast<physx::PxQueryHit*>(m_pOverlapHit);
+void POverlapHit::CreateHit(physx::PxOverlapHit* pOverlapHit) {
+	mOverlapHit = new (PAlignedAllocator::allocate<physx::PxOverlapHit>()) physx::PxOverlapHit(*pOverlapHit);
+	mQueryHit = static_cast<physx::PxQueryHit*>(mOverlapHit);
 }
 #pragma endregion

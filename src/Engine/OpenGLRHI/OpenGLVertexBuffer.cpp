@@ -154,7 +154,7 @@ private:
 			OpenGLSpecs::BindBuffer(GL_COPY_READ_BUFFER, mBuffer);
 			GLbitfield Access =
 				GL_MAP_WRITE_BIT | // to be used only for writing
-				GL_MAP_PERSISTENT_BIT | // updated regularly
+				GL_MAP_PERSISTENT_BIT | // Updated regularly
 				GL_MAP_COHERENT_BIT; // the data will be available at gpu right away
 
 			// obtain a buffer storage with same access as mapping

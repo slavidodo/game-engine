@@ -26,84 +26,84 @@
 #include "Pch.h"
 #include "PhysicsEngine.h"
 
-PMaterial_ptr g_pDefaultMaterial = nullptr;
+PMaterial_ptr gDefaultMaterial = nullptr;
 
 #pragma region Material Properties Functions
 PMaterialProperties::PMaterialProperties(float staticFriction, float dynamicFriction, float restitution) : staticFriction(staticFriction), dynamicFriction(dynamicFriction), restitution(restitution) {}
 #pragma endregion
 
 #pragma region Material Functions
-PMaterial::PMaterial(physx::PxMaterial* pMaterial) : m_pMaterial(pMaterial) {}
+PMaterial::PMaterial(physx::PxMaterial* pMaterial) : mMaterial(pMaterial) {}
 PMaterial::~PMaterial() {
-	if (!m_pMaterial) return;
+	if (!mMaterial) return;
 	
-	PAlignedAllocator::deallocate(m_pMaterial->userData);
-	m_pMaterial->release();
+	PAlignedAllocator::deallocate(mMaterial->userData);
+	mMaterial->release();
 }
 
-PMaterial_ptr PMaterial::createMaterial(const PMaterialProperties& properties) {
-	physx::PxMaterial* pMaterial = g_pPhysicsEngine->m_pPhysics->createMaterial(properties.staticFriction, properties.dynamicFriction, properties.restitution);
+PMaterial_ptr PMaterial::CreateMaterial(const PMaterialProperties& properties) {
+	physx::PxMaterial* pMaterial = PhysicsEngine::GetInstance().mPhysics->createMaterial(properties.staticFriction, properties.dynamicFriction, properties.restitution);
 	if (!pMaterial) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating material", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating material", __FILE__, __LINE__);
 		return nullptr;
 	}
 
 	PMaterial_ptr material = std::make_shared<PMaterial>(pMaterial);
-	material->m_pMaterial->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PMaterial>>()) std::weak_ptr<PMaterial>(material);
+	material->mMaterial->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PMaterial>>()) std::weak_ptr<PMaterial>(material);
 
 	return std::move(material);
 }
-PMaterial_ptr PMaterial::createMaterial(float staticFriction, float dynamicFriction, float restitution) {
-	physx::PxMaterial* pMaterial = g_pPhysicsEngine->m_pPhysics->createMaterial(staticFriction, dynamicFriction, restitution);
+PMaterial_ptr PMaterial::CreateMaterial(float staticFriction, float dynamicFriction, float restitution) {
+	physx::PxMaterial* pMaterial = PhysicsEngine::GetInstance().mPhysics->createMaterial(staticFriction, dynamicFriction, restitution);
 	if (!pMaterial) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating material", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating material", __FILE__, __LINE__);
 		return nullptr;
 	}
 
 	PMaterial_ptr material = std::make_shared<PMaterial>(pMaterial);
-	material->m_pMaterial->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PMaterial>>()) std::weak_ptr<PMaterial>(material);
+	material->mMaterial->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PMaterial>>()) std::weak_ptr<PMaterial>(material);
 
 	return std::move(material);
 }
 
-physx::PxMaterial* PMaterial::getSdkMaterial() const { 
-	return m_pMaterial;
+physx::PxMaterial* PMaterial::GetSdkMaterial() const { 
+	return mMaterial;
 }
 #pragma endregion
 
 #pragma region Material Set Functions
-PMaterialSet::PMaterialSet(physx::PxMaterial** pMaterialArray, uint16_t numOfMaterials) : m_pMaterialsArray(pMaterialArray), m_numOfMaterials(numOfMaterials) {}
+PMaterialSet::PMaterialSet(physx::PxMaterial** pMaterialArray, uint16_t numOfMaterials) : mMaterialsArray(pMaterialArray), mNumOfMaterials(numOfMaterials) {}
 PMaterialSet::~PMaterialSet() {
-	if (!m_pMaterialsArray) return;
+	if (!mMaterialsArray) return;
 	
-	PAlignedAllocator::deallocate(m_pMaterialsArray[0]->userData);
+	PAlignedAllocator::deallocate(mMaterialsArray[0]->userData);
 
-	for (int i = 0; i < m_numOfMaterials; i++)
-		m_pMaterialsArray[i]->release();
+	for (int i = 0; i < mNumOfMaterials; i++)
+		mMaterialsArray[i]->release();
 	
-	PAlignedAllocator::deallocate(m_pMaterialsArray);
+	PAlignedAllocator::deallocate(mMaterialsArray);
 }
 
-PMaterialSet_ptr PMaterialSet::createMaterialSet(const std::vector<PMaterialProperties>& materialsProperties) {
+PMaterialSet_ptr PMaterialSet::CreateMaterialSet(const std::vector<PMaterialProperties>& materialsProperties) {
 	uint16_t numOfMaterials = static_cast<uint16_t>(materialsProperties.size());
 	physx::PxMaterial** pMaterialsArray = PAlignedAllocator::allocate<physx::PxMaterial*>(numOfMaterials);
 	
 	for (int i = 0; i < numOfMaterials; i++) {
 		PMaterialProperties properties = materialsProperties[i];
-		pMaterialsArray[i] = g_pPhysicsEngine->m_pPhysics->createMaterial(properties.staticFriction, properties.dynamicFriction, properties.restitution);
+		pMaterialsArray[i] = PhysicsEngine::GetInstance().mPhysics->createMaterial(properties.staticFriction, properties.dynamicFriction, properties.restitution);
 	}
 
 	PMaterialSet_ptr materialArray = std::make_shared<PMaterialSet>(pMaterialsArray, numOfMaterials);
-	materialArray->m_pMaterialsArray[0]->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PMaterialSet>>()) std::weak_ptr<PMaterialSet>(materialArray);
+	materialArray->mMaterialsArray[0]->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PMaterialSet>>()) std::weak_ptr<PMaterialSet>(materialArray);
 	
 	return std::move(materialArray);
 }
 
-physx::PxMaterial** PMaterialSet::getSdkMaterialsArray() const {
-	return m_pMaterialsArray;
+physx::PxMaterial** PMaterialSet::GetSdkMaterialsArray() const {
+	return mMaterialsArray;
 }
 
-uint16_t PMaterialSet::getNumOfMaterials() const {
-	return m_numOfMaterials;
+uint16_t PMaterialSet::GetNumOfMaterials() const {
+	return mNumOfMaterials;
 }
 #pragma endregion

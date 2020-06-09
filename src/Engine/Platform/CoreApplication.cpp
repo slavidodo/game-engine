@@ -5,7 +5,9 @@
 #include "Window.h"
 
 #include "../Filesystem/ResourceManager.h"
+#include "../Physics/PhysicsEngine.h"
 #include "../Scene/SceneManager.h"
+#include "../Physics/PSceneManager.h"
 #include "../RHI/RHICommandList.h"
 #include "../Globals.h"
 
@@ -22,6 +24,19 @@ bool CoreApplication::Init()
 		return false;
 	}
 
+	PhysicsSettings settings;
+	{
+		#ifdef _DEBUG
+		settings.bEnableVisualDebugger = true;
+		settings.bTrackMemoryAllocations = true;
+		#endif
+		settings.bEnableHeightFields = true;
+	}
+	if (!PhysicsEngine::GetInstance().Init(settings)) {
+		std::cout << "Physics engine failed to initialize!" << std::endl;
+		return false;
+	}
+
 	glfwInit();
 
 	mInitialized = true;
@@ -33,6 +48,7 @@ void CoreApplication::Terminate()
 	if (!mInitialized)
 		return;
 
+	PhysicsEngine::GetInstance().Terminate();
 	ResourceManager::GetInstance().Terminate();
 
 	mInitialized = false;

@@ -218,6 +218,9 @@
     <ClCompile Include="..\src\Engine\Physics\PAllocator.cpp">
       <Filter>Engine\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PSceneManager.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Tests\ExampleScene.h">
@@ -379,6 +382,9 @@
       <Filter>Engine\Physics</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Engine\Physics\PhysicsTest.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PSceneManager.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
   </ItemGroup>

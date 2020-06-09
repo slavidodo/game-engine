@@ -28,157 +28,164 @@
 
 #pragma region Actor Functions
 PActor::~PActor() {
-	if (!m_pActor) return;
+	if (!mActor) return;
 	
-	PAlignedAllocator::deallocate(m_pActor->userData);
-	m_pActor->release();
+	PAlignedAllocator::deallocate(mActor->userData);
+	mActor->release();
 }
 
-physx::PxRigidActor* PActor::getSdkActor() const {
-	return m_pActor;
+physx::PxRigidActor* PActor::GetSdkActor() const {
+	return mActor;
 }
 
-void PActor::addCollider(PCollider_ptr collider) {	
-	m_pActor->attachShape(*collider->getSdkShape());
-	m_pColliders.push_back(collider);
+void PActor::AddCollider(PCollider_ptr collider) {	
+	mActor->attachShape(*collider->GetSdkShape());
+	mColliders.push_back(collider);
 }
-void PActor::removeCollider(PCollider_ptr pCollider) {
-	auto it = std::find(m_pColliders.begin(), m_pColliders.end(), pCollider);
-	if (it == m_pColliders.end()) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Trying to remove a collider that is not attached to this actor", __FILE__, __LINE__);
+void PActor::RemoveCollider(PCollider_ptr pCollider) {
+	auto it = std::find(mColliders.begin(), mColliders.end(), pCollider);
+	if (it == mColliders.end()) {
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Trying to remove a collider that is not attached to this actor", __FILE__, __LINE__);
 		return;
 	}
 	
-	m_pActor->detachShape(*pCollider->m_pShape);
-	m_pColliders.erase(it);
+	mActor->detachShape(*pCollider->mShape);
+	mColliders.erase(it);
+}
+#pragma endregion
+
+#pragma region Static Actor Functions
+PStaticActor::PStaticActor(physx::PxRigidStatic* pStaticActor) : mStaticActor(pStaticActor) {
+	mActor = static_cast<physx::PxRigidActor*>(mStaticActor);
+}
+
+PStaticActor_ptr PStaticActor::CreateActor(glm::vec3 position, glm::vec3 rotation) {
+	physx::PxVec3 pos = physx::PxVec3(position.x, position.y, position.z);
+	glm::quat _rot = glm::quat(rotation);
+	physx::PxQuat rot = physx::PxQuat(_rot.x, _rot.y, _rot.z, _rot.w);
+	physx::PxRigidStatic* pStaticActor = PhysicsEngine::GetInstance().mPhysics->createRigidStatic(physx::PxTransform(pos, rot));
+	if (!pStaticActor) {
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating static actor", __FILE__, __LINE__);
+		return nullptr;
+	}
+
+	PStaticActor_ptr actor = std::make_shared<PStaticActor>(pStaticActor);
+	actor->mActor->userData = actor->mStaticActor->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PStaticActor>>()) std::weak_ptr<PStaticActor>(actor);
+
+	return std::move(actor);
 }
 #pragma endregion
 
 #pragma region Dynamic Actor Functions
-PDynamicActor::PDynamicActor(physx::PxRigidDynamic* pDynamicActor) : m_pDynamicActor(pDynamicActor) {
-	m_pActor = static_cast<physx::PxRigidActor*>(m_pDynamicActor);
+PDynamicActor::PDynamicActor(physx::PxRigidDynamic* pDynamicActor) : mDynamicActor(pDynamicActor) {
+	mActor = static_cast<physx::PxRigidActor*>(mDynamicActor);
 }
 
-PDynamicActor_ptr PDynamicActor::createActor(glm::vec3 position) {
-	physx::PxRigidDynamic* pDynamicActor = g_pPhysicsEngine->m_pPhysics->createRigidDynamic(physx::PxTransform(position.x, position.y, position.z));
+PDynamicActor_ptr PDynamicActor::CreateActor(glm::vec3 position, glm::vec3 rotation) {
+	physx::PxVec3 pos = physx::PxVec3(position.x, position.y, position.z);
+	glm::quat _rot = glm::quat(rotation);
+	physx::PxQuat rot = physx::PxQuat(_rot.x, _rot.y, _rot.z, _rot.w);
+	physx::PxRigidDynamic* pDynamicActor = PhysicsEngine::GetInstance().mPhysics->createRigidDynamic(physx::PxTransform(pos, rot));
 	if (!pDynamicActor) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating dynamic actor", __FILE__, __LINE__);
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating dynamic actor", __FILE__, __LINE__);
 		return nullptr;
 	}
 
 	PDynamicActor_ptr actor = std::make_shared<PDynamicActor>(pDynamicActor);
-	actor->m_pActor->userData = actor->m_pDynamicActor->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PDynamicActor>>()) std::weak_ptr<PDynamicActor>(actor);
+	actor->mActor->userData = actor->mDynamicActor->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PDynamicActor>>()) std::weak_ptr<PDynamicActor>(actor);
 
 	return std::move(actor);
 }
 
-void PDynamicActor::applyForce(glm::vec3 force) {
-	m_pDynamicActor->addForce(physx::PxVec3(force.x, force.y, force.z));
+void PDynamicActor::ApplyForce(glm::vec3 force) {
+	mDynamicActor->addForce(physx::PxVec3(force.x, force.y, force.z));
 }
-void PDynamicActor::applyImpulse(glm::vec3 impulse) {
-	m_pDynamicActor->addForce(physx::PxVec3(impulse.x, impulse.y, impulse.z), physx::PxForceMode::eIMPULSE);
+void PDynamicActor::ApplyImpulse(glm::vec3 impulse) {
+	mDynamicActor->addForce(physx::PxVec3(impulse.x, impulse.y, impulse.z), physx::PxForceMode::eIMPULSE);
 }
-void PDynamicActor::applyTorque(glm::vec3 torque) {
-	m_pDynamicActor->addTorque(physx::PxVec3(torque.x, torque.y, torque.z));
+void PDynamicActor::ApplyTorque(glm::vec3 torque) {
+	mDynamicActor->addTorque(physx::PxVec3(torque.x, torque.y, torque.z));
 }
 
 void PDynamicActor::UpdateMassAndInertia(float density) {
-	if (!physx::PxRigidBodyExt::updateMassAndInertia(*m_pDynamicActor, density)) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Failed to update mass & intertia of dynamic actor", __FILE__, __LINE__);
+	if (!physx::PxRigidBodyExt::updateMassAndInertia(*mDynamicActor, density)) {
+		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Failed to Update mass & intertia of dynamic actor", __FILE__, __LINE__);
 		return;
 	}
 }
 
 #pragma region Getter Functions
-glm::vec3 PDynamicActor::getPosition() const {
-	physx::PxTransform transform = m_pDynamicActor->getGlobalPose();
+glm::vec3 PDynamicActor::GetPosition() const {
+	physx::PxTransform transform = mDynamicActor->getGlobalPose();
 	return glm::vec3(transform.p.x, transform.p.y, transform.p.z);
 }
 
-float PDynamicActor::getMass() const {
-	return m_pDynamicActor->getMass();
+float PDynamicActor::GetMass() const {
+	return mDynamicActor->getMass();
 }
-glm::vec3 PDynamicActor::getInertiaTensor() const {
-	physx::PxVec3 inertia = m_pDynamicActor->getMassSpaceInertiaTensor();
+glm::vec3 PDynamicActor::GetInertiaTensor() const {
+	physx::PxVec3 inertia = mDynamicActor->getMassSpaceInertiaTensor();
 	return glm::vec3(inertia.x, inertia.y, inertia.z);
 }
 
-glm::vec3 PDynamicActor::getLinearVelocity() const {
-	physx::PxVec3 velocity = m_pDynamicActor->getLinearVelocity();
+glm::vec3 PDynamicActor::GetLinearVelocity() const {
+	physx::PxVec3 velocity = mDynamicActor->getLinearVelocity();
 	return glm::vec3(velocity.x, velocity.y, velocity.z);
 }
-float PDynamicActor::getLinearDamping() const {
-	return m_pDynamicActor->getLinearDamping();
+float PDynamicActor::GetLinearDamping() const {
+	return mDynamicActor->getLinearDamping();
 }
 
-glm::vec3 PDynamicActor::getAngularVelocity() const {
-	physx::PxVec3 velocity = m_pDynamicActor->getAngularVelocity();
+glm::vec3 PDynamicActor::GetAngularVelocity() const {
+	physx::PxVec3 velocity = mDynamicActor->getAngularVelocity();
 	return glm::vec3(velocity.x, velocity.y, velocity.z);
 }
-float PDynamicActor::getAngularDamping() const {
-	return m_pDynamicActor->getAngularDamping();
+float PDynamicActor::GetAngularDamping() const {
+	return mDynamicActor->getAngularDamping();
 }
 #pragma endregion
 
 #pragma region Setter Functions
-void PDynamicActor::setPosition(glm::vec3 position) {
-	m_pDynamicActor->setGlobalPose(physx::PxTransform(position.x, position.y, position.z));
+void PDynamicActor::SetPosition(glm::vec3 position) {
+	mDynamicActor->setGlobalPose(physx::PxTransform(position.x, position.y, position.z));
 }
 
-void PDynamicActor::setMass(float mass) {
-	m_pDynamicActor->setMass(mass);
+void PDynamicActor::SetMass(float mass) {
+	mDynamicActor->setMass(mass);
 }
-void PDynamicActor::setInertiaTensor(glm::vec3 inertia) {
-	m_pDynamicActor->setMassSpaceInertiaTensor(physx::PxVec3(inertia.x, inertia.y, inertia.z));
-}
-
-void PDynamicActor::setLinearVelocity(glm::vec3 velocity) {
-	m_pDynamicActor->setLinearVelocity(physx::PxVec3(velocity.x, velocity.y, velocity.z));
-}
-void PDynamicActor::setLinearDamping(float damping) {
-	m_pDynamicActor->setLinearDamping(damping);
+void PDynamicActor::SetInertiaTensor(glm::vec3 inertia) {
+	mDynamicActor->setMassSpaceInertiaTensor(physx::PxVec3(inertia.x, inertia.y, inertia.z));
 }
 
-void PDynamicActor::setAngularVelocity(glm::vec3 velocity) {
-	m_pDynamicActor->setAngularVelocity(physx::PxVec3(velocity.x, velocity.y, velocity.z));
+void PDynamicActor::SetLinearVelocity(glm::vec3 velocity) {
+	mDynamicActor->setLinearVelocity(physx::PxVec3(velocity.x, velocity.y, velocity.z));
 }
-void PDynamicActor::setAngularDamping(float damping) {
-	m_pDynamicActor->setAngularDamping(damping);
+void PDynamicActor::SetLinearDamping(float damping) {
+	mDynamicActor->setLinearDamping(damping);
+}
+
+void PDynamicActor::SetAngularVelocity(glm::vec3 velocity) {
+	mDynamicActor->setAngularVelocity(physx::PxVec3(velocity.x, velocity.y, velocity.z));
+}
+void PDynamicActor::SetAngularDamping(float damping) {
+	mDynamicActor->setAngularDamping(damping);
 }
 #pragma endregion
 
 #pragma region Utility Functions
-void PDynamicActor::setGravity(bool value) {
-	m_pDynamicActor->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, !value);
+void PDynamicActor::SetGravity(bool value) {
+	mDynamicActor->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, !value);
 }
-void PDynamicActor::setKinematic(bool value) {
-	m_pDynamicActor->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, value);
+void PDynamicActor::SetKinematic(bool value) {
+	mDynamicActor->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, value);
 }
 
-void PDynamicActor::lockMotion(MotionAxis axis) {
-	m_pDynamicActor->setRigidDynamicLockFlag(static_cast<physx::PxRigidDynamicLockFlag::Enum>(axis), true);
+void PDynamicActor::LockMotion(MotionAxis axis) {
+	mDynamicActor->setRigidDynamicLockFlag(static_cast<physx::PxRigidDynamicLockFlag::Enum>(axis), true);
 }
-void PDynamicActor::unlockMotion(MotionAxis axis) {
-	m_pDynamicActor->setRigidDynamicLockFlag(static_cast<physx::PxRigidDynamicLockFlag::Enum>(axis), false);
+void PDynamicActor::UnlockMotion(MotionAxis axis) {
+	mDynamicActor->setRigidDynamicLockFlag(static_cast<physx::PxRigidDynamicLockFlag::Enum>(axis), false);
 }
 #pragma endregion
 #pragma endregion
 
-#pragma region Static Actor Functions
-PStaticActor::PStaticActor(physx::PxRigidStatic* pStaticActor) : m_pStaticActor(pStaticActor) {
-	m_pActor = static_cast<physx::PxRigidActor*>(m_pStaticActor);
-}
-
-PStaticActor_ptr PStaticActor::createActor(glm::vec3 position) {
-	physx::PxRigidStatic* pStaticActor = g_pPhysicsEngine->m_pPhysics->createRigidStatic(physx::PxTransform(position.x, position.y, position.z));
-	if (!pStaticActor) {
-		g_pPhysicsEngine->m_pErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating static actor", __FILE__, __LINE__);
-		return nullptr;
-	}
-
-	PStaticActor_ptr actor = std::make_shared<PStaticActor>(pStaticActor);
-	actor->m_pActor->userData = actor->m_pStaticActor->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PStaticActor>>()) std::weak_ptr<PStaticActor>(actor);
-
-	return std::move(actor);
-}
-#pragma endregion

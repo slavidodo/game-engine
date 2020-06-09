@@ -47,48 +47,48 @@ typedef std::shared_ptr<PHeightFieldGeometry> PHeightFieldGeometry_ptr;
 class PGeometry {
 public:
 	~PGeometry();
-	physx::PxGeometry* getSdkGeometry() const;
+	physx::PxGeometry* GetSdkGeometry() const;
 
 protected:
-	physx::PxGeometry* m_pGeometry = nullptr;
+	physx::PxGeometry* mGeometry = nullptr;
 };
 
 #pragma region Simple Primitives
 class PBoxGeometry : public PGeometry {
 public:
 	PBoxGeometry(physx::PxBoxGeometry* pGeometry);
-	static PBoxGeometry_ptr createGeometry(glm::vec3 halfDimensions = glm::vec3(1.0f));
+	static PBoxGeometry_ptr CreateGeometry(glm::vec3 halfDimensions = glm::vec3(1.0f));
 	
 private:
 	// For specific operations
-	physx::PxBoxGeometry* m_pBoxGeometry = nullptr;
+	physx::PxBoxGeometry* mBoxGeometry = nullptr;
 };
 class PSphereGeometry : public PGeometry {
 public:
 	PSphereGeometry(physx::PxSphereGeometry* pGeometry);
-	static PSphereGeometry_ptr createGeometry(float radius = 1.0f);
+	static PSphereGeometry_ptr CreateGeometry(float radius = 1.0f);
 	
 private:
 	// For specific operations
-	physx::PxSphereGeometry* m_pSphereGeometry = nullptr;
+	physx::PxSphereGeometry* mSphereGeometry = nullptr;
 };
 class PPlaneGeometry : public PGeometry {
 public:
 	PPlaneGeometry(physx::PxPlaneGeometry* pGeometry);
-	static PPlaneGeometry_ptr createGeometry();
+	static PPlaneGeometry_ptr CreateGeometry();
 
 private:
 	// For specific operations
-	physx::PxPlaneGeometry* m_pPlaneGeometry = nullptr;
+	physx::PxPlaneGeometry* mPlaneGeometry = nullptr;
 };
 class PCapsuleGeometry : public PGeometry {
 public:
 	PCapsuleGeometry(physx::PxCapsuleGeometry* pGeometry);
-	static PCapsuleGeometry_ptr createGeometry(float radius = 1.0f, float halfHeight = 2.0f);
+	static PCapsuleGeometry_ptr CreateGeometry(float radius = 1.0f, float halfHeight = 2.0f);
 
 private:
 	// For specific operations
-	physx::PxCapsuleGeometry* m_pCapsuleGeometry = nullptr;
+	physx::PxCapsuleGeometry* mCapsuleGeometry = nullptr;
 };
 #pragma endregion
 
@@ -98,33 +98,33 @@ public:
 	PConvexMeshDescriptor();
 	~PConvexMeshDescriptor();
 
-	const physx::PxConvexMeshDesc* getSdkDescriptor() const;
+	const physx::PxConvexMeshDesc* GetSdkDescriptor() const;
 
 	// mandatory
-	void setPointsCount(uint32_t count);
+	void SetPointsCount(uint32_t count);
 	// mandatory
-	void setPointsStride(size_t stride);
+	void SetPointsStride(size_t stride);
 	// mandatory
-	void setPointsData(float* data);
+	void SetPointsData(float* data);
 
 	// increase performance at the cost of safety
-	void disableMeshValidation();
+	void DisableMeshValidation();
 	// increase performace at the cost of precision
-	void enableFastInertiaComputation();
+	void EnableFastInertiaComputation();
 	// should be enabled if only vertices are provided (no face data)
-	void enableAutomaticHullComputation();
+	void EnableAutomaticHullComputation();
 	
 
 private:
-	physx::PxConvexMeshDesc* m_pDescriptor = nullptr;
+	physx::PxConvexMeshDesc* mDescriptor = nullptr;
 };
 class PConvexMeshGeometry : public PGeometry {
 public:
 	PConvexMeshGeometry(physx::PxConvexMeshGeometry* pConvexMeshGeometry);
-	static PConvexMeshGeometry_ptr createGeometry(const PConvexMeshDescriptor& descriptor);
+	static PConvexMeshGeometry_ptr CreateGeometry(const PConvexMeshDescriptor& descriptor);
 
 private:
-	physx::PxConvexMeshGeometry* m_pConvexGeometry = nullptr;
+	physx::PxConvexMeshGeometry* mConvexGeometry = nullptr;
 };
 
 struct PTriangleMeshDescriptor {
@@ -132,54 +132,54 @@ public:
 	PTriangleMeshDescriptor();
 	~PTriangleMeshDescriptor();
 
-	const physx::PxTriangleMeshDesc* getSdkDescriptor() const;
+	const physx::PxTriangleMeshDesc* GetSdkDescriptor() const;
 
 	// mandatory
-	void setPointsCount(uint32_t count);
+	void SetPointsCount(uint32_t count);
 	// mandatory
-	void setPointsStride(size_t stride);
+	void SetPointsStride(size_t stride);
 	// mandatory
-	void setPointsData(float* data);
+	void SetPointsData(float* data);
 
 	// mandatory
-	void setTrianglesCount(uint32_t count);
+	void SetTrianglesCount(uint32_t count);
 	// mandatory
-	void setTrianglesStride(size_t stride);
+	void SetTrianglesStride(size_t stride);
 	// mandatory
-	void setTrianglesData(uint32_t* data);
+	void SetTrianglesData(uint32_t* data);
 
 
 private:
-	physx::PxTriangleMeshDesc* m_pDescriptor = nullptr;
+	physx::PxTriangleMeshDesc* mDescriptor = nullptr;
 };
 class PTriangleMeshGeometry : public PGeometry {
 public:
 	PTriangleMeshGeometry(physx::PxTriangleMeshGeometry* pTriangleMeshGeometry);
-	static PTriangleMeshGeometry_ptr createGeometry(const PTriangleMeshDescriptor& descriptor);
+	static PTriangleMeshGeometry_ptr CreateGeometry(const PTriangleMeshDescriptor& descriptor);
 
 private:
-	physx::PxTriangleMeshGeometry* m_pTriangleGeometry = nullptr;
+	physx::PxTriangleMeshGeometry* mTriangleGeometry = nullptr;
 };
 
 struct PHeightFieldStructure {
 	PHeightFieldStructure(uint16_t numOfRows, uint16_t numOfCols, float heightScale = 1.0f, float rowScale = 1.0f, float colScale = 1.0f);
 	~PHeightFieldStructure();
 
-	physx::PxHeightFieldSample* getSdkSamples() const;
+	physx::PxHeightFieldSample* GetSdkSamples() const;
 
-	uint16_t getNumOfRows() const;
-	uint16_t getNumOfCols() const;
-	float getRowScale() const;
-	float getColScale() const;
-	float getHeightScale() const;
+	uint16_t GetNumOfRows() const;
+	uint16_t GetNumOfCols() const;
+	float GetRowScale() const;
+	float GetColScale() const;
+	float GetHeightScale() const;
 
-	void setVertexHeight(uint16_t row, uint16_t col, uint16_t height);
-	void setVertexMaterials(uint16_t row, uint16_t col, uint16_t materialIndex1, uint16_t materialIndex2);
+	void SetVertexHeight(uint16_t row, uint16_t col, uint16_t height);
+	void SetVertexMaterials(uint16_t row, uint16_t col, uint16_t materialIndex1, uint16_t materialIndex2);
 
 private:
-	uint16_t m_numOfRows = 0, m_numOfCols = 0;
-	float m_heightScale, m_rowScale, m_colScale;
-	physx::PxHeightFieldSample* m_pVertices = nullptr;
+	uint16_t mNumOfRows = 0, mNumOfCols = 0;
+	float mHeightScale, mRowScale, mColScale;
+	physx::PxHeightFieldSample* mVertices = nullptr;
 
 	bool isValidIndex(uint16_t row, uint16_t col) const;
 };
@@ -188,18 +188,18 @@ public:
 	PHeightFieldDescriptor(const PHeightFieldStructure& structure);
 	~PHeightFieldDescriptor();
 
-	const physx::PxHeightFieldDesc* getSdkDescriptor() const;
-	float m_heightScale, m_rowScale, m_colScale;
+	const physx::PxHeightFieldDesc* GetSdkDescriptor() const;
+	float mHeightScale, mRowScale, mColScale;
 		
 private:
-	physx::PxHeightFieldDesc* m_pDescriptor = nullptr;
+	physx::PxHeightFieldDesc* mDescriptor = nullptr;
 };
 class PHeightFieldGeometry : public PGeometry {
 public:
 	PHeightFieldGeometry(physx::PxHeightFieldGeometry* pHeightFieldGeometry);
-	static PHeightFieldGeometry_ptr createGeometry(const PHeightFieldDescriptor& descriptor);
+	static PHeightFieldGeometry_ptr CreateGeometry(const PHeightFieldDescriptor& descriptor);
 
 private:
-	physx::PxHeightFieldGeometry* m_pHeightFieldGeometry = nullptr;
+	physx::PxHeightFieldGeometry* mHeightFieldGeometry = nullptr;
 };
 #pragma endregion

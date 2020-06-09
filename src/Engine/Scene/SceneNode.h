@@ -24,7 +24,7 @@ public:
     Object_ptr AttachObject(Object_ptr&& obj);
     Object_ptr AttachObject(Object* obj);
 
-    Transform_ptr GetTransform() const { return mTransform; }
+    Transformtr GetTransform() const { return mTransform; }
 
     template<typename T>
     std::shared_ptr<T> GetAttachedObject() const {
@@ -43,7 +43,7 @@ public:
     }
 
     template<>
-    Transform_ptr GetAttachedObject() const {
+    Transformtr GetAttachedObject() const {
         return mTransform;
     }
 
@@ -53,7 +53,7 @@ private:
     std::vector<SceneNode_ptr> mChildren;
     mutable std::vector<Object_ptr> mAttachedObjects;
 	SceneNode_weakPtr mParent;
-    Transform_ptr mTransform;
+    Transformtr mTransform;
     bool mActive;
 
 protected:

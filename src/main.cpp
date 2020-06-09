@@ -4,7 +4,9 @@
 #include "Engine/Platform/CoreApplication.h"
 #include "Engine/Platform/Window.h"
 #include "Engine/Filesystem/ResourceManager.h"
+#include "Engine/Physics/PhysicsEngine.h"
 #include "Engine/Scene/SceneManager.h"
+#include "Engine/Physics/PSceneManager.h"
 #include "Tests/ExampleScene.h"
 
 const std::string WINDOW_TITLE = "Game Engine";
@@ -29,7 +31,7 @@ constexpr int32_t WINDOW_HEIGHT = 768;
 
 using Context = RENDERING_BACKEND;
 
-#include "Engine/Physics/PhysicsTest.h"
+
 
 int main(int argc, char* argv[])
 {
@@ -71,7 +73,7 @@ int main(int argc, char* argv[])
 
 	// TODO: should be done in a more semantic way
 	// DynamicRHI has Init function, we could add PostInit
-	// make sure to update the viewport at least once
+	// make sure to Update the viewport at least once
 	// 
 	gWindow.setWindowSize(gWindow.getWindowSize());
 
@@ -79,6 +81,8 @@ int main(int argc, char* argv[])
 	// TODO: The scene handles drawing but in real-life, it shouldn't
 	// it should account for batching, ... and so the workflow of drawing
 	// should be moved to a separate class
+
+
 
 	// TODO: low-priority
 	// we should have a default scene with a cube, camera and light
@@ -89,6 +93,7 @@ int main(int argc, char* argv[])
 	// in order to make this work, the engine may ship with extra
 	// objects, ...
 	SceneManager::GetInstance().SetCurrentScene(Scene_ptr(new ExampleScene));
+
 
 	// run application's main loop
 	gApplication.RunMainLoop();

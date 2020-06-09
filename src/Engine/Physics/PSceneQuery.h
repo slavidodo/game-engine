@@ -39,45 +39,45 @@ class PQueryHit {
 public:
 	~PQueryHit();
 
-	PActor_ptr getActor() const;
-	PCollider_ptr getCollider() const;
+	PActor_ptr GetActor() const;
+	PCollider_ptr GetCollider() const;
 
 protected:
-	physx::PxQueryHit* m_pQueryHit = nullptr;
+	physx::PxQueryHit* mQueryHit = nullptr;
 };
 class PPointHit {
 public:
 	~PPointHit();
 
-	PActor_ptr getActor() const;
-	PCollider_ptr getCollider() const;
+	PActor_ptr GetActor() const;
+	PCollider_ptr GetCollider() const;
 
-	float getDistance() const;
-	glm::vec3 getNormal() const;
-	glm::vec3 getPosition() const;
+	float GetDistance() const;
+	glm::vec3 GetNormal() const;
+	glm::vec3 GetPosition() const;
 
 protected:
-	physx::PxLocationHit* m_pPointHit = nullptr;
+	physx::PxLocationHit* mPointHit = nullptr;
 };
 
 class PRaycastHit : public PPointHit {
 public:
-	void createHit(physx::PxRaycastHit* pRaycastHit);
+	void CreateHit(physx::PxRaycastHit* pRaycastHit);
 
 private:
-	physx::PxRaycastHit* m_pRaycastHit = nullptr;
+	physx::PxRaycastHit* mRaycastHit = nullptr;
 };
 class PSweepHit : public PPointHit {
 public:
-	void createHit(physx::PxSweepHit* pSweepHit);
+	void CreateHit(physx::PxSweepHit* pSweepHit);
 
 private:
-	physx::PxSweepHit* m_pSweepHit = nullptr;
+	physx::PxSweepHit* mSweepHit = nullptr;
 };
 class POverlapHit : public PQueryHit {
 public:
-	void createHit(physx::PxOverlapHit* pOverlapHit);
+	void CreateHit(physx::PxOverlapHit* pOverlapHit);
 
 private:
-	physx::PxOverlapHit* m_pOverlapHit = nullptr;
+	physx::PxOverlapHit* mOverlapHit = nullptr;
 };

@@ -12,7 +12,7 @@ void OpenGLDynamicRHI::BindPendingFramebuffer(OpenGLContextState& ContextState)
 		if (mPendingState.Framebuffer != 0) {
 			// TODO; multiple render targets
 			// just use an array of render targets
-			// and if any updates needed call glDrawBuffers(n, bufs)
+			// and if any Updates needed call glDrawBuffers(n, bufs)
 		} else {
 			glReadBuffer(GL_BACK);
 			glDrawBuffer(GL_BACK);
