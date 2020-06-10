@@ -23,7 +23,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
+#ifndef ENGINE_PHYSICS_JOINT_H
+#define ENGINE_PHYSICS_JOINT_H
+
 #include "physx/PxPhysicsAPI.h"
 #include "PActor.h"
 
@@ -41,7 +43,8 @@ typedef std::shared_ptr<PRevoluteJoint> PRevoluteJoint_ptr;
 typedef std::shared_ptr<PSphericalJoint> PSphericalJoint_ptr;
 typedef std::shared_ptr<PPrismaticJoint> PPrismaticJoint_ptr;
 
-class PJoint {
+class PJoint 
+{
 public:
 	~PJoint();
 
@@ -53,7 +56,8 @@ protected:
 	physx::PxJoint* mJoint;
 };
 
-class PFixedJoint : public PJoint {
+class PFixedJoint : public PJoint 
+{
 public:
 	PFixedJoint(physx::PxFixedJoint* pFixedJoint);
 	static PFixedJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
@@ -61,7 +65,9 @@ public:
 private:
 	physx::PxFixedJoint* mFixedJoint;
 };
-class PDistanceJoint : public PJoint {
+
+class PDistanceJoint : public PJoint 
+{
 public:
 	PDistanceJoint(physx::PxDistanceJoint* pDistanceJoint);
 	static PDistanceJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
@@ -71,7 +77,9 @@ public:
 private:
 	physx::PxDistanceJoint* mDistanceJoint;
 };
-class PSphericalJoint : public PJoint {
+
+class PSphericalJoint : public PJoint 
+{
 public:
 	PSphericalJoint(physx::PxSphericalJoint* pSphericalJoint);
 	static PSphericalJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
@@ -81,7 +89,9 @@ public:
 private:
 	physx::PxSphericalJoint* mSphericalJoint;
 };
-class PRevoluteJoint : public PJoint {
+
+class PRevoluteJoint : public PJoint 
+{
 public:
 	PRevoluteJoint(physx::PxRevoluteJoint* pRevoluteJoint);
 	static PRevoluteJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
@@ -91,7 +101,9 @@ public:
 private:
 	physx::PxRevoluteJoint* mRevoluteJoint;
 };
-class PPrismaticJoint : public PJoint {
+
+class PPrismaticJoint : public PJoint 
+{
 public:
 	PPrismaticJoint(physx::PxPrismaticJoint* pPrismaticJoint);
 	static PPrismaticJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
@@ -101,3 +113,5 @@ public:
 private:
 	physx::PxPrismaticJoint* mPrismaticJoint;
 };
+
+#endif

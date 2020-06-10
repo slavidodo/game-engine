@@ -11,7 +11,7 @@ bool Camera::IsViewOutdated()
 	glm::fvec3 DesiredTranslation;
 	glm::fquat DesiredRotation;
 	if (SceneNode_ptr parent = mParent.lock()) {
-		Transformtr transform = parent->GetTransform(); // any scene node is guaranteed to have a transform
+		Transform_ptr transform = parent->GetTransform(); // any scene node is guaranteed to have a transform
 		DesiredTranslation = transform->GetTranslation();
 		DesiredRotation = transform->GetRotation();
 	} else {

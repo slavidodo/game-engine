@@ -1,7 +1,10 @@
-#pragma once
+#ifndef ENGINE_PHYSICS_SCENE_MANAGER_H
+#define ENGINE_PHYSICS_SCENE_MANAGER_H
+
 #include "Engine/Physics/PScene.h"
 
-class PSceneManager {
+class PSceneManager 
+{
 public:
 	static PSceneManager& GetInstance() {
 		static PSceneManager instance;
@@ -30,3 +33,5 @@ public:
 private:
 	PScene_ptr mCurrentScene;
 };
+
+#endif

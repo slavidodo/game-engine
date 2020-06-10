@@ -28,11 +28,8 @@
 
 PMaterial_ptr gDefaultMaterial = nullptr;
 
-#pragma region Material Properties Functions
 PMaterialProperties::PMaterialProperties(float staticFriction, float dynamicFriction, float restitution) : staticFriction(staticFriction), dynamicFriction(dynamicFriction), restitution(restitution) {}
-#pragma endregion
 
-#pragma region Material Functions
 PMaterial::PMaterial(physx::PxMaterial* pMaterial) : mMaterial(pMaterial) {}
 PMaterial::~PMaterial() {
 	if (!mMaterial) return;
@@ -69,9 +66,7 @@ PMaterial_ptr PMaterial::CreateMaterial(float staticFriction, float dynamicFrict
 physx::PxMaterial* PMaterial::GetSdkMaterial() const { 
 	return mMaterial;
 }
-#pragma endregion
 
-#pragma region Material Set Functions
 PMaterialSet::PMaterialSet(physx::PxMaterial** pMaterialArray, uint16_t numOfMaterials) : mMaterialsArray(pMaterialArray), mNumOfMaterials(numOfMaterials) {}
 PMaterialSet::~PMaterialSet() {
 	if (!mMaterialsArray) return;
@@ -106,4 +101,3 @@ physx::PxMaterial** PMaterialSet::GetSdkMaterialsArray() const {
 uint16_t PMaterialSet::GetNumOfMaterials() const {
 	return mNumOfMaterials;
 }
-#pragma endregion

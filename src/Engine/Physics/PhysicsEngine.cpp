@@ -26,7 +26,6 @@
 #include "Pch.h"
 #include "PhysicsEngine.h"
 
-#pragma region Initializtion/Termination
 bool PhysicsEngine::Init(const PhysicsSettings& settings) {
 	if (mInitialized)
 		return true;
@@ -52,6 +51,7 @@ bool PhysicsEngine::Init(const PhysicsSettings& settings) {
 
 	return true;
 }
+
 void PhysicsEngine::Terminate() {
 	PSceneManager::GetInstance().SetCurrentScene(nullptr);
 
@@ -146,7 +146,6 @@ bool PhysicsEngine::InitExtensions() {
 	}	
 	return true;
 }
-#pragma endregion
 
 bool PhysicsSettings::CreateFullPhysics() const {
 	return bEnableArticulations && bEnableArticulationsReducedCoordinates && bEnableHeightFields;

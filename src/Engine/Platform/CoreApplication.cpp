@@ -75,6 +75,19 @@ void CoreApplication::RunMainLoop()
 		glfwPollEvents();
 
 		gFrameNumber++;
+
+		/*int frameX, frameY;
+		glfwGetFramebufferSize(gWindow.GetGlfwWindow(), &frameX, &frameY);
+		std::cout << "Framebuffer Size: (" << frameX << ", " << frameY << ")\n";
+
+		int windowX, windowY;
+		glfwGetWindowSize(gWindow.GetGlfwWindow(), &windowX, &windowY);
+		std::cout << "Window Size: (" << windowX << ", " << windowY << ")\n";
+
+		float xscale, yscale;
+		glfwGetWindowContentScale(gWindow.GetGlfwWindow(), &xscale, &yscale);
+		std::cout << "Scale: (" << xscale << ", " << yscale << ")\n";*/
+
 	}
 }
 

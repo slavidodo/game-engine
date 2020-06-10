@@ -23,7 +23,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
+#ifndef ENGINE_PHYSICS_SCENE_H
+#define ENGINE_PHYSICS_SCENE_H
+
 #include "physx/PxPhysicsAPI.h"
 #include "PActor.h"
 #include "PSceneQuery.h"
@@ -33,7 +35,8 @@ typedef std::shared_ptr<PScene> PScene_ptr;
 
 physx::PxFilterFlags FilterShaderFunction(physx::PxFilterObjectAttributes attribs1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attribs2, physx::PxFilterData filterData2, physx::PxPairFlags& pairFlags, const void* constBlock, uint32_t constBlockSize);
 
-struct PSceneDescriptor {
+struct PSceneDescriptor 
+{
 public:
 	PSceneDescriptor();
 	~PSceneDescriptor();
@@ -48,7 +51,8 @@ private:
 	physx::PxSceneDesc* mDescriptor;
 };
 
-class PScene {
+class PScene 
+{
 public:
 	PScene(physx::PxScene* pScene);
 	~PScene();
@@ -74,6 +78,7 @@ public:
 		Default = physx::PxPairFlag::eCONTACT_DEFAULT,
 		Trigger = physx::PxPairFlag::eTRIGGER_DEFAULT,
 	};
+
 	enum class PairFlag {
 		Default = physx::PxFilterFlag::eDEFAULT, // processes collision, then ignores this pair until it falls out then in collision again, or until any filter relevant data changes.
 		Kill = physx::PxFilterFlag::eKILL, // ignores collision, then ignores this pair until it falls out then in collision again.
@@ -81,6 +86,7 @@ public:
 		Callback = physx::PxFilterFlag::eCALLBACK, // invokes the filter callback PairFound().
 		Notify = physx::PxFilterFlag::eNOTIFY, // invokes the filter callback PairFound() when the pair falls in collision, and PairLost() when it falls out of collision.
 	};
+
 	void SetCollisionRelationship(uint8_t categoryNum1, uint8_t categoryNum2, CollisionHandle collisionHandle, PairFlag pairFlag);
 
 	// Joint visualization doesn't work for some reason?
@@ -93,3 +99,5 @@ private:
 
 	std::pair<physx::PxPairFlag::Enum, physx::PxFilterFlag::Enum> mCollisionMatrix[128][128];
 };
+
+#endif

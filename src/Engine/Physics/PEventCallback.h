@@ -23,10 +23,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
+#ifndef ENGINE_PHYSICS_EVENT_CALLBACK_H
+#define ENGINE_PHYSICS_EVENT_CALLBACK_H
+
 #include "physx/PxPhysicsAPI.h"
 
-class PEventCallback : public physx::PxSimulationEventCallback {
+class PEventCallback : public physx::PxSimulationEventCallback 
+{
 public:
 	virtual void onWake(physx::PxActor** actors, physx::PxU32 count) override;
 	virtual void onSleep(physx::PxActor** actors, physx::PxU32 count) override;
@@ -35,3 +38,5 @@ public:
 	virtual void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override;
 	virtual void onAdvance(const physx::PxRigidBody* const* bodyBuffer, const physx::PxTransform* poseBuffer, const physx::PxU32 count) override;
 };
+
+#endif

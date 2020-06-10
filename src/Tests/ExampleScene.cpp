@@ -149,6 +149,7 @@ void ExampleScene::Render(RHICommandList& RHICmdList)
 	/// Update the physics actors
 	PSceneManager::GetInstance().Update(mDeltaTime);
 	PSceneManager::GetInstance().ApplyUpdateResults(true);
+
 }
 
 void ExampleScene::RenderSceneElements(RHICommandList& RHICmdList)
@@ -170,7 +171,7 @@ void ExampleScene::RenderSceneElements(RHICommandList& RHICmdList)
 		glm::mat4x4 ViewProjection = mCamera->GetProjMatrix() * mCamera->GetViewMatrix();
 
 		for (PrimitiveSceneElement& SceneElement : mSceneElements) {
-			Transformtr Transform = SceneElement.Transform;
+			Transform_ptr Transform = SceneElement.Transform;
 			StaticMesh_ptr Mesh = SceneElement.Mesh;
 
 			// set the vertex buffer to be our data source
