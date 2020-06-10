@@ -72,6 +72,8 @@ void PhysicsEngine::Terminate() {
 	
 	PAlignedAllocator::deallocate(mErrorReporter);
 	PAlignedAllocator::deallocate(mAllocator);
+
+	mInitialized = false;
 }
 
 bool PhysicsEngine::InitAllocator(const PhysicsSettings& settings) {

@@ -8,6 +8,7 @@
 #include "Engine/Scene/SceneManager.h"
 #include "Engine/Physics/PSceneManager.h"
 #include "Tests/ExampleScene.h"
+#include "Engine/Physics/PhysicsTest.h"
 
 const std::string WINDOW_TITLE = "Game Engine";
 constexpr int32_t WINDOW_WIDTH = 1024;
@@ -36,8 +37,8 @@ using Context = RENDERING_BACKEND;
 int main(int argc, char* argv[])
 {
 	/* Physics tests (run without errors)*/
-	//PhysicsTester pt;
-	//pt.RunTests();
+	PhysicsTester pt;
+	pt.RunTests();
 
 	std::vector<std::string> args(argv, argv + argc);
 
