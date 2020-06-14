@@ -54,21 +54,34 @@ static StaticMeshVertexDeclaration gStaticMeshVertexDeclaration;
 
 ExampleScene::ExampleScene()
 {
+	// Create the physics scene
+	PSceneManager::GetInstance().SetCurrentScene(PScene::CreateScene(PSceneDescriptor()));
+
+	PBoxGeometry_ptr geometry = PBoxGeometry::CreateGeometry(glm::vec3(0.5f, 0.5f, 0.5f));
+
 	mSceneElements.push_back({
 		std::make_shared<Transform>(
 			glm::fvec3(-1.5f, 0, -4.5f),
 			glm::radians(glm::fvec3(0.f, -45.f, 0.f)),
 			glm::fvec3(1)),
-		nullptr
-		});
+		nullptr,
+	});
+	PStaticActor_ptr physicsActor1 = PStaticActor::CreateActor(glm::fvec3(-1.5f, 0, -4.5f), glm::radians(glm::fvec3(0.f, -45.f, 0.f)));
+	physicsActor1->AddCollider(PCollider::CreateCollider(geometry));
+	PSceneManager::GetInstance().AddActor(physicsActor1);
+
 
 	mSceneElements.push_back({
 		std::make_shared<Transform>(
 			glm::fvec3(1.5f, 0, -4.5f),
 			glm::radians(glm::fvec3(0.f, 45.f, 0.f)),
 			glm::fvec3(1)),
-		nullptr
-		});
+		nullptr,
+	});
+	PStaticActor_ptr physicsActor2 = PStaticActor::CreateActor(glm::fvec3(-1.5f, 0, -4.5f), glm::radians(glm::fvec3(0.f, -45.f, 0.f)));
+	physicsActor2->AddCollider(PCollider::CreateCollider(geometry));
+	PSceneManager::GetInstance().AddActor(physicsActor2);
+
 
 	mCamera = Camera::CreatePerspectiveCamera(45.0f, 0.1f, 1000.f);
 	mCamera->SetEditorTranslation(glm::fvec3(0, 10.f, 1.f));
@@ -142,6 +155,11 @@ void ExampleScene::Render(RHICommandList& RHICmdList)
 		RenderSceneElements(RHICmdList);
 	}
 	RHICmdList.EndScene();
+
+	/// Update the physics actors
+	PSceneManager::GetInstance().Update(mDeltaTime);
+	PSceneManager::GetInstance().ApplyUpdateResults(true);
+
 }
 
 void ExampleScene::RenderSceneElements(RHICommandList& RHICmdList)
@@ -156,7 +174,7 @@ void ExampleScene::RenderSceneElements(RHICommandList& RHICmdList)
 	RHICmdList.BeginRenderPass(RPInfo);
 	{
 		// TODO: should call SetGraphicsPSO instead
-		// setting shader should only update once since we're not really changing the shaders
+		// setting shader should only Update once since we're not really changing the shaders
 		// between frames/draw calls
 		RHICmdList.SetBoundShaderState(mBoundShaderState);
 
@@ -174,7 +192,7 @@ void ExampleScene::RenderSceneElements(RHICommandList& RHICmdList)
 			// make sure all matricies are calculated if any changes occurred
 			Transform->EnsureUpdated();
 
-			// update shader paramaters
+			// Update shader paramaters
 			PrimitiveUniformShaderParameters Parameters;
 			Parameters.LocalToWorld = ViewProjection * SceneElement.Transform->GetLocalToWorld();
 			mUniformBuffer.UpdateUniformBufferImmediate(Parameters);

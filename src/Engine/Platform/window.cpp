@@ -17,6 +17,9 @@ bool Window::Init(std::string title, int32_t width, int32_t height)
 	if (mInitialized)
 		return false;
 
+	// TODO(honey): high-dpi fix. should work for now :)
+	glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+
 	mSize = glm::uvec2(width, height);
 	mTitle = title;
 

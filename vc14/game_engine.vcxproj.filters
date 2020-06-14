@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="TESTS">
-      <UniqueIdentifier>{770ccdf6-d416-4ac5-bbd6-5232849ae36c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{a33ca838-4bfd-40e5-b89a-57f465243511}</UniqueIdentifier>
     </Filter>
@@ -55,11 +52,14 @@
     <Filter Include="Engine\Atomic">
       <UniqueIdentifier>{c83c2889-a95e-42a8-abdd-2e226f8bd1b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{770ccdf6-d416-4ac5-bbd6-5232849ae36c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
     <ClCompile Include="..\src\Tests\ExampleScene.cpp">
-      <Filter>TESTS</Filter>
+      <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Engine\Filesystem\AssimpIOStream.cpp">
       <Filter>Engine\Filesystem</Filter>
@@ -182,10 +182,49 @@
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLShaderCompiler.cpp">
       <Filter>Engine\OpenGLRHI</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PActor.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PCollider.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PCollisionFilterCallback.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PEventCallback.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PGeometry.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PhysicsEngine.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PJoint.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PMaterial.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PScene.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PSceneQuery.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PAllocator.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PSceneManager.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Tests\PhysicsTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Tests\ExampleScene.h">
-      <Filter>TESTS</Filter>
+      <Filter>Tests</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Engine\Filesystem\AssimpIOStream.h">
       <Filter>Engine\Filesystem</Filter>
@@ -308,6 +347,45 @@
     </ClInclude>
     <ClInclude Include="..\src\Engine\Atomic\ThreadSafeRefCountedObject.h">
       <Filter>Engine\Atomic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PActor.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PAllocator.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PCollider.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PCollisionFilterCallback.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PEventCallback.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PGeometry.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PhysicsEngine.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PJoint.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PMaterial.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PScene.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PSceneQuery.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PSceneManager.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Tests\PhysicsTest.h">
+      <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

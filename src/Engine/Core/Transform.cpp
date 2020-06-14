@@ -61,7 +61,7 @@ void Transform::EnsureUpdated()
 		mRight = mRotation * glm::fvec3(1.0, 0.0, 0.0);
 		mUp = mRotation * glm::fvec3(0.0, 1.0, 0.0);
 
-		// update the model matrix
+		// Update the model matrix
 		mLocalToWorld = glm::translate(glm::fmat4(1.0f), mTranslation);
 		mLocalToWorld = mLocalToWorld * glm::mat4_cast(mRotation);
 		mLocalToWorld = glm::scale(mLocalToWorld, mScale);

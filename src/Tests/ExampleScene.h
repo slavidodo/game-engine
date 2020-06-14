@@ -6,6 +6,9 @@
 #include "../Engine/Core/StaticMesh.h"
 #include "../Engine/Rendering/ShaderParameterMacros.h"
 
+#include "../Engine/Physics/PActor.h"
+#include "../Engine/Physics/PSceneManager.h"
+
 #include "../Engine/Core/Model.h"
 
 __declspec(align(SHADER_PARAMETER_STRUCT_ALIGNMENT))

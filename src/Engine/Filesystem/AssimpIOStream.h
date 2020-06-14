@@ -10,7 +10,7 @@
 #include <assimp/ZipArchiveIOSystem.h>
 
 class AssimpIOStream;
-typedef std::shared_ptr<AssimpIOStream> AssimpIOStream_ptr;
+typedef std::shared_ptr<AssimpIOStream> AssimpIOStreamtr;
 
 class AssimpIOSystem : public Assimp::IOSystem
 {
