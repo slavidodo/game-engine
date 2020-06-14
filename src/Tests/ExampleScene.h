@@ -6,6 +6,8 @@
 #include "../Engine/Core/StaticMesh.h"
 #include "../Engine/Rendering/ShaderParameterMacros.h"
 
+#include "../Engine/Core/Model.h"
+
 __declspec(align(SHADER_PARAMETER_STRUCT_ALIGNMENT))
 class PrimitiveUniformShaderParameters
 {
@@ -68,6 +70,9 @@ private:
 
 	double mLastTime = 0.0;
 	float mDeltaTime = 0.0;
+
+	Model_ptr modelTest;
+
 };
 
 #endif // TESTS_EXAMPLE_SCENE

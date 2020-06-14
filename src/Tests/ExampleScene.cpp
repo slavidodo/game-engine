@@ -5,6 +5,8 @@
 
 #include "../Engine/StaticMeshGenerator.h"
 
+#include "../Engine/Filesystem/ResourceManager.h"
+
 // TODO: we should not include any opengl specific headers
 // but for now in a test-phase we do so
 #include "../Engine/OpenGLRHI/OpenGLShaderCompiler.h"
@@ -58,7 +60,7 @@ ExampleScene::ExampleScene()
 			glm::radians(glm::fvec3(0.f, -45.f, 0.f)),
 			glm::fvec3(1)),
 		nullptr
-	});
+		});
 
 	mSceneElements.push_back({
 		std::make_shared<Transform>(
@@ -66,7 +68,7 @@ ExampleScene::ExampleScene()
 			glm::radians(glm::fvec3(0.f, 45.f, 0.f)),
 			glm::fvec3(1)),
 		nullptr
-	});
+		});
 
 	mCamera = Camera::CreatePerspectiveCamera(45.0f, 0.1f, 1000.f);
 	mCamera->SetEditorTranslation(glm::fvec3(0, 10.f, 1.f));
@@ -74,6 +76,7 @@ ExampleScene::ExampleScene()
 
 	InitGraphcisPipeline();
 }
+
 
 void ExampleScene::InitGraphcisPipeline()
 {
@@ -113,12 +116,19 @@ void ExampleScene::InitGraphcisPipeline()
 	mSceneElements[0].Mesh = StaticMeshGenerator::CreateCube(1.0f);
 	mSceneElements[1].Mesh = StaticMeshGenerator::CreateCube(1.0f);
 
+	ResourceManager::GetInstance().Init();
+	//ResourceManager::GetInstance().Mount("C:/DefinitelyNotWindows/Tracks/GameDev/OpenGL/models");
+	//auto p = ResourceManager::GetInstance().LoadModel("New folder (2)/Knuckles.fbx");
+
+	ResourceManager::GetInstance().Mount("C:/DefinitelyNotWindows/Tracks/GameDev/Models");
+	modelTest = ResourceManager::GetInstance().LoadModel("Mine/scene.fbx");
+
+
 	mUniformBuffer = UniformBufferRef<PrimitiveUniformShaderParameters>::CreateUniformBufferImmediate(
 		PrimitiveUniformShaderParameters(), EUniformBufferUsage::UniformBuffer_MultiFrame);
 
 	gDynamicRHI->RHISetShaderUniformBuffer(mVertexShaderRHI, 0, mUniformBuffer);
 }
-
 void ExampleScene::Render(RHICommandList& RHICmdList)
 {
 	double currentTime = glfwGetTime(); // really?
@@ -152,12 +162,14 @@ void ExampleScene::RenderSceneElements(RHICommandList& RHICmdList)
 
 		glm::mat4x4 ViewProjection = mCamera->GetProjMatrix() * mCamera->GetViewMatrix();
 
+		int i = 0;
 		for (PrimitiveSceneElement& SceneElement : mSceneElements) {
 			Transform_ptr Transform = SceneElement.Transform;
 			StaticMesh_ptr Mesh = SceneElement.Mesh;
 
 			// set the vertex buffer to be our data source
-			RHICmdList.SetStreamSource(0, Mesh->VertexBuffer, 0);
+			if (!i)
+				RHICmdList.SetStreamSource(0, Mesh->VertexBuffer, 0);
 
 			// make sure all matricies are calculated if any changes occurred
 			Transform->EnsureUpdated();
@@ -170,8 +182,12 @@ void ExampleScene::RenderSceneElements(RHICommandList& RHICmdList)
 			// this is yet fixed to draw triangles, in some cases or might be preffered
 			// by the user, we may need to determine the topology
 			// this will issue a draw call with index buffer
-			RHICmdList.DrawIndexedPrimitive(Mesh->IndexBuffer, 0, 0, Mesh->NumVertices, 0, Mesh->NumTriangles, 1);
+			if (!i)
+				RHICmdList.DrawIndexedPrimitive(Mesh->IndexBuffer, 0, 0, Mesh->NumVertices, 0, Mesh->NumTriangles, 1);
+
+			i++;
 		}
+		modelTest->RenderSceneElements(RHICmdList);
 	}
 	RHICmdList.EndRenderPass();
 }
