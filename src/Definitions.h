@@ -3,6 +3,12 @@
 #define FRAMEWORK_DEFINITIONS_H
 
 /// definitions
+#if defined(DEBUG) || !defined(NDEBUG) || defined(_DEBUG)
+#define BUILD_DEBUG 1
+#else
+#define BUILD_DEBUG 0
+#endif
+
 #if __GNUC__
 #if __x86_64__ || __ppc64__
 #define ARCH_64

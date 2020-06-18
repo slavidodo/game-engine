@@ -31,7 +31,11 @@ public:
 	void ClearScreen(bool color, bool depth) override final;
 	void ClearColor(glm::fvec4 color) override final;
 
+	// resources
 	RHIVertexDeclarationRef RHICreateVertexDeclaration(const VertexDeclarationElementList& Elements) override final;
+
+	RHITexture2DRef RHICreateTexture2D(uint32_t SizeX, uint32_t SizeY, uint8_t Format, uint32_t NumMips, uint32_t NumSamples, uint32_t Flags) override final;
+	RHITexture2DRef RHICreateTexture2DFromResource(EPixelFormat Format, uint32_t SizeX, uint32_t SizeY, uint32_t NumMips, uint32_t NumSamples, uint32_t NumSamplesTileMem, uint32_t Flags, GLuint Resource, uint32_t TexCreateFlags) override final;
 
 	// shaders
 	RHIVertexShaderRef RHICreateVertexShader(const std::vector<uint8_t>& Code) override final;
@@ -104,6 +108,26 @@ public:
 	OpenGLContextState& GetContextStateForCurrentContext();
 
 private:
+	inline uint32_t FindMaxMipmapLevel(uint32_t Size) {
+		uint32_t MipCount = 1;
+		while (Size >>= 1) {
+			MipCount++;
+		}
+		return MipCount;
+	}
+
+	inline uint32_t FindMaxMipmapLevel(uint32_t Width, uint32_t Height) {
+		return FindMaxMipmapLevel((Width > Height) ? Width : Height);
+	}
+
+	inline uint32_t FindMaxMipmapLevel(uint32_t Width, uint32_t Height, uint32_t Depth) {
+		return FindMaxMipmapLevel((Width > Height) ? Width : Height, Depth);
+	}
+
+	RHITexture* CreateOpenGLRHITextureOnly(const uint32_t SizeX, const uint32_t SizeY, const bool bCubeTexture, const bool bArrayTexture, const bool bIsExternal, uint8_t& Format, uint32_t& NumMips, uint32_t& NumSamples, const uint32_t ArraySize, uint32_t& Flags);
+
+	RHITexture* CreateOpenGLTexture(uint32_t SizeX, uint32_t SizeY, bool bCubeTexture, bool bArrayTexture, bool bIsExternal, uint8_t Format, uint32_t NumMips, uint32_t NumSamples, uint32_t ArraySize, uint32_t Flags);
+
 	void BindPendingFramebuffer(OpenGLContextState& ContextState);
 	void SetPendingBlendStateForActiveRenderTargets(OpenGLContextState& ContextState);
 	void UpdateViewportInOpenGLContext(OpenGLContextState& ContextState);
@@ -112,6 +136,9 @@ private:
 	void BindPendingShaderState(OpenGLContextState& ContextState);
 	void CommitNonComputeShaderConstants(OpenGLContextState& ContextState);
 	void BindUniformBufferBase(OpenGLContextState& ContextState, int32_t NumUniformBuffers, RHIUniformBufferRef* BoundUniformBuffers, uint32_t FirstUniformBuffer, bool ForceUpdate);
+
+	void SetupTexturesForDraw(OpenGLContextState& ContextState);
+	void SetupTexturesForDraw(OpenGLContextState& ContextState, OpenGLBoundShaderState* BoundShaderState, int32_t NumTextures);
 
 	void InitializeStateResources();
 

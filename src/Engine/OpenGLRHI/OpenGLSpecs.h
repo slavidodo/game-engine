@@ -21,6 +21,18 @@ public:
 	static inline bool SupportsVertexAttribBinding() { return supportsVertexAttribBinding; }
 	static inline bool SupportsBufferStorage() { return supportsBufferStorage; }
 	static inline bool SupportsTessellation() { return supportsTessellation; }
+	static inline bool SupportsBindlessTextures() { return supportsBindlessTextures; }
+	static inline bool SupportsTexture3D() { return true; }
+	static inline bool SupportsMultisampledTextures() { return true; }
+	static inline bool SupportsBGRA8888RenderTarget() { return true; }
+
+	static inline GLint GetMaxTextureImageUnits() { return MaxTextureImageUnits; }
+	static inline GLint GetMaxVertexTextureImageUnits() { return MaxVertexTextureImageUnits; }
+	static inline GLint GetMaxGeometryTextureImageUnits() { return MaxGeometryTextureImageUnits; }
+	static inline GLint GetMaxHullTextureImageUnits() { return MaxHullTextureImageUnits; }
+	static inline GLint GetMaxDomainTextureImageUnits() { return MaxDomainTextureImageUnits; }
+	static inline GLint GetMaxComputeTextureImageUnits() { return 0; }
+	static inline GLint GetMaxCombinedTextureImageUnits() { return MaxCombinedTextureImageUnits; }
 
 	static inline GLint GetMaxPixelUniformComponents() { return MaxPixelUniformComponents; }
 	static inline GLint GetMaxVertexUniformComponents() { return MaxVertexUniformComponents; }
@@ -28,6 +40,8 @@ public:
 	static inline GLint GetMaxHullUniformComponents() { return MaxHullUniformComponents; }
 	static inline GLint GetMaxDomainUniformComponents() { return MaxDomainUniformComponents; }
 	static inline GLint GetMaxComputeUniformComponents() { return 0; }
+
+	static inline GLint GetMaxMSAASamplesTileMem() { return 0; /* not supported */ }
 
 	// OpenGL functions
 	static inline void GenVertexArrays(GLsizei N, GLuint* Arrays) {
@@ -88,6 +102,14 @@ private:
 	static bool supportsVertexAttribBinding;
 	static bool supportsBufferStorage;
 	static bool supportsTessellation;
+	static bool supportsBindlessTextures;
+
+	static GLint MaxTextureImageUnits;
+	static GLint MaxCombinedTextureImageUnits;
+	static GLint MaxVertexTextureImageUnits;
+	static GLint MaxGeometryTextureImageUnits;
+	static GLint MaxHullTextureImageUnits;
+	static GLint MaxDomainTextureImageUnits;
 
 	static GLint MaxVertexUniformComponents;
 	static GLint MaxPixelUniformComponents;

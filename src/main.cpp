@@ -36,10 +36,6 @@ using Context = RENDERING_BACKEND;
 
 int main(int argc, char* argv[])
 {
-	/* Physics tests (run without errors)*/
-	PhysicsTester pt;
-	pt.RunTests();
-
 	std::vector<std::string> args(argv, argv + argc);
 
 	// initialize core app

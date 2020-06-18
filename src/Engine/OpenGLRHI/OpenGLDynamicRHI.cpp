@@ -76,9 +76,9 @@ void OpenGLDynamicRHI::Terminate()
 
 void OpenGLDynamicRHI::InitializeStateResources()
 {
-	mSharedContextState.InitializeResources();
-	mRenderingContextState.InitializeResources();
-	mPendingState.InitializeResources();
+	mSharedContextState.InitializeResources(OpenGLSpecs::GetMaxCombinedTextureImageUnits(), OGL_MAX_COMPUTE_STAGE_UAV_UNITS);
+	mRenderingContextState.InitializeResources(OpenGLSpecs::GetMaxCombinedTextureImageUnits(), OGL_MAX_COMPUTE_STAGE_UAV_UNITS);
+	mPendingState.InitializeResources(OpenGLSpecs::GetMaxCombinedTextureImageUnits(), OGL_MAX_COMPUTE_STAGE_UAV_UNITS);
 }
 
 void OpenGLDynamicRHI::RHIBeginScene()

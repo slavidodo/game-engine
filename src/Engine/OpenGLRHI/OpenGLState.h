@@ -7,12 +7,67 @@
 #include "../Core/Math/Rect.h"
 
 #define NUM_OPENGL_VERTEX_STREAMS 16
-#define OGL_MAX_UNIFORM_BUFFER_BINDINGS 12
 
-#define OpenGLCachedAttr_Invalid (void*)(uintptr_t)0xFFFFFFFF
-#define OpenGLCachedAttr_SingleVertex (void*)(uintptr_t)0xFFFFFFFE
+enum
+{
+	OGL_MAX_UNIFORM_BUFFER_BINDINGS = 12,
+	OGL_FIRST_UNIFORM_BUFFER = 0,
+	OGL_MAX_COMPUTE_STAGE_UAV_UNITS = 8,
+};
 
 #define ZERO_FILLED_DUMMY_UNIFORM_BUFFER_SIZE 65536
+
+struct OpenGLSamplerStateData
+{
+	// These enum is just used to count the number of members in this struct
+	enum EGLSamplerData
+	{
+		EGLSamplerData_WrapS,
+		EGLSamplerData_WrapT,
+		EGLSamplerData_WrapR,
+		EGLSamplerData_LODBias,
+		EGLSamplerData_MagFilter,
+		EGLSamplerData_MinFilter,
+		EGLSamplerData_MaxAniso,
+		EGLSamplerData_CompareMode,
+		EGLSamplerData_CompareFunc,
+		EGLSamplerData_Num,
+	};
+
+	GLint WrapS;
+	GLint WrapT;
+	GLint WrapR;
+	GLint LODBias;
+	GLint MagFilter;
+	GLint MinFilter;
+	GLint MaxAnisotropy;
+	GLint CompareMode;
+	GLint CompareFunc;
+
+	OpenGLSamplerStateData()
+		: WrapS(GL_REPEAT)
+		, WrapT(GL_REPEAT)
+		, WrapR(GL_REPEAT)
+		, LODBias(0)
+		, MagFilter(GL_NEAREST)
+		, MinFilter(GL_NEAREST)
+		, MaxAnisotropy(1)
+		, CompareMode(GL_NONE)
+		, CompareFunc(GL_ALWAYS)
+	{
+	}
+};
+
+class OpenGLSamplerState : public RHISamplerState
+{
+public:
+	GLuint Resource;
+	OpenGLSamplerStateData Data;
+
+	~OpenGLSamplerState() {
+		glDeleteSamplers(1, &Resource);
+	}
+};
 
 struct OpenGLRasterizerStateData
 {
@@ -29,6 +84,43 @@ struct OpenGLRasterizerStateData
 	{
 	}
 };
+
+struct TextureStage
+{
+	class OpenGLTextureBase* Texture;
+	class OpenGLShaderResourceView* SRV;
+	GLenum Target;
+	GLuint Resource;
+	int32_t LimitMip;
+	bool bHasMips;
+	int32_t NumMips;
+
+	TextureStage()
+		: Texture(nullptr)
+		, SRV(nullptr)
+		, Target(GL_NONE)
+		, Resource(0)
+		, LimitMip(-1)
+		, bHasMips(false)
+		, NumMips(0)
+	{
+	}
+};
+
+struct UAVStage
+{
+	GLenum Format;
+	GLuint Resource;
+
+	UAVStage()
+		: Format(GL_NONE)
+		, Resource(0)
+	{
+	}
+};
+
+#define OpenGLCachedAttr_Invalid (void*)(uintptr_t)0xFFFFFFFF
+#define OpenGLCachedAttr_SingleVertex (void*)(uintptr_t)0xFFFFFFFE
 
 struct OpenGLCachedAttr
 {
@@ -73,12 +165,33 @@ struct OpenGLStream
 struct OpenGLCommonState
 {
 public:
-	virtual void InitializeResources()
+	TextureStage* Textures;
+	OpenGLSamplerState** SamplerStates;
+	UAVStage* UAVs;
+
+	OpenGLCommonState()
+		: Textures(nullptr)
+		, SamplerStates(nullptr)
+		, UAVs(nullptr)
+	{}
+
+	virtual void InitializeResources(int32_t NumCombinedTextures, int32_t NumComputeUAVUnits)
 	{
+		Textures = new TextureStage[NumCombinedTextures];
+		SamplerStates = new OpenGLSamplerState*[NumCombinedTextures];
+		UAVs = new UAVStage[NumCombinedTextures];
+		memset(SamplerStates, 0, NumCombinedTextures * sizeof(*SamplerStates));
 	}
 
 	virtual void CleanupResources()
 	{
+		delete[] UAVs;
+		delete[] SamplerStates;
+		delete[] Textures;
+
+		UAVs = NULL;
+		SamplerStates = NULL;
+		Textures = NULL;
 	}
 };
 
@@ -124,6 +237,7 @@ struct OpenGLContextState : OpenGLCommonState
 	OpenGLStream VertexStreams[NUM_OPENGL_VERTEX_STREAMS];
 	GLuint UniformBuffers[NUM_SHADER_STAGES * OGL_MAX_UNIFORM_BUFFER_BINDINGS];
 	GLuint UniformBufferOffsets[NUM_SHADER_STAGES * OGL_MAX_UNIFORM_BUFFER_BINDINGS];
+	std::vector<OpenGLSamplerState*> CachedSamplerStates;
 
 	uint32_t VertexAttrsEnabledBits;
 	inline bool GetVertexAttrEnabled(int32_t Index) const
@@ -137,6 +251,18 @@ struct OpenGLContextState : OpenGLCommonState
 		} else {
 			VertexAttrsEnabledBits &= ~(1 << Index);
 		}
+	}
+
+	virtual void InitializeResources(int32_t NumCombinedTextures, int32_t NumComputeUAVUnits) override
+	{
+		OpenGLCommonState::InitializeResources(NumCombinedTextures, NumComputeUAVUnits);
+		CachedSamplerStates.resize(NumCombinedTextures, nullptr);
+	}
+
+	virtual void CleanupResources() override
+	{
+		CachedSamplerStates.clear();
+		OpenGLCommonState::CleanupResources();
 	}
 };
 
@@ -182,8 +308,8 @@ struct OpenGLRHIState : OpenGLCommonState
 		memset(BoundUniformBuffers, 0, sizeof(BoundUniformBuffers));
 	}
 
-	void InitializeResources();
-	void CleanupResources();
+	virtual void InitializeResources(int32_t NumCombinedTextures, int32_t NumComputeUAVUnits) override;
+	virtual void CleanupResources() override;
 };
 
 #endif // ENGINE_OPENGLRHI_OPENGLSTATE_H

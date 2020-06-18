@@ -111,7 +111,5 @@ void Camera::UpdateProjection()
 
 glm::fmat4x4 Camera::GetPerspectiveProjMatrix()
 {
-	std::cout << "Updating Proj: " << GetFovY() << ", " << glm::radians(GetFovY()) << ", " << GetAspectRatio()
-		<< ", " << mZNear << ", " << mZFar << std::endl;
 	return glm::perspective(glm::radians(GetFovY()), GetAspectRatio(), mZNear, mZFar);
 }

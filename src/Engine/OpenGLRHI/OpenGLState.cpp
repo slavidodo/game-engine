@@ -3,9 +3,9 @@
 
 #include "OpenGLState.h"
 
-void OpenGLRHIState::InitializeResources()
+void OpenGLRHIState::InitializeResources(int32_t NumCombinedTextures, int32_t NumComputeUAVUnits)
 {
-	OpenGLCommonState::InitializeResources();
+	OpenGLCommonState::InitializeResources(NumCombinedTextures, NumComputeUAVUnits);
 
 	ShaderParameters = new OpenGLShaderParameterCache[NUM_SHADER_STAGES];
 	ShaderParameters[SHADER_STAGE_VERTEX].InitializeResources(OpenGLSpecs::GetMaxVertexUniformComponents() * 4 * sizeof(float));

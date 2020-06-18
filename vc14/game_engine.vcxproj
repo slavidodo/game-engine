@@ -209,6 +209,7 @@
     <ClCompile Include="..\src\Engine\Physics\PhysicsTest.cpp" />
     <ClCompile Include="..\src\Engine\Platform\CoreApplication.cpp" />
     <ClCompile Include="..\src\Engine\Platform\Window.cpp" />
+    <ClCompile Include="..\src\Engine\Rendering\RenderUtils.cpp" />
     <ClCompile Include="..\src\Engine\RHI\RHICommandList.cpp" />
     <ClCompile Include="..\src\Engine\RHI\DynamicRHI.cpp" />
     <ClCompile Include="..\src\Engine\Scene\Scene.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="..\src\Engine\Filesystem\ResourceManager.h" />
     <ClInclude Include="..\src\Engine\Globals.h" />
     <ClInclude Include="..\src\Engine\Input\InputManager.h" />
+    <ClInclude Include="..\src\Engine\Math\MathUtility.h" />
     <ClInclude Include="..\src\Engine\OpenGLRHI\Desktop\OpenGLDesktop.h" />
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLDefinitions.h" />
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLResource.h" />
@@ -269,6 +271,7 @@
     <ClInclude Include="..\src\Engine\Physics\PSceneQuery.h" />
     <ClInclude Include="..\src\Engine\platform\CoreApplication.h" />
     <ClInclude Include="..\src\Engine\Platform\Window.h" />
+    <ClInclude Include="..\src\Engine\Rendering\RenderUtils.h" />
     <ClInclude Include="..\src\Engine\Rendering\ShaderParameterMacros.h" />
     <ClInclude Include="..\src\Engine\RHI\RHICommandList.h" />
     <ClInclude Include="..\src\Engine\RHI\RHIDefinitions.h" />

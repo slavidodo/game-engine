@@ -37,6 +37,9 @@ public:
 	// resources
 	virtual RHIVertexDeclarationRef RHICreateVertexDeclaration(const VertexDeclarationElementList& Elements) = 0;
 
+	virtual RHITexture2DRef RHICreateTexture2D(uint32_t SizeX, uint32_t SizeY, uint8_t Format, uint32_t NumMips, uint32_t NumSamples, uint32_t Flags) = 0;
+	virtual RHITexture2DRef RHICreateTexture2DFromResource(EPixelFormat Format, uint32_t SizeX, uint32_t SizeY, uint32_t NumMips, uint32_t NumSamples, uint32_t NumSamplesTileMem, uint32_t Flags, GLuint Resource, uint32_t TexCreateFlags) = 0;
+
 	// shaders
 	virtual RHIVertexShaderRef RHICreateVertexShader(const std::vector<uint8_t>& Code) = 0;
 	virtual RHIPixelShaderRef RHICreatePixelShader(const std::vector<uint8_t>& Code) = 0;

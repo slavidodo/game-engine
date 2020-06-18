@@ -186,7 +186,212 @@ public:
 	}
 };
 
+// Textures
+class OpenGLTextureBase
+{
+protected:
+	class OpenGLDynamicRHI* OpenGLRHI;
+
+public:
+	// Pointer to current sampler state in this unit
+	class FOpenGLSamplerState* SamplerState;
+
+	/** The OpenGL texture resource. */
+	GLuint Resource;
+
+	/** The OpenGL texture target. */
+	GLenum Target;
+
+	/** The number of mips in the texture. */
+	uint32_t NumMips;
+
+	/** The OpenGL attachment point. This should always be GL_COLOR_ATTACHMENT0 in case of color buffer, but the actual texture may be attached on other color attachments. */
+	GLenum Attachment;
+
+	/** OpenGL 3 Stencil/SRV workaround texture resource */
+	GLuint SRVResource;
+
+	OpenGLTextureBase(
+		OpenGLDynamicRHI* InOpenGLRHI,
+		GLuint InResource,
+		GLenum InTarget,
+		uint32_t InNumMips,
+		GLenum InAttachment
+	)
+		: OpenGLRHI(InOpenGLRHI)
+		, SamplerState(nullptr)
+		, Resource(InResource)
+		, Target(InTarget)
+		, NumMips(InNumMips)
+		, Attachment(InAttachment)
+		, SRVResource(0)
+		, mMemorySize(0)
+		, mIsPowerOfTwo(false)
+		, mIsAliased(false)
+		, mMemorySizeReady(false)
+	{}
+
+	int32_t GetMemorySize() const {
+		return mMemorySize;
+	}
+
+	void SetMemorySize(uint32_t InMemorySize) {
+		mMemorySize = InMemorySize;
+		mMemorySizeReady = true;
+	}
+
+	bool IsMemorySizeSet() {
+		return mMemorySizeReady;
+	}
+
+	void SetIsPowerOfTwo(bool bInIsPowerOfTwo) {
+		mIsPowerOfTwo = bInIsPowerOfTwo ? 1 : 0;
+	}
+
+	bool IsPowerOfTwo() const {
+		return mIsPowerOfTwo != 0;
+	}
+
+	void SetAliased(const bool bInAliased) {
+		mIsAliased = bInAliased ? 1 : 0;
+	}
+
+	bool IsAliased() const {
+		return mIsAliased != 0;
+	}
+
+	void AliasResources(OpenGLTextureBase* Texture)
+	{
+		Resource = Texture->Resource;
+		SRVResource = Texture->SRVResource;
+		mIsAliased = 1;
+	}
+
+private:
+	uint32_t mMemorySize : 30;
+	uint32_t mIsPowerOfTwo : 1;
+	uint32_t mIsAliased : 1;
+	uint32_t mMemorySizeReady : 1;
+};
+
+template<typename BaseType>
+class TOpenGLTexture : public BaseType, public OpenGLTextureBase
+{
+public:
+	TOpenGLTexture(
+		class OpenGLDynamicRHI* InOpenGLRHI,
+		GLuint InResource,
+		GLenum InTarget,
+		GLenum InAttachment,
+		uint32_t InSizeX,
+		uint32_t InSizeY,
+		uint32_t InSizeZ,
+		uint32_t InNumMips,
+		uint32_t InNumSamples,
+		uint32_t InNumSamplesTileMem, /* For render targets on Android tiled GPUs, the number of samples to use internally */
+		uint32_t InArraySize,
+		EPixelFormat InFormat,
+		bool InCubemap,
+		bool InAllocatedStorage,
+		uint32_t InFlags,
+		uint8_t* InTextureRange
+	)
+		: BaseType(InSizeX, InSizeY, InSizeZ, InNumMips, InNumSamples, InNumSamplesTileMem, InArraySize, InFormat, InFlags)
+		, OpenGLTextureBase(
+			InOpenGLRHI,
+			InResource,
+			InTarget,
+			InNumMips,
+			InAttachment
+		)
+		, TextureRange(InTextureRange)
+		, BaseLevel(0)
+		, IsCubemap(InCubemap)
+	{
+		PixelBuffers.resize(GetNumMips() * (IsCubeMap ? 6 : 1) * GetEffectiveSizeZ(), 0);
+		SetAllocatedStorage(InAllocatedStorage);
+		ClientStorageBuffers.resize(GetNumMips() * (IsCubemap ? 6 : 1) * GetEffectiveSizeZ());
+	}
+};
+
+class OpenGLBaseTexture2D : public RHITexture2D
+{
+public:
+	OpenGLBaseTexture2D(uint32_t InSizeX, uint32_t InSizeY, uint32_t InSizeZ, uint32_t InNumMips, uint32_t InNumSamples, uint32_t InNumSamplesTileMem, uint32_t InArraySize, EPixelFormat InFormat, uint32_t InFlags)
+		: RHITexture2D(InSizeX, InSizeY, InNumMips, InNumSamples, InFormat, InFlags)
+		, mSampleCount(InNumSamples)
+		, mSampleCountTileMem(InNumSamplesTileMem)
+	{
+	}
+
+	uint32_t GetSizeZ() const { return 0; }
+	uint32_t GetNumSamples() const { return mSampleCount; }
+	uint32_t GetNumSamplesTileMem() const { return mSampleCountTileMem; }
+
+private:
+	uint32_t mSampleCount;
+	/* For render targets on Android tiled GPUs, the number of samples to use internally */
+	uint32_t mSampleCountTileMem;
+};
+
+class OpenGLBaseTexture2DArray : public RHITexture2DArray
+{
+
+};
+
+class OpenGLBaseTextureCube : public RHITextureCube
+{
+public:
+	OpenGLBaseTextureCube(uint32_t InSizeX, uint32_t InSizeY, uint32_t InSizeZ, uint32_t InNumMips, uint32_t InNumSamples, uint32_t InNumSamplesTileMem, uint32_t InArraySize, EPixelFormat InFormat, uint32_t InFlags)
+		: RHITextureCube(InSizeX, InNumMips, InFormat, InFlags)
+		, ArraySize(InArraySize)
+	{
+	}
+	uint32_t GetSizeX() const { return GetSize(); }
+	uint32_t GetSizeY() const { return GetSize(); } //-V524
+	uint32_t GetSizeZ() const { return ArraySize > 1 ? ArraySize : 0; }
+
+	uint32_t GetArraySize() const { return ArraySize; }
+private:
+	uint32_t ArraySize;
+};
+
+class OpenGLBaseTexture3D : public RHITexture3D
+{
+
+};
+
+typedef TOpenGLTexture<RHITexture> OpenGLTexture;
+typedef TOpenGLTexture<OpenGLBaseTexture2D> OpenGLTexture2D;
+typedef TOpenGLTexture<OpenGLBaseTexture2DArray> OpenGLTexture2DArray;
+typedef TOpenGLTexture<OpenGLBaseTextureCube> OpenGLTextureCube;
+typedef TOpenGLTexture<OpenGLBaseTexture3D> OpenGLTexture3D;
+
+class OpenGLTextureReference : public RHITextureReference
+{
+	// todo: fast access to rhi texture since multiple-inheritance is provided!
+};
+
 // Shaders
+struct OpenGLShaderResourceTable : BaseShaderResourceTable
+{
+	std::vector<int32_t> TextureMap;
+
+	bool operator==(const OpenGLShaderResourceTable& B) {
+		if (!BaseShaderResourceTable::operator==(B)) {
+			return false;
+		}
+
+		if (TextureMap.size() != B.TextureMap.size()) {
+			return false;
+		}
+		if (memcmp(TextureMap.data(), B.TextureMap.data(), sizeof(int32_t) * TextureMap.size()) != 0) {
+			return false;
+		}
+		return true;
+	}
+};
+
 struct OpenGLShaderBindings
 {
 	uint8_t NumSamplers = 0;
@@ -195,6 +400,7 @@ struct OpenGLShaderBindings
 
 	std::vector<PackedArrayInfoVec> PackedUniformBuffers;
 	PackedArrayInfoVec PackedGlobalArrays;
+	OpenGLShaderResourceTable ShaderResourceTable;
 
 	friend bool operator==(const OpenGLShaderBindings& A, const OpenGLShaderBindings& B)
 	{
@@ -294,8 +500,8 @@ private:
 
 		void MarkDirtyRange(uint32_t NewStartVector, uint32_t NewNumVectors) {
 			if (NumVectors > 0) {
-				uint32_t MinVector = std::min<uint32_t>(StartVector, NewStartVector);
-				uint32_t MaxVector = std::max<uint32_t>(StartVector + NumVectors, NewStartVector + NewNumVectors);
+				uint32_t MinVector = Math::Max<uint32_t>(StartVector, NewStartVector);
+				uint32_t MaxVector = Math::Max<uint32_t>(StartVector + NumVectors, NewStartVector + NewNumVectors);
 
 				StartVector = MinVector;
 				NumVectors = (MaxVector - MinVector) + 1;

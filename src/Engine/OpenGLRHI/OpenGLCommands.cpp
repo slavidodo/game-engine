@@ -304,6 +304,19 @@ void OpenGLDynamicRHI::CommitNonComputeShaderConstants(OpenGLContextState& Conte
 	}
 }
 
+void OpenGLDynamicRHI::SetupTexturesForDraw(OpenGLContextState& ContextState)
+{
+	SetupTexturesForDraw(ContextState, mPendingState.BoundShaderState, OpenGLSpecs::GetMaxCombinedTextureImageUnits());
+}
+
+void OpenGLDynamicRHI::SetupTexturesForDraw(OpenGLContextState& ContextState, OpenGLBoundShaderState* BoundShaderState, int32_t NumTextures)
+{
+	// via gl_ARB_bindless_texture, we pass texture by number instead
+	if (OpenGLSpecs::SupportsBindlessTextures()) {
+		return;
+	}
+}
+
 void OpenGLDynamicRHI::RHIDrawPrimitive(uint32_t BaseVertexIndex, uint32_t NumPrimitives, uint32_t NumInstances)
 {
 	RHI_THREAD_BEGIN_COMMAND();
@@ -316,7 +329,7 @@ void OpenGLDynamicRHI::RHIDrawPrimitive(uint32_t BaseVertexIndex, uint32_t NumPr
 	//UpdateDepthStencilStateInOpenGLContext(ContextState);
 	BindPendingShaderState(ContextState);
 	//CommitGraphicsResourceTables();
-	//SetupTexturesForDraw(ContextState);
+	SetupTexturesForDraw(ContextState);
 	CommitNonComputeShaderConstants(ContextState);
 	CachedBindElementArrayBuffer(ContextState, 0);
 
@@ -349,7 +362,7 @@ void OpenGLDynamicRHI::RHIDrawIndexedPrimitive(RHIIndexBuffer* IndexBufferRHI, u
 	glEnable(GL_DEPTH_TEST); // TODO: Depth Stencil
 	BindPendingShaderState(ContextState);
 	// TODO: Shader Resources
-	// TODO: Textures [should be cached already + shader resources should extract them from each shader stage]
+	SetupTexturesForDraw(ContextState);
 	CommitNonComputeShaderConstants(ContextState);
 	CachedBindElementArrayBuffer(ContextState, IndexBuffer->GetGLResource());
 	SetupVertexArrays(ContextState, BaseVertexIndex, mPendingState.Streams, NUM_OPENGL_VERTEX_STREAMS, NumVertices + StartIndex);

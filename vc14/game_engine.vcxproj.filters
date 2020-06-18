@@ -55,6 +55,9 @@
     <Filter Include="Engine\Atomic">
       <UniqueIdentifier>{c83c2889-a95e-42a8-abdd-2e226f8bd1b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Math">
+      <UniqueIdentifier>{2957c599-12ef-4b13-a89a-26a88ab798c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../src/main.cpp" />
@@ -220,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="..\src\Engine\Physics\PSceneManager.cpp">
       <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Rendering\RenderUtils.cpp">
+      <Filter>Engine\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -387,8 +393,11 @@
     <ClInclude Include="..\src\Engine\Physics\PSceneManager.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="..\src\Engine\Math\MathUtility.h">
+      <Filter>Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Rendering\RenderUtils.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

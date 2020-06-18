@@ -156,52 +156,178 @@ private:
 class RHITexture : public RHIResource
 {
 public:
+	RHITexture(uint32_t InNumMips, uint32_t InNumSamples, EPixelFormat InFormat, uint32_t InFlags)
+		: mNumMips(InNumMips)
+		, mNumSamples(InNumSamples)
+		, mFormat(InFormat)
+		, mFlags(InFlags)
+	{}
+
 	virtual RHITexture2D* GetTexture2D() { return nullptr; }
+	virtual RHITexture2DArray* GetTexture2DArray() { return nullptr; }
 	virtual RHITexture3D* GetTexture3D() { return nullptr; }
+	virtual RHITextureCube* GetTextureCube() { return nullptr; }
+	virtual RHITextureReference* GetTextureReference() { return nullptr; }
+
+	virtual glm::uvec3 GetSizeXYZ() const = 0;
+
+	virtual void* GetNativeResource() const {
+		// Override this in derived classes to expose access to the native texture resource
+		return nullptr;
+	}
+
+	virtual void* GetNativeShaderResourceView() const {
+		// Override this in derived classes to expose access to the native texture resource
+		return nullptr;
+	}
+
+	virtual void* GetTextureBaseRHI() {
+		// Override this in derived classes to expose access to the native texture resource
+		return nullptr;
+	}
+
+	/** @return The number of mip-maps in the texture. */
+	uint32_t GetNumMips() const { return mNumMips; }
+
+	/** @return The format of the pixels in the texture. */
+	EPixelFormat GetFormat() const { return mFormat; }
+
+	/** @return The flags used to create the texture. */
+	uint32_t GetFlags() const { return mFlags; }
+
+	/* @return the number of samples for multi-sampling. */
+	uint32_t GetNumSamples() const { return mNumSamples; }
+
+	/** @return Whether the texture is multi sampled. */
+	bool IsMultisampled() const { return mNumSamples > 1; }
 
 private:
+	uint32_t mNumMips;
+	uint32_t mNumSamples;
+	uint32_t mFlags;
+	EPixelFormat mFormat;
 };
 
 class RHITexture2D : public RHITexture
 {
 public:
-	RHITexture2D(uint32_t width, uint32_t height)
-		: RHITexture(), mWidth(width), mHeight(height) {}
+	RHITexture2D(uint32_t InSizeX, uint32_t InSizeY, uint32_t InNumMips, uint32_t InNumSamples, EPixelFormat InFormat, uint32_t InFlags)
+		: RHITexture(InNumMips, InNumSamples, InFormat, InFlags)
+		, mSizeX(InSizeX)
+		, mSizeY(InSizeY)
+	{}
 
-	RHITexture2D* GetTexture2D() override final { return this; }
+	virtual RHITexture2D* GetTexture2D() override { return this; }
 
-	inline glm::uvec2 GetSize() {
-		return glm::fvec2(mWidth, mHeight);
+	uint32_t GetSizeX() const { return mSizeX; }
+	uint32_t GetSizeY() const { return mSizeY; }
+
+	inline glm::uvec2 GetSizeXY() const {
+		return glm::uvec2(mSizeX, mSizeY);
 	}
 
-	inline uint32_t GetWidth() { return mWidth; }
-	inline uint32_t GetHeight() { return mHeight; }
+	glm::uvec3 GetSizeXYZ() const override{
+		return glm::uvec3(mSizeX, mSizeY, 1);
+	}
 
 private:
-	uint32_t mWidth;
-	uint32_t mHeight;
+	uint32_t mSizeX;
+	uint32_t mSizeY;
+};
+
+class RHITexture2DArray : public RHITexture2D
+{
+public:
+	RHITexture2DArray(uint32_t InSizeX, uint32_t InSizeY, uint32_t InSizeZ, uint32_t InNumMips, uint32_t InNumSamples, EPixelFormat InFormat, uint32_t InFlags)
+		: RHITexture2D(InSizeX, InSizeY, InNumMips, InNumSamples, InFormat, InFlags)
+		, mSizeZ(InSizeZ)
+	{}
+
+	virtual RHITexture2DArray* GetTexture2DArray() override { return this; }
+	virtual RHITexture2D* GetTexture2D() override { return nullptr; }
+
+	uint32_t GetSizeZ() { return mSizeZ; }
+
+	virtual glm::uvec3 GetSizeXYZ() const override {
+		return glm::uvec3(GetSizeX(), GetSizeY(), mSizeZ);
+	}
+
+private:
+	uint32_t mSizeZ;
 };
 
 class RHITexture3D : public RHITexture
 {
 public:
-	RHITexture3D(uint32_t width, uint32_t height, uint32_t depth)
-		: RHITexture(), mWidth(width), mHeight(height), mDepth(depth) {}
+	RHITexture3D(uint32_t InSizeX, uint32_t InSizeY, uint32_t InSizeZ, uint32_t InNumMips, uint32_t InNumSamples, EPixelFormat InFormat, uint32_t InFlags)
+		: RHITexture(InNumMips, InNumSamples, InFormat, InFlags)
+		, mSizeX(InSizeX)
+		, mSizeY(InSizeY)
+		, mSizeZ(InSizeZ)
+	{}
 
 	RHITexture3D* GetTexture3D() override final { return this; }
 
-	inline glm::uvec2 GetSize() {
-		return glm::fvec2(mWidth, mHeight);
+	inline uint32_t GetSizeX() { return mSizeX; }
+	inline uint32_t GetSizeY() { return mSizeY; }
+	inline uint32_t GetSizeZ() { return mSizeZ; }
+
+	virtual glm::uvec3 GetSizeXYZ() const override {
+		return glm::uvec3(mSizeX, mSizeY, mSizeZ);
 	}
 
-	inline uint32_t GetWidth() { return mWidth; }
-	inline uint32_t GetHeight() { return mHeight; }
-	inline uint32_t GetDepth() { return mDepth; }
+private:
+	uint32_t mSizeX;
+	uint32_t mSizeY;
+	uint32_t mSizeZ;
+};
+
+class RHITextureCube : public RHITexture
+{
+public:
+	RHITextureCube(uint32_t InSize, uint32_t InNumMips, EPixelFormat InFormat, uint32_t InFlags)
+		: RHITexture(InNumMips, 1, InFormat, InFlags)
+		, mSize(InSize)
+	{}
+
+	RHITextureCube* GetTextureCube() override final { return this; }
+
+	/** @return The width and height of each face of the cubemap. */
+	uint32_t GetSize() const { return mSize; }
+
+	virtual glm::uvec3 GetSizeXYZ() const final override {
+		return glm::uvec3(mSize, mSize, 1);
+	}
 
 private:
-	uint32_t mWidth;
-	uint32_t mHeight;
-	uint32_t mDepth;
+	uint32_t mSize;
+};
+
+class RHITextureReference : public RHITexture
+{
+public:
+	RHITextureReference()
+		: RHITexture(0, 0, PF_Unknown, 0)
+	{}
+
+	RHITextureReference* GetTextureReference() override { return this; }
+	RHITexture* GetReferencedTexture() { return mReferencedTexture.GetReference(); }
+
+	void SetReferencedTexture(RHITexture* InTexture)
+	{
+		mReferencedTexture = InTexture;
+	}
+
+	virtual glm::uvec3 GetSizeXYZ() const final override
+	{
+		if (mReferencedTexture) {
+			return mReferencedTexture->GetSizeXYZ();
+		}
+		return glm::uvec3(0, 0, 0);
+	}
+
+private:
+	TRefCountPtr<RHITexture> mReferencedTexture;
 };
 
 /// State Blocks

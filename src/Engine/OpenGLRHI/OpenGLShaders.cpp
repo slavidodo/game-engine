@@ -3,6 +3,8 @@
 
 #include "OpenGLDynamicRHI.h"
 
+#include "../Math/MathUtility.h"
+
 namespace {
 
 template<typename OpenGLShaderType>
@@ -273,7 +275,7 @@ void OpenGLShaderParameterCache::CommitPackedGlobals(const OpenGLLinkedProgram* 
 			const void* UniformData = PackedGlobalUniforms[ArrayIndex];
 
 			const uint32_t StartVector = PackedGlobalUniformDirty[ArrayIndex].StartVector;
-			int32_t NumDirtyVectors = std::min(PackedGlobalUniformDirty[ArrayIndex].NumVectors, NumVectors - StartVector);
+			int32_t NumDirtyVectors = Math::Min(PackedGlobalUniformDirty[ArrayIndex].NumVectors, NumVectors - StartVector);
 
 			UniformData = (uint8_t*)UniformData + StartVector * sizeof(float) * 4;
 			Location += StartVector;
