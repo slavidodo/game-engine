@@ -23,7 +23,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
+#ifndef ENGINE_PHYSICS_ACTOR_H
+#define ENGINE_PHYSICS_ACTOR_H
+
 #include "physx/PxPhysicsAPI.h"
 #include "PCollider.h"
 
@@ -35,7 +37,8 @@ typedef std::shared_ptr<PActor> PActor_ptr;
 typedef std::shared_ptr<PStaticActor> PStaticActor_ptr;
 typedef std::shared_ptr<PDynamicActor> PDynamicActor_ptr;
 
-class PActor {
+class PActor 
+{
 	friend class PCollider;
 
 public:
@@ -53,7 +56,9 @@ protected:
 
 	std::list<PCollider_ptr> mColliders;
 };
-class PStaticActor : public PActor {
+
+class PStaticActor : public PActor 
+{
 public:
 	PStaticActor(physx::PxRigidStatic* pStaticActor);
 
@@ -63,7 +68,9 @@ private:
 	// For specific physics operations
 	physx::PxRigidStatic* mStaticActor = nullptr;
 };
-class PDynamicActor : public PActor {
+
+class PDynamicActor : public PActor 
+{
 public:
 	PDynamicActor(physx::PxRigidDynamic* pDynamicActor);
 
@@ -75,7 +82,6 @@ public:
 	
 	void UpdateMassAndInertia(float density);
 
-	#pragma region Getter Functions
 	glm::vec3 GetPosition() const;
 	float GetMass() const;
 	glm::vec3  GetInertiaTensor() const;
@@ -83,9 +89,7 @@ public:
 	float GetLinearDamping() const;
 	glm::vec3  GetAngularVelocity() const;
 	float GetAngularDamping() const;
-	#pragma endregion
 
-	#pragma region Setter Functions
 	void SetPosition(glm::vec3 position);
 	void SetMass(float mass);
 	void SetInertiaTensor(glm::vec3 interiaTensor);
@@ -93,9 +97,7 @@ public:
 	void SetLinearDamping(float damping);
 	void SetAngularVelocity(glm::vec3 velocity);
 	void SetAngularDamping(float damping);
-	#pragma endregion
 
-	#pragma region Utility Functions
 	void SetGravity(bool value);
 	void SetKinematic(bool value);
 
@@ -109,9 +111,10 @@ public:
 	};
 	void LockMotion(MotionAxis axis);
 	void UnlockMotion(MotionAxis axis);
-	#pragma endregion
 
 private:
 	// For specific physics operations
 	physx::PxRigidDynamic* mDynamicActor = nullptr;
 };
+
+#endif

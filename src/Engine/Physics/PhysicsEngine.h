@@ -23,7 +23,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
+#ifndef ENGINE_PHYSICS_ENGINE_H
+#define ENGINE_PHYSICS_ENGINE_H
+
 #include "physx/PxPhysicsAPI.h"
 #include "PAllocator.h"
 #include "PScene.h"
@@ -37,7 +39,8 @@
 #define PVD_HOST "127.0.0.1"
 #define PVD_PORT 5425
 
-struct PhysicsSettings {
+struct PhysicsSettings 
+{
 	/// Physics Object options
 	bool bEnableHeightFields = false;
 	bool bEnableArticulations = false;
@@ -54,7 +57,8 @@ struct PhysicsSettings {
 	bool CreateFullPhysics() const;
 };
 
-class PhysicsEngine {
+class PhysicsEngine 
+{
 public:
 	static PhysicsEngine& GetInstance() {
 		static PhysicsEngine instance;
@@ -90,3 +94,5 @@ private:
 	bool InitCooking(const PhysicsSettings& options);
 	bool InitExtensions();
 };
+
+#endif

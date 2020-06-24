@@ -26,7 +26,6 @@
 #include "Pch.h"
 #include "PhysicsEngine.h"
 
-#pragma region Actor Functions
 PActor::~PActor() {
 	if (!mActor) return;
 	
@@ -52,9 +51,7 @@ void PActor::RemoveCollider(PCollider_ptr pCollider) {
 	mActor->detachShape(*pCollider->mShape);
 	mColliders.erase(it);
 }
-#pragma endregion
 
-#pragma region Static Actor Functions
 PStaticActor::PStaticActor(physx::PxRigidStatic* pStaticActor) : mStaticActor(pStaticActor) {
 	mActor = static_cast<physx::PxRigidActor*>(mStaticActor);
 }
@@ -74,9 +71,7 @@ PStaticActor_ptr PStaticActor::CreateActor(glm::vec3 position, glm::vec3 rotatio
 
 	return std::move(actor);
 }
-#pragma endregion
 
-#pragma region Dynamic Actor Functions
 PDynamicActor::PDynamicActor(physx::PxRigidDynamic* pDynamicActor) : mDynamicActor(pDynamicActor) {
 	mActor = static_cast<physx::PxRigidActor*>(mDynamicActor);
 }
@@ -114,7 +109,6 @@ void PDynamicActor::UpdateMassAndInertia(float density) {
 	}
 }
 
-#pragma region Getter Functions
 glm::vec3 PDynamicActor::GetPosition() const {
 	physx::PxTransform transform = mDynamicActor->getGlobalPose();
 	return glm::vec3(transform.p.x, transform.p.y, transform.p.z);
@@ -143,9 +137,7 @@ glm::vec3 PDynamicActor::GetAngularVelocity() const {
 float PDynamicActor::GetAngularDamping() const {
 	return mDynamicActor->getAngularDamping();
 }
-#pragma endregion
 
-#pragma region Setter Functions
 void PDynamicActor::SetPosition(glm::vec3 position) {
 	mDynamicActor->setGlobalPose(physx::PxTransform(position.x, position.y, position.z));
 }
@@ -170,9 +162,7 @@ void PDynamicActor::SetAngularVelocity(glm::vec3 velocity) {
 void PDynamicActor::SetAngularDamping(float damping) {
 	mDynamicActor->setAngularDamping(damping);
 }
-#pragma endregion
 
-#pragma region Utility Functions
 void PDynamicActor::SetGravity(bool value) {
 	mDynamicActor->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, !value);
 }
@@ -186,6 +176,4 @@ void PDynamicActor::LockMotion(MotionAxis axis) {
 void PDynamicActor::UnlockMotion(MotionAxis axis) {
 	mDynamicActor->setRigidDynamicLockFlag(static_cast<physx::PxRigidDynamicLockFlag::Enum>(axis), false);
 }
-#pragma endregion
-#pragma endregion
 

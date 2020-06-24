@@ -26,7 +26,6 @@
 #include "Pch.h"
 #include "PhysicsEngine.h"
 
-#pragma region Joint Functions
 PJoint::~PJoint() {
 	if (!mJoint) return;
 
@@ -43,9 +42,7 @@ void PJoint::SetThresholdForceAndTorque(float forceMagnitude, float torqueMagnit
 void PJoint::SetVisualization(bool value) {
 	mJoint->setConstraintFlag(physx::PxConstraintFlag::eVISUALIZATION, value);
 }
-#pragma endregion
 
-#pragma region Fixed Joint Functions
 PFixedJoint::PFixedJoint(physx::PxFixedJoint* pFixedJoint) : mFixedJoint(pFixedJoint) {
 	mJoint = static_cast<physx::PxJoint*>(mFixedJoint);
 }
@@ -61,8 +58,7 @@ PFixedJoint_ptr PFixedJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
 
 	return std::move(joint);
 }
-#pragma endregion
-#pragma region Distance Joint Functions
+
 PDistanceJoint::PDistanceJoint(physx::PxDistanceJoint* pDistanceJoint) : mDistanceJoint(pDistanceJoint) {
 	mJoint = static_cast<physx::PxJoint*>(mDistanceJoint);
 }
@@ -88,8 +84,7 @@ void PDistanceJoint::SetLimits(float minDistance, float maxDistance, float toler
 
 	mDistanceJoint->setTolerance(tolerance);
 }
-#pragma endregion
-#pragma region Spherical Joint Functions
+
 PSphericalJoint::PSphericalJoint(physx::PxSphericalJoint* pSphericalJoint) : mSphericalJoint(pSphericalJoint) {
 	mJoint = static_cast<physx::PxJoint*>(mSphericalJoint);
 }
@@ -110,8 +105,7 @@ void PSphericalJoint::SetLimits(float yMaxAngleRadians, float zMaxAngleRadians, 
 	mSphericalJoint->setLimitCone(physx::PxJointLimitCone(yMaxAngleRadians, zMaxAngleRadians, tolerance));
 	mSphericalJoint->setSphericalJointFlag(physx::PxSphericalJointFlag::eLIMIT_ENABLED, true);
 }
-#pragma endregion
-#pragma region Revolute Joint Functions
+
 PRevoluteJoint::PRevoluteJoint(physx::PxRevoluteJoint* pRevoluteJoint) : mRevoluteJoint(pRevoluteJoint) {
 	mJoint = static_cast<physx::PxJoint*>(mRevoluteJoint);
 }
@@ -132,8 +126,7 @@ void PRevoluteJoint::SetLimits(float minAngleRadian, float maxAngleRadian, float
 	mRevoluteJoint->setLimit(physx::PxJointAngularLimitPair(minAngleRadian, maxAngleRadian, tolerance));
 	mRevoluteJoint->setRevoluteJointFlag(physx::PxRevoluteJointFlag::eLIMIT_ENABLED, true);
 }
-#pragma endregion
-#pragma region Prismatic Joint Functions
+
 PPrismaticJoint::PPrismaticJoint(physx::PxPrismaticJoint* pPrismaticJoint) : mPrismaticJoint(pPrismaticJoint) {
 	mJoint = static_cast<physx::PxJoint*>(mPrismaticJoint);
 }
@@ -154,4 +147,3 @@ void PPrismaticJoint::SetLimits(float minDistance, float maxDistance, float tole
 	mPrismaticJoint->setLimit(physx::PxJointLinearLimitPair(PhysicsEngine::GetInstance().mPhysics->getTolerancesScale(), minDistance, maxDistance, tolerance));
 	mPrismaticJoint->setPrismaticJointFlag(physx::PxPrismaticJointFlag::eLIMIT_ENABLED, true);
 }
-#pragma endregion

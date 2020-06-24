@@ -26,7 +26,6 @@
 #include "Pch.h"
 #include "PhysicsEngine.h"
 
-#pragma region Scene Core Functions
 PScene::PScene(physx::PxScene* pScene) : mScene(pScene) {
 	for (int i = 0; i < 128; i++) mCollisionMatrix[0][i] = mCollisionMatrix[i][0] = { 
 		physx::PxPairFlag::eCONTACT_DEFAULT,
@@ -169,9 +168,7 @@ void PScene::SetJointVisualization(bool value) {
 		return;
 	}
 }
-#pragma endregion
 
-#pragma region Descriptor Functions
 PSceneDescriptor::PSceneDescriptor() {
 	mDescriptor = new (PAlignedAllocator::allocate<physx::PxSceneDesc>()) physx::PxSceneDesc(PhysicsEngine::GetInstance().mPhysics->getTolerancesScale());
 	setFilterShader(FilterShaderFunction);
@@ -206,8 +203,6 @@ void PSceneDescriptor::SetCpuDispatcher(physx::PxCpuDispatcher* cpuDispatcher) {
 /// <param name = 'pairFlags'> output param that determines how the actors will be handled physically </param>
 /// <param name = 'constBlock'> custom global scene info </param>
 /// <returns> determines when this function will be called again for this specific pair </returns>
-#pragma endregion
-
 physx::PxFilterFlags FilterShaderFunction(physx::PxFilterObjectAttributes attribs1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attribs2, physx::PxFilterData filterData2, physx::PxPairFlags& pairFlags, const void* constBlock, uint32_t constBlockSize) {
 	/// Filter trigger objects
 	if (physx::PxFilterObjectIsTrigger(attribs1) || physx::PxFilterObjectIsTrigger(attribs2)) {

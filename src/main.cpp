@@ -8,7 +8,7 @@
 #include "Engine/Scene/SceneManager.h"
 #include "Engine/Physics/PSceneManager.h"
 #include "Tests/ExampleScene.h"
-#include "Engine/Physics/PhysicsTest.h"
+#include "Tests/PhysicsTest.h"
 
 const std::string WINDOW_TITLE = "Game Engine";
 constexpr int32_t WINDOW_WIDTH = 1024;

@@ -23,7 +23,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
+#ifndef ENGINE_PHYSICS_MATERIAL_H
+#define ENGINE_PHYSICS_MATERIAL_H
+
 #include "physx/PxPhysicsAPI.h"
 #include "PAllocator.h"
 
@@ -33,12 +35,15 @@ class PMaterialSet;
 typedef std::shared_ptr<PMaterial> PMaterial_ptr;
 typedef std::shared_ptr<PMaterialSet> PMaterialSet_ptr;
 
-struct PMaterialProperties {
+struct PMaterialProperties 
+{
 public:
 	float staticFriction, dynamicFriction, restitution;
 	PMaterialProperties(float staticFriction = 0.5f, float dynamicFriction = 0.5f, float restitution = 0.5f);
 };
-class PMaterial {
+
+class PMaterial 
+{
 public:	
 	PMaterial(physx::PxMaterial* pMaterial);
 	~PMaterial();
@@ -51,7 +56,9 @@ public:
 private:	
 	physx::PxMaterial* mMaterial = nullptr;
 };
-class PMaterialSet {
+
+class PMaterialSet 
+{
 public:
 	PMaterialSet(physx::PxMaterial** pMaterialArray, uint16_t numOfMaterials);
 	~PMaterialSet();
@@ -67,3 +74,5 @@ private:
 };
 
 extern PMaterial_ptr gDefaultMaterial;
+
+#endif

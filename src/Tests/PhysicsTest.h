@@ -1,8 +1,10 @@
 
-#pragma once
+#ifndef ENGINE_PHYSICS_TEST_H
+#define ENGINE_PHYSICS_TEST_H
 #include "Engine/Physics/PhysicsEngine.h"
 
-class PhysicsTester {
+class PhysicsTester 
+{
 public:
     void EmptyGameLoop(float time);
 
@@ -23,3 +25,5 @@ public:
 
     void RunTests();
 };
+
+#endif

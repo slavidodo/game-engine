@@ -23,10 +23,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
+#ifndef ENGINE_PHYSICS_COLLISION_FILTER_CALLBACK_H
+#define ENGINE_PHYSICS_COLLISION_FILTER_CALLBACK_H
+
 #include "physx/PxPhysicsAPI.h"
 
-class CollisionFilterCallback : public physx::PxSimulationFilterCallback {
+class CollisionFilterCallback : public physx::PxSimulationFilterCallback 
+{
 	virtual	physx::PxFilterFlags pairFound(
 		physx::PxU32 pairID,
 		physx::PxFilterObjectAttributes attributes0, physx::PxFilterData filterData0, const physx::PxActor* a0, const physx::PxShape* s0,
@@ -43,3 +46,5 @@ class CollisionFilterCallback : public physx::PxSimulationFilterCallback {
 
 	virtual	bool statusChange(physx::PxU32& pairID, physx::PxPairFlags& pairFlags, physx::PxFilterFlags& filterFlags) override;
 };
+
+#endif

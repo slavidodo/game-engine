@@ -37,7 +37,7 @@ public:
 
 struct PrimitiveSceneElement
 {
-	Transformtr Transform;
+	Transform_ptr Transform;
 	StaticMesh_ptr Mesh;
 };
 

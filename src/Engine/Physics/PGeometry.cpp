@@ -26,7 +26,6 @@
 #include "Pch.h"
 #include "PhysicsEngine.h"
 
-#pragma region Geometry Functions
 PGeometry::~PGeometry() {
 	PAlignedAllocator::deallocate(mGeometry);
 }
@@ -34,9 +33,7 @@ PGeometry::~PGeometry() {
 physx::PxGeometry* PGeometry::GetSdkGeometry() const { 
 	return mGeometry;
 }
-#pragma endregion
 
-#pragma region Box Geometry Functions
 PBoxGeometry::PBoxGeometry(physx::PxBoxGeometry* pBoxGeometry) : mBoxGeometry(pBoxGeometry) {
 	mGeometry = static_cast<physx::PxGeometry*>(mBoxGeometry);
 }
@@ -47,9 +44,7 @@ PBoxGeometry_ptr PBoxGeometry::CreateGeometry(glm::vec3 halfDimensions) {
 	
 	return std::move(geometry);
 }
-#pragma endregion
 
-#pragma region Sphere Geometry Functions
 PSphereGeometry::PSphereGeometry(physx::PxSphereGeometry* pSphereGeometry) : mSphereGeometry(pSphereGeometry) {
 	mGeometry = static_cast<physx::PxGeometry*>(mSphereGeometry);
 }
@@ -61,9 +56,7 @@ PSphereGeometry_ptr PSphereGeometry::CreateGeometry(float radius) {
 
 	return std::move(geometry);
 }
-#pragma endregion
 
-#pragma region Plane Geometry Functions
 PPlaneGeometry::PPlaneGeometry(physx::PxPlaneGeometry* pPlaneGeometry) : mPlaneGeometry(pPlaneGeometry) {
 	mGeometry = static_cast<physx::PxGeometry*>(mPlaneGeometry);
 }
@@ -75,9 +68,7 @@ PPlaneGeometry_ptr PPlaneGeometry::CreateGeometry() {
 
 	return std::move(geometry);
 }
-#pragma endregion
 
-#pragma region Capsule Geometry Functions
 PCapsuleGeometry::PCapsuleGeometry(physx::PxCapsuleGeometry* pCapsuleGeometry) : mCapsuleGeometry(pCapsuleGeometry) {
 	mGeometry = static_cast<physx::PxGeometry*>(mCapsuleGeometry);
 }
@@ -89,9 +80,7 @@ PCapsuleGeometry_ptr PCapsuleGeometry::CreateGeometry(float radius, float halfHe
 
 	return std::move(geometry);
 }
-#pragma endregion
 
-#pragma region Convex Mesh Descriptor Functions
 PConvexMeshDescriptor::PConvexMeshDescriptor() {
 	mDescriptor = new (PAlignedAllocator::allocate<physx::PxConvexMeshDesc>()) physx::PxConvexMeshDesc();
 }
@@ -122,8 +111,7 @@ void PConvexMeshDescriptor::DisableMeshValidation() {
 void PConvexMeshDescriptor::EnableFastInertiaComputation() {
 	mDescriptor->flags |= physx::PxConvexFlag::eFAST_INERTIA_COMPUTATION;
 }
-#pragma endregion
-#pragma region Convex Mesh Geometry Functions
+
 PConvexMeshGeometry::PConvexMeshGeometry(physx::PxConvexMeshGeometry* pConvexMeshGeometry) : mConvexGeometry(pConvexMeshGeometry) {
 	mGeometry = static_cast<physx::PxGeometry*>(mConvexGeometry);
 }
@@ -146,9 +134,7 @@ PConvexMeshGeometry_ptr PConvexMeshGeometry::CreateGeometry(const PConvexMeshDes
 	
 	return std::move(geometry);
 }
-#pragma endregion
 
-#pragma region Triangle Mesh Descriptor Functions
 PTriangleMeshDescriptor::PTriangleMeshDescriptor() {
 	mDescriptor = new (PAlignedAllocator::allocate<physx::PxTriangleMeshDesc>()) physx::PxTriangleMeshDesc();
 }
@@ -179,8 +165,7 @@ void PTriangleMeshDescriptor::SetTrianglesStride(size_t stride) {
 void PTriangleMeshDescriptor::SetTrianglesData(uint32_t* data) {
 	mDescriptor->triangles.data = data;
 }
-#pragma endregion
-#pragma region Triangle Mesh Geometry Functions
+
 PTriangleMeshGeometry::PTriangleMeshGeometry(physx::PxTriangleMeshGeometry* pTriangleMeshGeometry) : mTriangleGeometry(pTriangleMeshGeometry) {
 	mGeometry = static_cast<physx::PxGeometry*>(mTriangleGeometry);
 }
@@ -200,9 +185,7 @@ PTriangleMeshGeometry_ptr PTriangleMeshGeometry::CreateGeometry(const PTriangleM
 
 	return std::move(geometry);
 }
-#pragma endregion
 
-#pragma region Height Field Structure Functions
 PHeightFieldStructure::PHeightFieldStructure(uint16_t numOfRows, uint16_t numOfCols, float heightScale, float rowScale, float colScale) : mNumOfRows(numOfRows), mNumOfCols(numOfCols), mHeightScale(heightScale), mRowScale(rowScale), mColScale(colScale) {
 	mVertices = new (PAlignedAllocator::allocate<physx::PxHeightFieldSample>(mNumOfRows * mNumOfCols)) physx::PxHeightFieldSample();
 }
@@ -246,8 +229,7 @@ void PHeightFieldStructure::SetVertexMaterials(uint16_t row, uint16_t col, uint1
 	mVertices[row * mNumOfCols + col].materialIndex0 = 0;
 	mVertices[row * mNumOfCols + col].materialIndex1 = 0;
 }
-#pragma endregion
-#pragma region Height Field Descriptor Functions
+
 PHeightFieldDescriptor::PHeightFieldDescriptor(const PHeightFieldStructure& structure) : mHeightScale(structure.GetHeightScale()), mRowScale(structure.GetRowScale()), mColScale(structure.GetColScale()) {
 	mDescriptor = new (PAlignedAllocator::allocate<physx::PxHeightFieldDesc>()) physx::PxHeightFieldDesc();
 	
@@ -269,8 +251,7 @@ PHeightFieldDescriptor::~PHeightFieldDescriptor() {
 const physx::PxHeightFieldDesc* PHeightFieldDescriptor::GetSdkDescriptor() const {
 	return mDescriptor;
 }
-#pragma endregion
-#pragma region Height Field Geometry Functions
+
 PHeightFieldGeometry::PHeightFieldGeometry(physx::PxHeightFieldGeometry* pHeightFieldGeometry) : mHeightFieldGeometry(pHeightFieldGeometry) {
 	mGeometry = static_cast<physx::PxGeometry*>(mHeightFieldGeometry);
 }
@@ -291,5 +272,3 @@ PHeightFieldGeometry_ptr PHeightFieldGeometry::CreateGeometry(const PHeightField
 
 	return std::move(geometry);
 }
-#pragma endregion
-

@@ -26,7 +26,6 @@
 #include "Pch.h"
 #include "PhysicsEngine.h"
 
-#pragma region Query Hit Functions
 PQueryHit::~PQueryHit() {
 	PAlignedAllocator::deallocate(mQueryHit);
 }
@@ -45,8 +44,7 @@ PCollider_ptr PQueryHit::GetCollider() const {
 		return std::move(spActor);
 	return nullptr;
 }
-#pragma endregion
-#pragma region Point Hit Functions
+
 PPointHit::~PPointHit() {
 	PAlignedAllocator::deallocate(mPointHit);
 }
@@ -88,23 +86,18 @@ glm::vec3 PPointHit::GetNormal() const {
 float PPointHit::GetDistance() const {
 	return mPointHit->distance;
 }
-#pragma endregion
 
-#pragma region Raycast Functions
 void PRaycastHit::CreateHit(physx::PxRaycastHit* pRaycastHit) {
 	mRaycastHit = new (PAlignedAllocator::allocate<physx::PxRaycastHit>()) physx::PxRaycastHit(*pRaycastHit);
 	mPointHit = static_cast<physx::PxLocationHit*>(mRaycastHit);
 }
-#pragma endregion
-#pragma region Sweep Functions
+
 void PSweepHit::CreateHit(physx::PxSweepHit* pSweepHit) {
 	mSweepHit = new (PAlignedAllocator::allocate<physx::PxSweepHit>()) physx::PxSweepHit(*pSweepHit);
 	mPointHit = static_cast<physx::PxLocationHit*>(mSweepHit);
 }
-#pragma endregion
-#pragma region Overlap Functions
+
 void POverlapHit::CreateHit(physx::PxOverlapHit* pOverlapHit) {
 	mOverlapHit = new (PAlignedAllocator::allocate<physx::PxOverlapHit>()) physx::PxOverlapHit(*pOverlapHit);
 	mQueryHit = static_cast<physx::PxQueryHit*>(mOverlapHit);
 }
-#pragma endregion

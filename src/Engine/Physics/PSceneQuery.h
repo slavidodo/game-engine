@@ -23,7 +23,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
+#ifndef ENGINE_PHYSICS_SCENE_QUERY_H
+#define ENGINE_PHYSICS_SCENE_QUERY_H
+
 #include "physx/PxPhysicsAPI.h"
 #include "PActor.h"
 
@@ -35,7 +37,8 @@ typedef std::shared_ptr<PRaycastHit> PRaycastHit_ptr;
 typedef std::shared_ptr<PSweepHit> PSweepHit_ptr;
 typedef std::shared_ptr<POverlapHit> POverlapHit_ptr;
 
-class PQueryHit {
+class PQueryHit 
+{
 public:
 	~PQueryHit();
 
@@ -45,7 +48,9 @@ public:
 protected:
 	physx::PxQueryHit* mQueryHit = nullptr;
 };
-class PPointHit {
+
+class PPointHit
+{
 public:
 	~PPointHit();
 
@@ -60,24 +65,31 @@ protected:
 	physx::PxLocationHit* mPointHit = nullptr;
 };
 
-class PRaycastHit : public PPointHit {
+class PRaycastHit : public PPointHit 
+{
 public:
 	void CreateHit(physx::PxRaycastHit* pRaycastHit);
 
 private:
 	physx::PxRaycastHit* mRaycastHit = nullptr;
 };
-class PSweepHit : public PPointHit {
+
+class PSweepHit : public PPointHit 
+{
 public:
 	void CreateHit(physx::PxSweepHit* pSweepHit);
 
 private:
 	physx::PxSweepHit* mSweepHit = nullptr;
 };
-class POverlapHit : public PQueryHit {
+
+class POverlapHit : public PQueryHit 
+{
 public:
 	void CreateHit(physx::PxOverlapHit* pOverlapHit);
 
 private:
 	physx::PxOverlapHit* mOverlapHit = nullptr;
 };
+
+#endif

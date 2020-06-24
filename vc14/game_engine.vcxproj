@@ -207,7 +207,6 @@
     <ClCompile Include="..\src\Engine\Physics\PScene.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PSceneManager.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PSceneQuery.cpp" />
-    <ClCompile Include="..\src\Engine\Physics\PhysicsTest.cpp" />
     <ClCompile Include="..\src\Engine\Platform\CoreApplication.cpp" />
     <ClCompile Include="..\src\Engine\Platform\Window.cpp" />
     <ClCompile Include="..\src\Engine\RHI\RHICommandList.cpp" />
@@ -225,6 +224,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\src\Tests\ExampleScene.cpp" />
+    <ClCompile Include="..\src\Tests\PhysicsTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Definitions.h" />
@@ -262,7 +262,6 @@
     <ClInclude Include="..\src\Engine\Physics\PEventCallback.h" />
     <ClInclude Include="..\src\Engine\Physics\PGeometry.h" />
     <ClInclude Include="..\src\Engine\Physics\PhysicsEngine.h" />
-    <ClInclude Include="..\src\Engine\Physics\PhysicsTest.h" />
     <ClInclude Include="..\src\Engine\Physics\PJoint.h" />
     <ClInclude Include="..\src\Engine\Physics\PMaterial.h" />
     <ClInclude Include="..\src\Engine\Physics\PScene.h" />
@@ -283,6 +282,7 @@
     <ClInclude Include="..\src\Engine\Utils.h" />
     <ClInclude Include="..\src\Pch.h" />
     <ClInclude Include="..\src\Tests\ExampleScene.h" />
+    <ClInclude Include="..\src\Tests\PhysicsTest.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -23,7 +23,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
+#ifndef ENGINE_PHYSICS_GEOMETRY_H
+#define ENGINE_PHYSICS_GEOMETRY_H
+
 #include "physx/PxPhysicsAPI.h"
 
 class PGeometry;
@@ -44,7 +46,8 @@ typedef std::shared_ptr<PConvexMeshGeometry> PConvexMeshGeometry_ptr;
 typedef std::shared_ptr<PTriangleMeshGeometry> PTriangleMeshGeometry_ptr;
 typedef std::shared_ptr<PHeightFieldGeometry> PHeightFieldGeometry_ptr;
 
-class PGeometry {
+class PGeometry 
+{
 public:
 	~PGeometry();
 	physx::PxGeometry* GetSdkGeometry() const;
@@ -53,8 +56,8 @@ protected:
 	physx::PxGeometry* mGeometry = nullptr;
 };
 
-#pragma region Simple Primitives
-class PBoxGeometry : public PGeometry {
+class PBoxGeometry : public PGeometry 
+{
 public:
 	PBoxGeometry(physx::PxBoxGeometry* pGeometry);
 	static PBoxGeometry_ptr CreateGeometry(glm::vec3 halfDimensions = glm::vec3(1.0f));
@@ -63,7 +66,9 @@ private:
 	// For specific operations
 	physx::PxBoxGeometry* mBoxGeometry = nullptr;
 };
-class PSphereGeometry : public PGeometry {
+
+class PSphereGeometry : public PGeometry 
+{
 public:
 	PSphereGeometry(physx::PxSphereGeometry* pGeometry);
 	static PSphereGeometry_ptr CreateGeometry(float radius = 1.0f);
@@ -72,7 +77,9 @@ private:
 	// For specific operations
 	physx::PxSphereGeometry* mSphereGeometry = nullptr;
 };
-class PPlaneGeometry : public PGeometry {
+
+class PPlaneGeometry : public PGeometry 
+{
 public:
 	PPlaneGeometry(physx::PxPlaneGeometry* pGeometry);
 	static PPlaneGeometry_ptr CreateGeometry();
@@ -81,7 +88,9 @@ private:
 	// For specific operations
 	physx::PxPlaneGeometry* mPlaneGeometry = nullptr;
 };
-class PCapsuleGeometry : public PGeometry {
+
+class PCapsuleGeometry : public PGeometry 
+{
 public:
 	PCapsuleGeometry(physx::PxCapsuleGeometry* pGeometry);
 	static PCapsuleGeometry_ptr CreateGeometry(float radius = 1.0f, float halfHeight = 2.0f);
@@ -90,10 +99,9 @@ private:
 	// For specific operations
 	physx::PxCapsuleGeometry* mCapsuleGeometry = nullptr;
 };
-#pragma endregion
 
-#pragma region Complex Meshes
-struct PConvexMeshDescriptor {
+struct PConvexMeshDescriptor 
+{
 public:
 	PConvexMeshDescriptor();
 	~PConvexMeshDescriptor();
@@ -118,7 +126,9 @@ public:
 private:
 	physx::PxConvexMeshDesc* mDescriptor = nullptr;
 };
-class PConvexMeshGeometry : public PGeometry {
+
+class PConvexMeshGeometry : public PGeometry 
+{
 public:
 	PConvexMeshGeometry(physx::PxConvexMeshGeometry* pConvexMeshGeometry);
 	static PConvexMeshGeometry_ptr CreateGeometry(const PConvexMeshDescriptor& descriptor);
@@ -127,7 +137,8 @@ private:
 	physx::PxConvexMeshGeometry* mConvexGeometry = nullptr;
 };
 
-struct PTriangleMeshDescriptor {
+struct PTriangleMeshDescriptor 
+{
 public:
 	PTriangleMeshDescriptor();
 	~PTriangleMeshDescriptor();
@@ -152,7 +163,9 @@ public:
 private:
 	physx::PxTriangleMeshDesc* mDescriptor = nullptr;
 };
-class PTriangleMeshGeometry : public PGeometry {
+
+class PTriangleMeshGeometry : public PGeometry 
+{
 public:
 	PTriangleMeshGeometry(physx::PxTriangleMeshGeometry* pTriangleMeshGeometry);
 	static PTriangleMeshGeometry_ptr CreateGeometry(const PTriangleMeshDescriptor& descriptor);
@@ -161,7 +174,8 @@ private:
 	physx::PxTriangleMeshGeometry* mTriangleGeometry = nullptr;
 };
 
-struct PHeightFieldStructure {
+struct PHeightFieldStructure 
+{
 	PHeightFieldStructure(uint16_t numOfRows, uint16_t numOfCols, float heightScale = 1.0f, float rowScale = 1.0f, float colScale = 1.0f);
 	~PHeightFieldStructure();
 
@@ -183,7 +197,9 @@ private:
 
 	bool isValidIndex(uint16_t row, uint16_t col) const;
 };
-struct PHeightFieldDescriptor {
+
+struct PHeightFieldDescriptor 
+{
 public:
 	PHeightFieldDescriptor(const PHeightFieldStructure& structure);
 	~PHeightFieldDescriptor();
@@ -194,7 +210,9 @@ public:
 private:
 	physx::PxHeightFieldDesc* mDescriptor = nullptr;
 };
-class PHeightFieldGeometry : public PGeometry {
+
+class PHeightFieldGeometry : public PGeometry 
+{
 public:
 	PHeightFieldGeometry(physx::PxHeightFieldGeometry* pHeightFieldGeometry);
 	static PHeightFieldGeometry_ptr CreateGeometry(const PHeightFieldDescriptor& descriptor);
@@ -202,4 +220,5 @@ public:
 private:
 	physx::PxHeightFieldGeometry* mHeightFieldGeometry = nullptr;
 };
-#pragma endregion
+
+#endif

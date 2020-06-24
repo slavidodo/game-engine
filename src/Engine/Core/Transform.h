@@ -3,7 +3,7 @@
 #define ENGINE_CORE_TRANSFORM_H
 
 class Transform;
-typedef std::shared_ptr<Transform> Transformtr;
+typedef std::shared_ptr<Transform> Transform_ptr;
 
 class Transform
 {
