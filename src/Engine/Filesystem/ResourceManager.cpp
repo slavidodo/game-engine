@@ -70,7 +70,6 @@ Model_ptr ResourceManager::LoadModel(std::string filename)
 		| aiProcess_JoinIdenticalVertices // get rid of duplicated vertices
 		| aiProcess_SortByPType // split primitives
 		| aiProcess_OptimizeGraph; // get rid of unnecessary nodes
-
 	const aiScene* scene = mAssimpImporter->ReadFile(filename, flags);
 	if (scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		std::cout << "ERROR::ASSIMP:: " << mAssimpImporter->GetErrorString() << std::endl;

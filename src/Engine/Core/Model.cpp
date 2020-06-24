@@ -63,7 +63,6 @@ void Model::ProcessHierarchy(const aiNode* pNode, const aiScene* pScene, const a
 	}
 
 	//std::cout << (pNode->mName.C_Str()) << std::endl;
-
 	for (size_t childIndex = 0; childIndex < pNode->mNumChildren; childIndex++) {
 		const aiNode* pChildNode = pNode->mChildren[childIndex];
 		//std::cout << (pChildNode->mName.C_Str()) << " ";
@@ -109,8 +108,7 @@ std::vector<StaticMeshVertex> Model::GetMeshVertices(const aiMesh* pMesh)
 			aiColor4D color = pMesh->mColors[0][i];
 			vertex.color = glm::fvec3(color.r, color.g, color.b); // add color.a by making it vec4 in staticmeshvertix
 		}
-		else
-		{
+		else {
 			vertex.color = glm::fvec3(1, 0, 1);
 		}
 
@@ -135,8 +133,7 @@ std::vector<int32_t> Model::GetMeshIndices(const aiMesh* mesh)
 void Model::RenderSceneElements(RHICommandList& RHICmdList)
 {
 
-	for (const StaticMesh_ptr& Mesh : mStaticMeshList)
-	{
+	for (const StaticMesh_ptr& Mesh : mStaticMeshList) {
 		RHICmdList.SetStreamSource(0, Mesh->VertexBuffer, 0);
 
 		RHICmdList.DrawIndexedPrimitive(Mesh->IndexBuffer, 0, 0, Mesh->NumVertices, 0, Mesh->NumTriangles, 1);
