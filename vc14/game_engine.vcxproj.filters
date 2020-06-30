@@ -112,9 +112,6 @@
     <ClCompile Include="..\src\Engine\Scene\SceneManager.cpp">
       <Filter>Engine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Engine\Scene\Scene.cpp">
-      <Filter>Engine\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Engine\Utils.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -206,20 +203,23 @@
     <ClCompile Include="..\src\Engine\Physics\PMaterial.cpp">
       <Filter>Engine\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Engine\Physics\PScene.cpp">
-      <Filter>Engine\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Engine\Physics\PSceneQuery.cpp">
       <Filter>Engine\Physics</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Engine\Physics\PAllocator.cpp">
       <Filter>Engine\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Engine\Physics\PSceneManager.cpp">
-      <Filter>Engine\Physics</Filter>
+    <ClCompile Include="..\src\Engine\Scene\RScene.cpp">
+      <Filter>Engine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Tests\PhysicsTest.cpp">
-      <Filter>Tests</Filter>
+    <ClCompile Include="..\src\Engine\Scene\PScene.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\RActor.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\Actor.cpp">
+      <Filter>Engine\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -275,9 +275,6 @@
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Engine\Scene\SceneManager.h">
-      <Filter>Engine\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Engine\Scene\Scene.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Engine\Utils.h">
@@ -375,17 +372,26 @@
     <ClInclude Include="..\src\Engine\Physics\PMaterial.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Engine\Physics\PScene.h">
-      <Filter>Engine\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Engine\Physics\PSceneQuery.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Engine\Physics\PSceneManager.h">
-      <Filter>Engine\Physics</Filter>
+    <ClInclude Include="..\src\Engine\Scene\RScene.h">
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Tests\PhysicsTest.h">
-      <Filter>Tests</Filter>
+    <ClInclude Include="..\src\Engine\Scene\PScene.h">
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Engine\Scene\RActor.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Scene\Actor.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Scene\Scene.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

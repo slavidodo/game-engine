@@ -1,26 +1,27 @@
-
-#ifndef ENGINE_SCENE_SCENE_H
-#define ENGINE_SCENE_SCENE_H
-
-#include "SceneNode.h"
-#include "../Core/Camera.h"
-#include "../RHI/RHICommandList.h"
+#pragma once
+#include "PScene.h"
+#include "RScene.h"
+#include "Actor.h"
 
 class Scene;
 typedef std::shared_ptr<Scene> Scene_ptr;
 
-class Scene
-{
+class Scene {
 public:
-	virtual void Render(RHICommandList& RHICmdList);
+	Scene(RScene_ptr renderScene, PScene_ptr physicsScene) : mRenderScene(renderScene), mPhysicsScene(physicsScene) {}
 
-	Camera_ptr GetMainCamera() const {
-		return mMainaCmera;
+	std::vector<Actor_ptr> GetActors() const {
+		return mActors;
+	}
+	void AddActor(Actor_ptr actor) {
+		mActors.push_back(actor);
+	}
+	void RemoveActor(Actor_ptr actor) {
+		auto it = std::find(mActors.begin(), mActors.end(), actor);
+		if (it != mActors.end()) mActors.erase(it);
 	}
 
-protected:
-	Camera_ptr mMainaCmera;
-	SceneNode_ptr mRootNode;
+	PScene_ptr mPhysicsScene;
+	RScene_ptr mRenderScene;
+	std::vector<Actor_ptr> mActors;
 };
-
-#endif // ENGINE_SCENE_SCENE_H

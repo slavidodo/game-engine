@@ -27,8 +27,8 @@
 #define ENGINE_PHYSICS_SCENE_H
 
 #include "physx/PxPhysicsAPI.h"
-#include "PActor.h"
-#include "PSceneQuery.h"
+#include "../Scene/PScene.h"
+#include "../Physics/PSceneQuery.h"
 
 class PScene;
 typedef std::shared_ptr<PScene> PScene_ptr;
@@ -61,9 +61,11 @@ public:
 
 	void AddActor(PActor_ptr pActor);
 	void RemoveActor(PActor_ptr pActor);
+	std::list<PActor_ptr> GetActors() const {
+		return mActors;
+	}
 
 	void Update(float dt);
-	void ApplyUpdateResults(bool bSleep);
 
 	void ShiftOrigin(glm::vec3 translation);
 
@@ -91,6 +93,8 @@ public:
 
 	// Joint visualization doesn't work for some reason?
 	void SetJointVisualization(bool value);
+
+	std::function<void()> mUpdateFunction;
 
 private:
 	physx::PxScene* mScene = nullptr;

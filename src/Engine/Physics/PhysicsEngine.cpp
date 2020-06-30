@@ -25,6 +25,7 @@
 
 #include "Pch.h"
 #include "PhysicsEngine.h"
+#include "../Scene/SceneManager.h"
 
 bool PhysicsEngine::Init(const PhysicsSettings& settings) {
 	if (mInitialized)
@@ -53,7 +54,7 @@ bool PhysicsEngine::Init(const PhysicsSettings& settings) {
 }
 
 void PhysicsEngine::Terminate() {
-	PSceneManager::GetInstance().SetCurrentScene(nullptr);
+	SceneManager::GetInstance().SetCurrentPhysicsScene(nullptr);
 
 	gDefaultMaterial.reset();
 
@@ -146,6 +147,24 @@ bool PhysicsEngine::InitExtensions() {
 	}	
 	return true;
 }
+
+physx::PxTransform PhysicsEngine::ToPhysxTransform(Transform_ptr transform) {
+	glm::fvec3 position = transform->GetTranslation();
+	glm::fquat rotation = transform->GetRotation();
+	return physx::PxTransform(
+		physx::PxVec3(position.x, position.y, position.z), 
+		physx::PxQuat(rotation.x, rotation.y, rotation.z, rotation.w)
+	);
+}
+Transform_ptr PhysicsEngine::ToEngineTransform(physx::PxTransform transform) {
+	physx::PxVec3 position = transform.p;
+	physx::PxQuat rotation = transform.q;
+	return std::move(std::make_shared<Transform>(
+		glm::fvec3(position.x, position.y, position.z),
+		glm::fquat(rotation.x, rotation.y, rotation.z, rotation.w)
+	));
+}
+
 
 bool PhysicsSettings::CreateFullPhysics() const {
 	return bEnableArticulations && bEnableArticulationsReducedCoordinates && bEnableHeightFields;

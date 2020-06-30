@@ -7,7 +7,6 @@
 #include "../Filesystem/ResourceManager.h"
 #include "../Physics/PhysicsEngine.h"
 #include "../Scene/SceneManager.h"
-#include "../Physics/PSceneManager.h"
 #include "../RHI/RHICommandList.h"
 #include "../Globals.h"
 
@@ -67,6 +66,7 @@ void CoreApplication::RunMainLoop()
 	while (!glfwWindowShouldClose(gWindow.GetGlfwWindow())) {
 		RHICmdList.BeginFrame();
 		{
+			SceneManager::GetInstance().UpdatePhysics();
 			SceneManager::GetInstance().Render(RHICmdList);
 		}
 		RHICmdList.EndFrame();

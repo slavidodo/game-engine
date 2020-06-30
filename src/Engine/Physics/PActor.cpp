@@ -52,15 +52,27 @@ void PActor::RemoveCollider(PCollider_ptr pCollider) {
 	mColliders.erase(it);
 }
 
+glm::fvec3 PActor::GetPosition() const {
+	physx::PxTransform transform = mActor->getGlobalPose();
+	return glm::fvec3(transform.p.x, transform.p.y, transform.p.z);
+}
+glm::fquat PActor::GetRotation() const {
+	physx::PxTransform transform = mActor->getGlobalPose();
+	return glm::fquat(transform.q.x, transform.q.y, transform.q.z, transform.q.w);
+}
+Transform_ptr PActor::GetTransform() const {
+	physx::PxTransform transform = mActor->getGlobalPose();
+	return std::move(PhysicsEngine::GetInstance().ToEngineTransform(transform));
+}
+
+
 PStaticActor::PStaticActor(physx::PxRigidStatic* pStaticActor) : mStaticActor(pStaticActor) {
 	mActor = static_cast<physx::PxRigidActor*>(mStaticActor);
 }
 
-PStaticActor_ptr PStaticActor::CreateActor(glm::vec3 position, glm::vec3 rotation) {
-	physx::PxVec3 pos = physx::PxVec3(position.x, position.y, position.z);
-	glm::quat _rot = glm::quat(rotation);
-	physx::PxQuat rot = physx::PxQuat(_rot.x, _rot.y, _rot.z, _rot.w);
-	physx::PxRigidStatic* pStaticActor = PhysicsEngine::GetInstance().mPhysics->createRigidStatic(physx::PxTransform(pos, rot));
+PStaticActor_ptr PStaticActor::CreateActor(Transform_ptr transform) {
+	//if (!transform) transform = std::make_shared<Transform>();
+	physx::PxRigidStatic* pStaticActor = PhysicsEngine::GetInstance().mPhysics->createRigidStatic(PhysicsEngine::GetInstance().ToPhysxTransform(transform));
 	if (!pStaticActor) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating static actor", __FILE__, __LINE__);
 		return nullptr;
@@ -72,15 +84,16 @@ PStaticActor_ptr PStaticActor::CreateActor(glm::vec3 position, glm::vec3 rotatio
 	return std::move(actor);
 }
 
+
+
+
 PDynamicActor::PDynamicActor(physx::PxRigidDynamic* pDynamicActor) : mDynamicActor(pDynamicActor) {
 	mActor = static_cast<physx::PxRigidActor*>(mDynamicActor);
 }
 
-PDynamicActor_ptr PDynamicActor::CreateActor(glm::vec3 position, glm::vec3 rotation) {
-	physx::PxVec3 pos = physx::PxVec3(position.x, position.y, position.z);
-	glm::quat _rot = glm::quat(rotation);
-	physx::PxQuat rot = physx::PxQuat(_rot.x, _rot.y, _rot.z, _rot.w);
-	physx::PxRigidDynamic* pDynamicActor = PhysicsEngine::GetInstance().mPhysics->createRigidDynamic(physx::PxTransform(pos, rot));
+PDynamicActor_ptr PDynamicActor::CreateActor(Transform_ptr transform) {
+	if (!transform) transform = std::make_shared<Transform>();
+	physx::PxRigidDynamic* pDynamicActor = PhysicsEngine::GetInstance().mPhysics->createRigidDynamic(PhysicsEngine::GetInstance().ToPhysxTransform(transform));
 	if (!pDynamicActor) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating dynamic actor", __FILE__, __LINE__);
 		return nullptr;
@@ -107,11 +120,6 @@ void PDynamicActor::UpdateMassAndInertia(float density) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Failed to Update mass & intertia of dynamic actor", __FILE__, __LINE__);
 		return;
 	}
-}
-
-glm::vec3 PDynamicActor::GetPosition() const {
-	physx::PxTransform transform = mDynamicActor->getGlobalPose();
-	return glm::vec3(transform.p.x, transform.p.y, transform.p.z);
 }
 
 float PDynamicActor::GetMass() const {
@@ -176,4 +184,3 @@ void PDynamicActor::LockMotion(MotionAxis axis) {
 void PDynamicActor::UnlockMotion(MotionAxis axis) {
 	mDynamicActor->setRigidDynamicLockFlag(static_cast<physx::PxRigidDynamicLockFlag::Enum>(axis), false);
 }
-

@@ -2,12 +2,12 @@
 #ifndef ENGINE_SCENE_SCENE_RENDERER_H
 #define ENGINE_SCENE_SCENE_RENDERER_H
 
-#include "Scene.h"
+#include "RScene.h"
 
 class SceneRenderer
 {
 public:
-	Scene_ptr GetScene() {
+	RScene_ptr GetScene() {
 		return mScene;
 	}
 	
@@ -15,7 +15,7 @@ public:
 	void Render(RHICommandList& RHICmdList);
 
 private:
-	Scene_ptr mScene;
+	RScene_ptr mScene;
 };
 
 #endif // ENGINE_SCENE_SCENE_RENDERER_H

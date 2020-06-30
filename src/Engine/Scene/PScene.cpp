@@ -24,7 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Pch.h"
-#include "PhysicsEngine.h"
+#include "../Physics/PhysicsEngine.h"
 
 PScene::PScene(physx::PxScene* pScene) : mScene(pScene) {
 	for (int i = 0; i < 128; i++) mCollisionMatrix[0][i] = mCollisionMatrix[i][0] = { 
@@ -70,9 +70,7 @@ void PScene::RemoveActor(PActor_ptr actor) {
 
 void PScene::Update(float dt) {
 	mScene->simulate(dt);
-}
-void PScene::ApplyUpdateResults(bool bSleep) {
-	mScene->fetchResults(bSleep);
+	mScene->fetchResults(true);
 }
 
 void PScene::ShiftOrigin(glm::vec3 translation) {

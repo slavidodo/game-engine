@@ -6,7 +6,6 @@
 #include "Engine/Filesystem/ResourceManager.h"
 #include "Engine/Physics/PhysicsEngine.h"
 #include "Engine/Scene/SceneManager.h"
-#include "Engine/Physics/PSceneManager.h"
 #include "Tests/ExampleScene.h"
 #include "Tests/PhysicsTest.h"
 
@@ -37,8 +36,8 @@ using Context = RENDERING_BACKEND;
 int main(int argc, char* argv[])
 {
 	/* Physics tests (run without errors)*/
-	PhysicsTester pt;
-	pt.RunTests();
+	//PhysicsTester pt;
+	//pt.RunTests();
 
 	std::vector<std::string> args(argv, argv + argc);
 
@@ -93,7 +92,14 @@ int main(int argc, char* argv[])
 	// and agreed-on structure of how a scene could be stored
 	// in order to make this work, the engine may ship with extra
 	// objects, ...
-	SceneManager::GetInstance().SetCurrentScene(Scene_ptr(new ExampleScene));
+	PSceneDescriptor desc;
+	desc.SetGravityForce(glm::fvec3(0.0f, -1.0f, 0.0f));
+
+
+	std::shared_ptr<ExampleScene> exampleScene = std::make_shared<ExampleScene>(std::make_shared<RScene>(), PScene::CreateScene(desc));
+	SceneManager::GetInstance().SetCurrentScene(exampleScene);
+	exampleScene->Init();
+	exampleScene = nullptr;
 
 
 	// run application's main loop

@@ -1,13 +1,13 @@
 
 #include "Pch.h"
 #include "Tests/PhysicsTest.h"
+#include "../Engine/Scene/SceneManager.h"
 
 
 void PhysicsTester::EmptyGameLoop(float time) {
 	auto startTime = std::chrono::high_resolution_clock::now();
 	while (true) {
-		PSceneManager::GetInstance().Update(0.01f);
-		PSceneManager::GetInstance().ApplyUpdateResults(true);
+		SceneManager::GetInstance().UpdatePhysics();
 
 		auto crntTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTime = crntTime - startTime;
@@ -21,14 +21,14 @@ void PhysicsTester::Test0(float time) {
 	PBoxGeometry_ptr geometry = PBoxGeometry::CreateGeometry(glm::vec3(1.0f, 1.0f, 1.0f));
 	// A
 	{
-		PStaticActor_ptr actor = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+		PStaticActor_ptr actor = PStaticActor::CreateActor();
 		PCollider_ptr sharedCollider = PCollider::CreateCollider(geometry);
 		actor->AddCollider(sharedCollider);
 		actor->RemoveCollider(sharedCollider);
 	}
 	// B
 	{
-		PStaticActor_ptr actor = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+		PStaticActor_ptr actor = PStaticActor::CreateActor();
 		PCollider_ptr sharedCollider = PCollider::CreateCollider(geometry);
 		actor->AddCollider(sharedCollider);
 	}
@@ -36,7 +36,7 @@ void PhysicsTester::Test0(float time) {
 	{
 		PCollider_ptr sharedCollider = PCollider::CreateCollider(geometry);
 		{
-			PStaticActor_ptr actor = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+			PStaticActor_ptr actor = PStaticActor::CreateActor();
 			actor->AddCollider(sharedCollider);
 		}
 	}
@@ -44,16 +44,16 @@ void PhysicsTester::Test0(float time) {
 	{
 		PCollider_ptr sharedCollider = PCollider::CreateCollider(geometry);
 		{
-			PStaticActor_ptr actor = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+			PStaticActor_ptr actor = PStaticActor::CreateActor();
 			actor->AddCollider(sharedCollider);
 			actor->RemoveCollider(sharedCollider);
 		}
 	}
 	// E
 	{
-		PStaticActor_ptr actor1 = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+		PStaticActor_ptr actor1 = PStaticActor::CreateActor();
 		{
-			PStaticActor_ptr actor2 = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+			PStaticActor_ptr actor2 = PStaticActor::CreateActor();
 			PCollider_ptr sharedCollider = PCollider::CreateCollider(geometry);
 			actor1->AddCollider(sharedCollider);
 			actor2->AddCollider(sharedCollider);
@@ -62,39 +62,39 @@ void PhysicsTester::Test0(float time) {
 	}
 	// F 
 	{
-		PStaticActor_ptr actor1 = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
-		PStaticActor_ptr actor2 = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+		PStaticActor_ptr actor1 = PStaticActor::CreateActor();
+		PStaticActor_ptr actor2 = PStaticActor::CreateActor();
 		{
 			PCollider_ptr sharedCollider = PCollider::CreateCollider(geometry);
 			actor1->AddCollider(sharedCollider);
 			actor2->AddCollider(sharedCollider);
-			PSceneManager::GetInstance().AddActor(actor1);
-			PSceneManager::GetInstance().AddActor(actor2);
+			SceneManager::GetInstance().AddActor(actor1);
+			SceneManager::GetInstance().AddActor(actor2);
 			EmptyGameLoop(time);
 		}
 		EmptyGameLoop(time);
-		PSceneManager::GetInstance().RemoveActor(actor1);
-		PSceneManager::GetInstance().RemoveActor(actor2);
+		SceneManager::GetInstance().RemoveActor(actor1);
+		SceneManager::GetInstance().RemoveActor(actor2);
 	}
 }
 // Capsule
 void PhysicsTester::Test1(float time) {
-	PStaticActor_ptr actor = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+	PStaticActor_ptr actor = PStaticActor::CreateActor();
 
 	PCapsuleGeometry_ptr geometry = PCapsuleGeometry::CreateGeometry(1.0f, 2.0f);
 	PCollider_ptr collider = PCollider::CreateCollider(geometry);
 	collider->Rotate(90.0f * 3.14f / 180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	actor->AddCollider(collider);
-	PSceneManager::GetInstance().AddActor(actor);
+	SceneManager::GetInstance().AddActor(actor);
 
 	EmptyGameLoop(time);
 
-	PSceneManager::GetInstance().RemoveActor(actor);
+	SceneManager::GetInstance().RemoveActor(actor);
 }
  //Plane
 void PhysicsTester::Test2(float time) {
-	PStaticActor_ptr actor = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f)); // must be static
+	PStaticActor_ptr actor = PStaticActor::CreateActor(); // must be static
 
 	PPlaneGeometry_ptr geometry = PPlaneGeometry::CreateGeometry();
 
@@ -102,16 +102,16 @@ void PhysicsTester::Test2(float time) {
 	collider->Rotate(90.0f * 3.14f / 180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 	actor->AddCollider(collider);
 	
-	PSceneManager::GetInstance().AddActor(actor);
+	SceneManager::GetInstance().AddActor(actor);
 
 	EmptyGameLoop(time);
 	
-	PSceneManager::GetInstance().RemoveActor(actor);
+	SceneManager::GetInstance().RemoveActor(actor);
 	actor->RemoveCollider(std::move(collider)); // DON'T FORGET
 }// collider ref cnt = 0
 // Actor with multiple colliders
 void PhysicsTester::Test3(float time) {
-	PStaticActor_ptr actor = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+	PStaticActor_ptr actor = PStaticActor::CreateActor();
 
 	PSphereGeometry_ptr geometry1 = PSphereGeometry::CreateGeometry(1.0f);
 	PCollider_ptr collider1 = PCollider::CreateCollider(geometry1);
@@ -127,15 +127,15 @@ void PhysicsTester::Test3(float time) {
 	PCollider_ptr collider3 = PCollider::CreateCollider(geometry3);
 	actor->AddCollider(collider3);
 
-	PSceneManager::GetInstance().AddActor(actor);
+	SceneManager::GetInstance().AddActor(actor);
 
 	EmptyGameLoop(time);
 
-	PSceneManager::GetInstance().RemoveActor(actor);
+	SceneManager::GetInstance().RemoveActor(actor);
 }
 // Convex Mesh
 void PhysicsTester::Test4(float time) {
-	PDynamicActor_ptr actor = PDynamicActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+	PDynamicActor_ptr actor = PDynamicActor::CreateActor();
 	actor->SetGravity(false);
 
 	PConvexMeshDescriptor desc;
@@ -156,16 +156,16 @@ void PhysicsTester::Test4(float time) {
 	PCollider_ptr collider = PCollider::CreateCollider(geometry);
 	
 	actor->AddCollider(collider);
-	PSceneManager::GetInstance().AddActor(actor);
+	SceneManager::GetInstance().AddActor(actor);
 
 	EmptyGameLoop(time);
 
 	actor->RemoveCollider(std::move(collider));
-	PSceneManager::GetInstance().RemoveActor(actor);
+	SceneManager::GetInstance().RemoveActor(actor);
 }
 // Triangle Mesh
 void PhysicsTester::Test5(float time) {
-	PStaticActor_ptr actor = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f)); // must be static
+	PStaticActor_ptr actor = PStaticActor::CreateActor(); // must be static
 
 	PTriangleMeshDescriptor desc;
 	{
@@ -196,16 +196,16 @@ void PhysicsTester::Test5(float time) {
 	PCollider_ptr collider = PCollider::CreateCollider(geometry);
 
 	actor->AddCollider(collider);
-	PSceneManager::GetInstance().AddActor(actor);
+	SceneManager::GetInstance().AddActor(actor);
 
 	EmptyGameLoop(time);
 
 	actor->RemoveCollider(std::move(collider));
-	PSceneManager::GetInstance().RemoveActor(actor);
+	SceneManager::GetInstance().RemoveActor(actor);
 }
 // Height Field
 void PhysicsTester::Test6(float time) {
-	PStaticActor_ptr actor = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f)); // the actor must be static
+	PStaticActor_ptr actor = PStaticActor::CreateActor(); // the actor must be static
 
 	PHeightFieldStructure structure = PHeightFieldStructure(64, 64, 0.05f);
 	{
@@ -222,26 +222,28 @@ void PhysicsTester::Test6(float time) {
 	PCollider_ptr collider = PCollider::CreateCollider(geometry, materials);
 
 	actor->AddCollider(collider);
-	PSceneManager::GetInstance().AddActor(actor);
+	SceneManager::GetInstance().AddActor(actor);
 
 	EmptyGameLoop(time);
 
 	actor->RemoveCollider(std::move(collider));
-	PSceneManager::GetInstance().RemoveActor(actor);
+	SceneManager::GetInstance().RemoveActor(actor);
 }
 // Falling sphere on boxes
 void PhysicsTester::Test7(float time) {
-	PDynamicActor_ptr ballActor = PDynamicActor::CreateActor(glm::vec3(0.0f, 10.0f, 0.0f));
+	Transform_ptr ballTransform = std::make_shared<Transform>(glm::vec3(0.0f, 10.0f, 0.0f), glm::fvec3(0.0f));
+	PDynamicActor_ptr ballActor = PDynamicActor::CreateActor(ballTransform);
 	ballActor->SetGravity(true);
 	PSphereGeometry_ptr ballGeometry = PSphereGeometry::CreateGeometry(1.0f);
 	PMaterial_ptr ballMaterial = PMaterial::CreateMaterial(0.5f, 0.5f, 1.5f); // play with parameters
 	PCollider_ptr ballCollider = PCollider::CreateCollider(ballGeometry, ballMaterial);
 	ballActor->AddCollider(ballCollider);
-	PSceneManager::GetInstance().AddActor((ballActor));
+	SceneManager::GetInstance().AddActor((ballActor));
 
-
-	PStaticActor_ptr cubeActor1 = PStaticActor::CreateActor(glm::vec3(-1.1f, 0.0f, 0.0f));
-	PStaticActor_ptr cubeActor2 = PStaticActor::CreateActor(glm::vec3(4.0f, 0.0f, 0.0f));
+	Transform_ptr cubeTransform1 = std::make_shared<Transform>(glm::vec3(-1.1f, 0.0f, 0.0f), glm::fvec3(0.0f));
+	PStaticActor_ptr cubeActor1 = PStaticActor::CreateActor(cubeTransform1);
+	Transform_ptr cubeTransform2 = std::make_shared<Transform>(glm::vec3(4.0f, 0.0f, 0.0f), glm::fvec3(0.0f));
+	PStaticActor_ptr cubeActor2 = PStaticActor::CreateActor(cubeTransform2);
 	
 	PBoxGeometry_ptr cubeGeometry = PBoxGeometry::CreateGeometry(glm::vec3(1.0f, 1.0f, 1.0f));
 	PMaterial_ptr cubeMaterial = PMaterial::CreateMaterial(0.5f, 0.5f, 0.0f);
@@ -249,8 +251,8 @@ void PhysicsTester::Test7(float time) {
 	
 	cubeActor1->AddCollider(cubeCollider);
 	cubeActor2->AddCollider(cubeCollider);
-	PSceneManager::GetInstance().AddActor(cubeActor1);
-	PSceneManager::GetInstance().AddActor(cubeActor2);
+	SceneManager::GetInstance().AddActor(cubeActor1);
+	SceneManager::GetInstance().AddActor(cubeActor2);
 
 	EmptyGameLoop(time);
 
@@ -258,24 +260,24 @@ void PhysicsTester::Test7(float time) {
 	cubeActor2->RemoveCollider(cubeCollider);
 	ballActor->RemoveCollider(std::move(ballCollider));
 
-	PSceneManager::GetInstance().RemoveActor((ballActor));
-	PSceneManager::GetInstance().RemoveActor((cubeActor1));
-	PSceneManager::GetInstance().RemoveActor((cubeActor2));
+	SceneManager::GetInstance().RemoveActor((ballActor));
+	SceneManager::GetInstance().RemoveActor((cubeActor1));
+	SceneManager::GetInstance().RemoveActor((cubeActor2));
 }
 // Applying forces & torques
 void PhysicsTester::Test8(float time) {
-	PDynamicActor_ptr actor = PDynamicActor::CreateActor(glm::vec3(0.0f, 10.0f, 0.0f));
+	Transform_ptr transform = std::make_shared<Transform>(glm::vec3(0.0f, 10.0f, 0.0f), glm::fvec3(0.0f));
+	PDynamicActor_ptr actor = PDynamicActor::CreateActor(transform);
 	actor->SetGravity(false);
 
 	PSphereGeometry_ptr geometry = PSphereGeometry::CreateGeometry(1.0f);
 	PCollider_ptr collider = PCollider::CreateCollider(geometry);
 	actor->AddCollider(collider);
-	PSceneManager::GetInstance().AddActor(actor);
+	SceneManager::GetInstance().AddActor(actor);
 
 	auto startTime = std::chrono::high_resolution_clock::now();
 	while (true) {
-		PSceneManager::GetInstance().Update(0.01f);
-		PSceneManager::GetInstance().ApplyUpdateResults(true);
+		SceneManager::GetInstance().UpdatePhysics();
 
 		auto crntTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> duration = crntTime - startTime;
@@ -291,18 +293,21 @@ void PhysicsTester::Test8(float time) {
 		if (elapsedTime > time) break;
 	}
 
-	PSceneManager::GetInstance().RemoveActor(actor);
+	SceneManager::GetInstance().RemoveActor(actor);
 }
 // Collision filteration
 void PhysicsTester::Test9(float time) {
-	PDynamicActor_ptr ballActor = PDynamicActor::CreateActor(glm::vec3(0.0f, 8.0f, 0.0f));
+	Transform_ptr ballTransform = std::make_shared<Transform>(glm::vec3(0.0f, 8.0f, 0.0f), glm::fvec3(0.0f));
+	PDynamicActor_ptr ballActor = PDynamicActor::CreateActor(ballTransform);
 	PSphereGeometry_ptr ballGeometry = PSphereGeometry::CreateGeometry(1.0f);
 	PCollider_ptr ballCollider = PCollider::CreateCollider(ballGeometry);
 	ballActor->AddCollider(ballCollider);
 
-	PStaticActor_ptr cubeActor1 = PStaticActor::CreateActor(glm::vec3(0.0f, 5.0f, 0.0f));
-	PStaticActor_ptr cubeActor2 = PStaticActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
-	PStaticActor_ptr cubeActor3 = PStaticActor::CreateActor(glm::vec3(0.0f, -5.0f, 0.0f));
+	Transform_ptr cubeTransform1 = std::make_shared<Transform>(glm::vec3(0.0f, 5.0f, 0.0f), glm::fvec3(0.0f));
+	PStaticActor_ptr cubeActor1 = PStaticActor::CreateActor(cubeTransform1);
+	PStaticActor_ptr cubeActor2 = PStaticActor::CreateActor();
+	Transform_ptr cubeTransform3 = std::make_shared<Transform>(glm::vec3(0.0f, -5.0f, 0.0f), glm::fvec3(0.0f));
+	PStaticActor_ptr cubeActor3 = PStaticActor::CreateActor(cubeTransform3);
 	PBoxGeometry_ptr cubeGeometry = PBoxGeometry::CreateGeometry(glm::vec3(0.5f, 0.5f, 0.5f));
 	
 	/// Use seperate colliders because we'll need different filter data
@@ -317,13 +322,13 @@ void PhysicsTester::Test9(float time) {
 	PCollider_ptr cubeCollider3 = PCollider::CreateCollider(cubeGeometry);
 	cubeActor3->AddCollider(cubeCollider3);
 
-	PSceneManager::GetInstance().SetCollisionRelationship(0, 1, PScene::CollisionHandle::Trigger, PScene::PairFlag::Default); // collisions between categories 0 & 1 will behave like trigger volumes
+	//SceneManager::GetInstance().SetCollisionRelationship(0, 1, PScene::CollisionHandle::Trigger, PScene::PairFlag::Default); // collisions between categories 0 & 1 will behave like trigger volumes
 
 
-	PSceneManager::GetInstance().AddActor(ballActor);
-	PSceneManager::GetInstance().AddActor(cubeActor1);
-	PSceneManager::GetInstance().AddActor(cubeActor2);
-	PSceneManager::GetInstance().AddActor(cubeActor3);
+	SceneManager::GetInstance().AddActor(ballActor);
+	SceneManager::GetInstance().AddActor(cubeActor1);
+	SceneManager::GetInstance().AddActor(cubeActor2);
+	SceneManager::GetInstance().AddActor(cubeActor3);
 
 	EmptyGameLoop(time);
 
@@ -332,18 +337,19 @@ void PhysicsTester::Test9(float time) {
 	cubeActor2->RemoveCollider(std::move(cubeCollider2));
 	cubeActor3->RemoveCollider(std::move(cubeCollider3));
 
-	PSceneManager::GetInstance().RemoveActor(ballActor);
-	PSceneManager::GetInstance().RemoveActor(cubeActor1);
-	PSceneManager::GetInstance().RemoveActor(cubeActor2);
-	PSceneManager::GetInstance().RemoveActor(cubeActor3);
+	SceneManager::GetInstance().RemoveActor(ballActor);
+	SceneManager::GetInstance().RemoveActor(cubeActor1);
+	SceneManager::GetInstance().RemoveActor(cubeActor2);
+	SceneManager::GetInstance().RemoveActor(cubeActor3);
 }
 // Joints
 void PhysicsTester::Test10(float time) {	
 	PSphereGeometry_ptr geometry = PSphereGeometry::CreateGeometry(1.0f);
 	PCollider_ptr collider = PCollider::CreateCollider(geometry);
 
-	PDynamicActor_ptr actor1 = PDynamicActor::CreateActor(glm::vec3(0.0f, 3.0f, 0.0f));
-	PDynamicActor_ptr actor2 = PDynamicActor::CreateActor(glm::vec3(0.0f, 0.0f, 0.0f));
+	Transform_ptr transform = std::make_shared<Transform>(glm::vec3(0.0f, 3.0f, 0.0f), glm::fvec3(0.0f));
+	PDynamicActor_ptr actor1 = PDynamicActor::CreateActor(transform);
+	PDynamicActor_ptr actor2 = PDynamicActor::CreateActor();
 	
 	actor1->SetGravity(false);
 	actor2->SetGravity(false);
@@ -351,8 +357,8 @@ void PhysicsTester::Test10(float time) {
 	actor1->AddCollider(collider);
 	actor2->AddCollider(collider);
 
-	PSceneManager::GetInstance().AddActor(actor1);
-	PSceneManager::GetInstance().AddActor(actor2);
+	SceneManager::GetInstance().AddActor(actor1);
+	SceneManager::GetInstance().AddActor(actor2);
 
 	auto reSetTransforms = [&] {
 		actor1->SetPosition(glm::vec3(0.0f, 3.0f, 0.0f));
@@ -371,8 +377,7 @@ void PhysicsTester::Test10(float time) {
 
 		auto startTime = std::chrono::high_resolution_clock::now();
 		while (true) {
-			PSceneManager::GetInstance().Update(0.01f);
-			PSceneManager::GetInstance().ApplyUpdateResults(false);
+			SceneManager::GetInstance().UpdatePhysics();
 
 			actor2->ApplyForce(glm::vec3(0.01f, 0.0f, 0.0f));
 			actor2->ApplyTorque(glm::vec3(0.01f, 0.0f, 0.0f));
@@ -393,8 +398,7 @@ void PhysicsTester::Test10(float time) {
 
 		auto startTime = std::chrono::high_resolution_clock::now();
 		while (true) {
-			PSceneManager::GetInstance().Update(0.01f);
-			PSceneManager::GetInstance().ApplyUpdateResults(false);
+			SceneManager::GetInstance().UpdatePhysics();
 
 			auto crntTime = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double> elapsedTime = crntTime - startTime;
@@ -419,8 +423,7 @@ void PhysicsTester::Test10(float time) {
 
 		auto startTime = std::chrono::high_resolution_clock::now();
 		while (true) {
-			PSceneManager::GetInstance().Update(0.01f);
-			PSceneManager::GetInstance().ApplyUpdateResults(false);
+			SceneManager::GetInstance().UpdatePhysics();
 
 			actor1->ApplyTorque(glm::vec3(0.01f, 0.01f, 0.01f));
 			actor2->ApplyTorque(glm::vec3(0.01f, 0.01f, 0.01f));
@@ -440,8 +443,7 @@ void PhysicsTester::Test10(float time) {
 
 		auto startTime = std::chrono::high_resolution_clock::now();
 		while (true) {
-			PSceneManager::GetInstance().Update(0.01f);
-			PSceneManager::GetInstance().ApplyUpdateResults(false);
+			SceneManager::GetInstance().UpdatePhysics();
 
 			actor1->ApplyTorque(glm::vec3(1.0f, 0.1f, 0.1f));
 			
@@ -459,8 +461,7 @@ void PhysicsTester::Test10(float time) {
 
 		auto startTime = std::chrono::high_resolution_clock::now();
 		while (true) {
-			PSceneManager::GetInstance().Update(0.01f);
-			PSceneManager::GetInstance().ApplyUpdateResults(false);
+			SceneManager::GetInstance().UpdatePhysics();
 
 			actor1->ApplyForce(glm::vec3(-0.01f, 0.0f, 0.0f));
 			actor2->ApplyForce(glm::vec3(0.01f, 0.0f, 0.0f));
@@ -478,13 +479,13 @@ void PhysicsTester::Test11() {
 	PCollider_ptr collider = PCollider::CreateCollider(geometry);
 
 	actor->AddCollider(collider);
-	PSceneManager::GetInstance().AddActor(actor);
+	SceneManager::GetInstance().AddActor(actor);
 
 	/// Raycasting
 	{
 		/// Single Hit
 		PRaycastHit_ptr RaycastHit = std::make_shared<PRaycastHit>();
-		bool bHit = PSceneManager::GetInstance().Raycast(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, -1.0f), 10.0f, RaycastHit);
+		bool bHit = SceneManager::GetInstance().Raycast(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, -1.0f), 10.0f, RaycastHit);
 		if (bHit) {
 			float dist = RaycastHit->GetDistance();
 			glm::vec3 norm = RaycastHit->GetNormal();
@@ -496,7 +497,7 @@ void PhysicsTester::Test11() {
 
 		/// Multiple Hits
 		std::vector<PRaycastHit_ptr> RaycastHits;
-		bHit = PSceneManager::GetInstance().Raycast(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, -1.0f), 10.0f, RaycastHits);
+		bHit = SceneManager::GetInstance().Raycast(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, -1.0f), 10.0f, RaycastHits);
 		if (bHit) {
 			for (PRaycastHit_ptr hit : RaycastHits) {
 				float dist = hit->GetDistance();
@@ -513,7 +514,7 @@ void PhysicsTester::Test11() {
 	{
 		/// Single Hit
 		PSweepHit_ptr SweepHit = std::make_shared<PSweepHit>();
-		bool bHit = PSceneManager::GetInstance().Sweep(geometry, glm::vec3(0.0f, 0.0f, 5.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), 10.0f, SweepHit);
+		bool bHit = SceneManager::GetInstance().Sweep(geometry, glm::vec3(0.0f, 0.0f, 5.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), 10.0f, SweepHit);
 		if (bHit) {
 			PActor_ptr hitActor = SweepHit->GetActor();
 			PCollider_ptr hitCollider = SweepHit->GetCollider();
@@ -524,7 +525,7 @@ void PhysicsTester::Test11() {
 
 		/// Multiple Hits
 		std::vector<PSweepHit_ptr> SweepHits;
-		bHit = PSceneManager::GetInstance().Sweep(geometry, glm::vec3(0.0f, 0.0f, 5.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), 10.0f, SweepHits);
+		bHit = SceneManager::GetInstance().Sweep(geometry, glm::vec3(0.0f, 0.0f, 5.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), 10.0f, SweepHits);
 		if (bHit) {
 			for (PSweepHit_ptr hit : SweepHits) {
 				float dist = hit->GetDistance();
@@ -545,7 +546,7 @@ void PhysicsTester::Test11() {
 
 		/// Multiple Hits
 		std::vector<POverlapHit_ptr> OverlapHits;
-		bool bHit = PSceneManager::GetInstance().Overlap(OverlapGeometry, glm::vec3(0.0f, 0.0f, 2.5f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), OverlapHits);
+		bool bHit = SceneManager::GetInstance().Overlap(OverlapGeometry, glm::vec3(0.0f, 0.0f, 2.5f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), OverlapHits);
 		if (bHit) {
 			for (POverlapHit_ptr hit : OverlapHits) {
 				PActor_ptr hitActor = hit->GetActor();
@@ -571,7 +572,7 @@ void PhysicsTester::RunTests() {
 		{
 			desc.SetGravityForce(glm::vec3(0.0f, -0.5f, 0.0f));
 		}
-		PSceneManager::GetInstance().SetCurrentScene(PScene::CreateScene(desc));
+		SceneManager::GetInstance().SetCurrentPhysicsScene(PScene::CreateScene(desc));
 
 		Test0(1.0f);
 		Test1(1.0f);
@@ -585,8 +586,6 @@ void PhysicsTester::RunTests() {
 		Test9(1.0f);
 		Test10(1.0f);
 		Test11();
-
-		PSceneManager::GetInstance().SetCurrentScene(nullptr);
 	}
 	PhysicsEngine::GetInstance().Terminate();
 }

@@ -6,8 +6,8 @@
 #include "../Engine/Core/StaticMesh.h"
 #include "../Engine/Rendering/ShaderParameterMacros.h"
 
-#include "../Engine/Physics/PActor.h"
-#include "../Engine/Physics/PSceneManager.h"
+#include "../Engine/Scene/SceneManager.h"
+#include "../Engine/Scene/Actor.h"
 
 __declspec(align(SHADER_PARAMETER_STRUCT_ALIGNMENT))
 class PrimitiveUniformShaderParameters
@@ -35,18 +35,15 @@ public:
 	}
 };
 
-struct PrimitiveSceneElement
-{
-	Transform_ptr Transform;
-	StaticMesh_ptr Mesh;
-};
 
 class ExampleScene : public Scene
 {
 public:
-	ExampleScene();
-
-	void Render(RHICommandList& RHICmdList) override final;
+	ExampleScene(RScene_ptr renderScene, PScene_ptr physicsScene);
+	void Init();
+	
+	void UpdatePhysics();
+	void Render(RHICommandList& RHICmdList);
 
 private:
 	/**
@@ -59,7 +56,7 @@ private:
 	 */
 	void RenderSceneElements(RHICommandList& RHICmdList);
 
-	std::vector<PrimitiveSceneElement> mSceneElements;
+	//std::vector<Actor_ptr> mActors;
 
 	Camera_ptr mCamera;
 

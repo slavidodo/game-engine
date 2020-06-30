@@ -8,11 +8,14 @@ typedef std::shared_ptr<Transform> Transform_ptr;
 class Transform
 {
 public:
+	Transform()
+		: Transform(glm::fvec3(0.0f), glm::fquat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) {}
+
 	// euler angles in radians
-	Transform(glm::fvec3 translation, glm::fvec3 eulerAngles, glm::fvec3 scale)
+	Transform(glm::fvec3 translation, glm::fvec3 eulerAngles, glm::fvec3 scale = glm::fvec3(1.0f))
 		: Transform(translation, glm::fquat(eulerAngles), scale) {}
 
-	Transform(glm::fvec3 translation, glm::fquat rotation, glm::fvec3 scale)
+	Transform(glm::fvec3 translation, glm::fquat rotation, glm::fvec3 scale = glm::fvec3(1.0f))
 		: mTranslation(translation), mRotation(rotation), mScale(scale), mForward(0.0f), mRight(0.0f), mUp(0.0f),
 			mLocalToWorld(0.0f), mWorldToLocal(0.0f)
 	{

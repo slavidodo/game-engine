@@ -1,7 +1,7 @@
 #ifndef ENGINE_PHYSICS_SCENE_MANAGER_H
 #define ENGINE_PHYSICS_SCENE_MANAGER_H
 
-#include "Engine/Physics/PScene.h"
+#include "Engine/Scene/PScene.h"
 
 class PSceneManager 
 {

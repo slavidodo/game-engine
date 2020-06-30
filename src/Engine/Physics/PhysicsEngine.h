@@ -28,13 +28,13 @@
 
 #include "physx/PxPhysicsAPI.h"
 #include "PAllocator.h"
-#include "PScene.h"
-#include "PSceneManager.h"
+#include "../Scene/PScene.h"
 #include "PActor.h"
 #include "PCollider.h"
 #include "PGeometry.h"
 #include "PMaterial.h"
 #include "PJoint.h"
+#include "../Core/Transform.h"
 
 #define PVD_HOST "127.0.0.1"
 #define PVD_PORT 5425
@@ -82,6 +82,9 @@ public:
 
 	bool Init(const PhysicsSettings& options);
 	void Terminate();
+
+	static physx::PxTransform ToPhysxTransform(Transform_ptr transform);
+	static Transform_ptr ToEngineTransform(physx::PxTransform transform);
 
 private:
 	bool mInitialized = false;

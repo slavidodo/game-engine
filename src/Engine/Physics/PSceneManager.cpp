@@ -18,6 +18,16 @@ void PSceneManager::Update(float deltaTime) {
 }
 void PSceneManager::ApplyUpdateResults(bool bSleep) {
 	mCurrentScene->ApplyUpdateResults(bSleep);
+
+	std::list<PActor_ptr> sceneActors = mCurrentScene->GetActors();
+	for (PActor_ptr actor : sceneActors) {
+		Transform_ptr physicsTransform = actor->GetTransform();
+		Transform_ptr renderTransform = actor->GetRenderTransform();
+		if (renderTransform && physicsTransform) {
+			renderTransform->SetTranslation(physicsTransform->GetTranslation());
+			renderTransform->SetRotation(physicsTransform->GetRotation());
+		}
+	}
 }
 
 void PSceneManager::ShiftOrigin(glm::vec3 translation) {

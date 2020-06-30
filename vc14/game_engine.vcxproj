@@ -204,14 +204,15 @@
     <ClCompile Include="..\src\Engine\Physics\PhysicsEngine.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PJoint.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PMaterial.cpp" />
-    <ClCompile Include="..\src\Engine\Physics\PScene.cpp" />
-    <ClCompile Include="..\src\Engine\Physics\PSceneManager.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PSceneQuery.cpp" />
     <ClCompile Include="..\src\Engine\Platform\CoreApplication.cpp" />
     <ClCompile Include="..\src\Engine\Platform\Window.cpp" />
     <ClCompile Include="..\src\Engine\RHI\RHICommandList.cpp" />
     <ClCompile Include="..\src\Engine\RHI\DynamicRHI.cpp" />
-    <ClCompile Include="..\src\Engine\Scene\Scene.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\Actor.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\PScene.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\RActor.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\RScene.cpp" />
     <ClCompile Include="..\src\Engine\Scene\SceneManager.cpp" />
     <ClCompile Include="..\src\Engine\Scene\SceneNode.cpp" />
     <ClCompile Include="..\src\Engine\Scene\SceneRenderer.cpp" />
@@ -224,7 +225,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\src\Tests\ExampleScene.cpp" />
-    <ClCompile Include="..\src\Tests\PhysicsTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Definitions.h" />
@@ -264,8 +264,6 @@
     <ClInclude Include="..\src\Engine\Physics\PhysicsEngine.h" />
     <ClInclude Include="..\src\Engine\Physics\PJoint.h" />
     <ClInclude Include="..\src\Engine\Physics\PMaterial.h" />
-    <ClInclude Include="..\src\Engine\Physics\PScene.h" />
-    <ClInclude Include="..\src\Engine\Physics\PSceneManager.h" />
     <ClInclude Include="..\src\Engine\Physics\PSceneQuery.h" />
     <ClInclude Include="..\src\Engine\platform\CoreApplication.h" />
     <ClInclude Include="..\src\Engine\Platform\Window.h" />
@@ -274,6 +272,10 @@
     <ClInclude Include="..\src\Engine\RHI\RHIDefinitions.h" />
     <ClInclude Include="..\src\Engine\RHI\RHIResource.h" />
     <ClInclude Include="..\src\Engine\RHI\DynamicRHI.h" />
+    <ClInclude Include="..\src\Engine\Scene\Actor.h" />
+    <ClInclude Include="..\src\Engine\Scene\PScene.h" />
+    <ClInclude Include="..\src\Engine\Scene\RScene.h" />
+    <ClInclude Include="..\src\Engine\Scene\RActor.h" />
     <ClInclude Include="..\src\Engine\Scene\Scene.h" />
     <ClInclude Include="..\src\Engine\Scene\SceneManager.h" />
     <ClInclude Include="..\src\Engine\Scene\SceneNode.h" />
@@ -282,7 +284,6 @@
     <ClInclude Include="..\src\Engine\Utils.h" />
     <ClInclude Include="..\src\Pch.h" />
     <ClInclude Include="..\src\Tests\ExampleScene.h" />
-    <ClInclude Include="..\src\Tests\PhysicsTest.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -291,11 +292,4 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets" Condition="Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets')" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.props'))" />
-    <Error Condition="!Exists('packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\vcpkg.C.Programs.vcpkg.1.0.0\build\native\vcpkg.C.Programs.vcpkg.targets'))" />
-  </Target>
 </Project>

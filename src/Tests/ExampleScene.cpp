@@ -50,36 +50,38 @@ public:
 // instead use this as a general vertex declaration
 static StaticMeshVertexDeclaration gStaticMeshVertexDeclaration;
 
-ExampleScene::ExampleScene()
-{
-	// Create the physics scene
-	PSceneManager::GetInstance().SetCurrentScene(PScene::CreateScene(PSceneDescriptor()));
+ExampleScene::ExampleScene(RScene_ptr renderScene, PScene_ptr physicsScene) : Scene(renderScene, physicsScene) {
+	mRenderScene->mRenderFunction = std::bind(&ExampleScene::Render, this, std::placeholders::_1);
+	mPhysicsScene->mUpdateFunction = std::bind(&ExampleScene::UpdatePhysics, this);
+}
 
-	PBoxGeometry_ptr geometry = PBoxGeometry::CreateGeometry(glm::vec3(0.5f, 0.5f, 0.5f));
+void ExampleScene::Init() {
 
-	mSceneElements.push_back({
-		std::make_shared<Transform>(
-			glm::fvec3(-1.5f, 0, -4.5f),
-			glm::radians(glm::fvec3(0.f, -45.f, 0.f)),
-			glm::fvec3(1)),
-		nullptr,
-	});
-	PStaticActor_ptr physicsActor1 = PStaticActor::CreateActor(glm::fvec3(-1.5f, 0, -4.5f), glm::radians(glm::fvec3(0.f, -45.f, 0.f)));
-	physicsActor1->AddCollider(PCollider::CreateCollider(geometry));
-	PSceneManager::GetInstance().AddActor(physicsActor1);
+	/// Create first cube
+	{
+		glm::fvec3 position = glm::fvec3(0.0f, 5.0f, -4.0f);
+		glm::fvec3 rotation = glm::fvec3(0.0f);
+		glm::fvec3 scale = glm::fvec3(1.0f);
 
+		RActor_ptr renderActor = std::make_shared<RActor>(std::make_shared<Transform>(position, rotation, scale), nullptr);
+		PActor_ptr physicsActor = PDynamicActor::CreateActor(std::make_shared<Transform>(position, rotation, scale));
+		physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(scale), PMaterial::CreateMaterial(0.0f, 0.0f, 0.2f)));
+		
+		SceneManager::GetInstance().AddActor(std::make_shared<Actor>(renderActor, physicsActor));
+	}
 
-	mSceneElements.push_back({
-		std::make_shared<Transform>(
-			glm::fvec3(1.5f, 0, -4.5f),
-			glm::radians(glm::fvec3(0.f, 45.f, 0.f)),
-			glm::fvec3(1)),
-		nullptr,
-	});
-	PStaticActor_ptr physicsActor2 = PStaticActor::CreateActor(glm::fvec3(-1.5f, 0, -4.5f), glm::radians(glm::fvec3(0.f, -45.f, 0.f)));
-	physicsActor2->AddCollider(PCollider::CreateCollider(geometry));
-	PSceneManager::GetInstance().AddActor(physicsActor2);
+	/// Create second cube
+	{
+		glm::fvec3 position = glm::fvec3(0.0f, 0.0f, -4.0f);
+		glm::fvec3 rotation = glm::fvec3(0.0f);
+		glm::fvec3 scale = glm::fvec3(1.0f);
 
+		RActor_ptr renderActor = std::make_shared<RActor>(std::make_shared<Transform>(position, rotation, scale), nullptr);
+		PActor_ptr physicsActor = PStaticActor::CreateActor(std::make_shared<Transform>(position, rotation, scale));
+		physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(scale), PMaterial::CreateMaterial(0.0f, 0.0f, 0.1f)));
+
+		SceneManager::GetInstance().AddActor(std::make_shared<Actor>(renderActor, physicsActor));
+	}
 
 	mCamera = Camera::CreatePerspectiveCamera(45.0f, 0.1f, 1000.f);
 	mCamera->SetEditorTranslation(glm::fvec3(0, 10.f, 1.f));
@@ -87,7 +89,6 @@ ExampleScene::ExampleScene()
 
 	InitGraphcisPipeline();
 }
-
 void ExampleScene::InitGraphcisPipeline()
 {
 	// this is fine to do, as we are creating things, an immediate context
@@ -117,14 +118,11 @@ void ExampleScene::InitGraphcisPipeline()
 	// using the editor and the information is stored along with it
 	mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 1);
 	mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
-	mBoundShaderState = RHICmdList.CreateBoundShaderState(
-		gStaticMeshVertexDeclaration.VertexDeclarationRHI,
-		mVertexShaderRHI,
-		mPixelShaderRHI);
+	mBoundShaderState = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mVertexShaderRHI, mPixelShaderRHI);
 
-	// finally, create some fancy meshes to draw
-	mSceneElements[0].Mesh = StaticMeshGenerator::CreateCube(1.0f);
-	mSceneElements[1].Mesh = StaticMeshGenerator::CreateCube(1.0f);
+	//// finally, create some fancy meshes to draw
+	mActors[0]->mRenderActor.lock()->mMesh = StaticMeshGenerator::CreateCube(1.0f);
+	mActors[1]->mRenderActor.lock()->mMesh = StaticMeshGenerator::CreateCube(1.0f);
 
 	mUniformBuffer = UniformBufferRef<PrimitiveUniformShaderParameters>::CreateUniformBufferImmediate(
 		PrimitiveUniformShaderParameters(), EUniformBufferUsage::UniformBuffer_MultiFrame);
@@ -132,26 +130,26 @@ void ExampleScene::InitGraphcisPipeline()
 	gDynamicRHI->RHISetShaderUniformBuffer(mVertexShaderRHI, 0, mUniformBuffer);
 }
 
-void ExampleScene::Render(RHICommandList& RHICmdList)
-{
+void ExampleScene::UpdatePhysics() {
 	double currentTime = glfwGetTime(); // really?
 	mDeltaTime = static_cast<float>(currentTime - mLastTime);
 	mLastTime = currentTime;
 
+	PDynamicActor_ptr actor0 = std::static_pointer_cast<PDynamicActor>(mActors[0]->mPhysicsActor.lock());
+	//actor0->ApplyTorque(glm::fvec3(1.0f, 1.0f, 0.0f));
+
+	mPhysicsScene->Update(mDeltaTime);
+	for (Actor_ptr actor : mActors) actor->Update();
+}
+
+void ExampleScene::Render(RHICommandList& RHICmdList)
+{
 	// Let the RHI know that we are drawing a scene
 	// the main use of this is profiling on a dev build
 	RHICmdList.BeginScene();
-	{
-		RenderSceneElements(RHICmdList);
-	}
+	RenderSceneElements(RHICmdList);
 	RHICmdList.EndScene();
-
-	/// Update the physics actors
-	PSceneManager::GetInstance().Update(mDeltaTime);
-	PSceneManager::GetInstance().ApplyUpdateResults(true);
-
 }
-
 void ExampleScene::RenderSceneElements(RHICommandList& RHICmdList)
 {
 	// RHI should take care for our context VAO (in opengl)
@@ -170,9 +168,9 @@ void ExampleScene::RenderSceneElements(RHICommandList& RHICmdList)
 
 		glm::mat4x4 ViewProjection = mCamera->GetProjMatrix() * mCamera->GetViewMatrix();
 
-		for (PrimitiveSceneElement& SceneElement : mSceneElements) {
-			Transform_ptr Transform = SceneElement.Transform;
-			StaticMesh_ptr Mesh = SceneElement.Mesh;
+		for (Actor_ptr actor : mActors) {
+			Transform_ptr Transform = actor->mRenderActor.lock()->mTransform;
+			StaticMesh_ptr Mesh = actor->mRenderActor.lock()->mMesh;
 
 			// set the vertex buffer to be our data source
 			RHICmdList.SetStreamSource(0, Mesh->VertexBuffer, 0);
@@ -182,7 +180,7 @@ void ExampleScene::RenderSceneElements(RHICommandList& RHICmdList)
 
 			// Update shader paramaters
 			PrimitiveUniformShaderParameters Parameters;
-			Parameters.LocalToWorld = ViewProjection * SceneElement.Transform->GetLocalToWorld();
+			Parameters.LocalToWorld = ViewProjection * Transform->GetLocalToWorld();
 			mUniformBuffer.UpdateUniformBufferImmediate(Parameters);
 
 			// this is yet fixed to draw triangles, in some cases or might be preffered

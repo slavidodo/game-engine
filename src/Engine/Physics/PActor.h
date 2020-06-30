@@ -28,6 +28,7 @@
 
 #include "physx/PxPhysicsAPI.h"
 #include "PCollider.h"
+#include "../Core/Transform.h"
 
 class PActor;
 class PStaticActor;
@@ -49,6 +50,9 @@ public:
 	void AddCollider(PCollider_ptr collider);
 	void RemoveCollider(PCollider_ptr pCollider);
 
+	glm::vec3 GetPosition() const;
+	glm::quat GetRotation() const;
+	Transform_ptr GetTransform() const;
 
 protected:
 	// For non-specific physics operations
@@ -62,7 +66,7 @@ class PStaticActor : public PActor
 public:
 	PStaticActor(physx::PxRigidStatic* pStaticActor);
 
-	static PStaticActor_ptr CreateActor(glm::vec3 position = glm::vec3(0.0f), glm::vec3 rotation = glm::vec3(0.0f));
+	static PStaticActor_ptr CreateActor(Transform_ptr transform = nullptr);
 	
 private:
 	// For specific physics operations
@@ -74,7 +78,7 @@ class PDynamicActor : public PActor
 public:
 	PDynamicActor(physx::PxRigidDynamic* pDynamicActor);
 
-	static PDynamicActor_ptr CreateActor(glm::vec3 position = glm::vec3(0.0f), glm::vec3 rotation = glm::vec3(0.0f));
+	static PDynamicActor_ptr CreateActor(Transform_ptr transform = nullptr);
 
 	void ApplyForce(glm::vec3 force);
 	void ApplyImpulse(glm::vec3 impulse);
@@ -82,7 +86,7 @@ public:
 	
 	void UpdateMassAndInertia(float density);
 
-	glm::vec3 GetPosition() const;
+	//glm::vec3 GetPosition() const;
 	float GetMass() const;
 	glm::vec3  GetInertiaTensor() const;
 	glm::vec3  GetLinearVelocity() const;
