@@ -36,34 +36,12 @@ public:
 		return std::vector<Actor_ptr>();
 	}
 
-	enum class MovementDirection { Forward, Backward, Upward, Downward, Right, Left };
-	void MovePlayer(MovementDirection dir) {
-		float movementSpeed = 0.05f;
-		glm::fvec3 direction;
-		switch (dir) {
-		case MovementDirection::Forward:
-			direction = glm::fvec3(0.0f, 0.0f, -1.0f);
-			break;
-		case MovementDirection::Backward:
-			direction = glm::fvec3(0.0f, 0.0f, +1.0f);
-			break;
-		case MovementDirection::Upward:
-			direction = glm::fvec3(0.0f, +1.0f, 0.0f);
-			break;
-		case MovementDirection::Downward:
-			direction = glm::fvec3(0.0f, -1.0f, 0.0f);
-			break;
-		case MovementDirection::Right:
-			direction = glm::fvec3(+1.0f, 0.0f, 0.0f);
-			break;
-		case MovementDirection::Left:
-			direction = glm::fvec3(-1.0f, 0.0f, 0.0f);
-			break;
-		}
-		mPlayer->Move(direction * movementSpeed);
+	void MovePlayer(Camera::MovementDirection dir) {
+		mCurrentScene->mRenderScene->mMainCamera->Move(dir);
+		mPlayer->Move(mCurrentScene->mRenderScene->mMainCamera->GetParentPosition());
 	}
-	void RotatePlayer(double xDelta, double yDelta) {
-		//mPlayer->Rotate(xDelta, yDelta);
+	void RotateCamera(double xDelta, double yDelta) {
+		mCurrentScene->mRenderScene->mMainCamera->Rotate(xDelta, yDelta);
 		//mCurrentScene->mRenderScene->mMainCamera->AddParentRotation();
 	}
 	void JumpPlayer() {

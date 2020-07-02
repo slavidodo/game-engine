@@ -48,8 +48,7 @@ float Camera::GetAspectRatio()
 	return (float)size.x / (float)size.y;
 }
 
-void Camera::UpdateView()
-{
+void Camera::UpdateView() {
 	if (IsViewOutdated()) {
 		mViewOutdated = false;
 
@@ -64,6 +63,10 @@ void Camera::UpdateView()
 		// casts mat4x4 to mat3x4
 		mViewMatrix = glm::translate(viewMatrix, translation);
 	}
+
+	glm::fvec3 parentPosition = mTempParent.lock()->GetTransform()->GetTranslation();
+	mPosition.y = parentPosition.y + mLocalTranslation.y;
+	mViewMatrix = glm::lookAt(mPosition, mPosition + mFront, glm::fvec3(0.0f, 1.0f, 0.0f));
 }
 
 void Camera::SetProjectionType(ProjectionType type)

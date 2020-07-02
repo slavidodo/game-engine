@@ -22,8 +22,13 @@ public:
 		Cam->SetFovY(InFovY);
 		Cam->SetZNear(InZNear);
 		Cam->SetZFar(InZFar);
+
+		Cam->mPitch = 0.0f;
+		Cam->mYaw = -90.0f;
+		Cam->mPosition = glm::fvec3(0.0f);
+		Cam->mFront = glm::fvec3(0.0f, 0.0f, 1.0f);
 		Cam->SetLocalTranslation(glm::fvec3(0.0f, 0.0f, 0.0f));
-		Cam->SetLocalRotation(glm::fquat(0.0f, 0.0f, 0.0f, 1.0f));
+		
 		return Cam;
 	}
 
@@ -49,6 +54,34 @@ public:
 	void SetEditorRotationDegrees(glm::fvec3 EulerAngles) { SetEditorRotation(glm::radians(EulerAngles)); }
 
 
+	enum class MovementDirection { Forward, Backward, Upward, Downward, Right, Left };
+	void Move(MovementDirection direction) {
+		float movementSpeed = 0.05f;
+		glm::fvec3 displacement = glm::fvec3(0.0f);
+		switch (direction) {
+		case MovementDirection::Forward:
+			displacement = mFront * movementSpeed * glm::fvec3(1.0f, 0.0f, 1.0f);
+			break;
+		case MovementDirection::Backward:
+			displacement = -mFront * movementSpeed * glm::fvec3(1.0f, 0.0f, 1.0f);
+			break;
+		case MovementDirection::Right:
+			displacement = glm::cross(mFront, glm::fvec3(0.0f, 1.0f, 0.0f)) * movementSpeed * glm::fvec3(1.0f, 0.0f, 1.0f);
+			break;
+		case MovementDirection::Left:
+			displacement = -glm::cross(mFront, glm::fvec3(0.0f, 1.0f, 0.0f)) * movementSpeed * glm::fvec3(1.0f, 0.0f, 1.0f);
+			break;
+		/*case MovementDirection::Upward:
+			mPosition += glm::cross(glm::cross(mFront, glm::fvec3(0.0f, 1.0f, 0.0f)), mFront) * movementSpeed;
+			break;
+		case MovementDirection::Downward:
+			mPosition -= glm::cross(glm::cross(mFront, glm::fvec3(0.0f, 1.0f, 0.0f)), mFront) * movementSpeed;
+			break;*/
+		}
+		mPosition += displacement;
+		std::cout << displacement.x << " " << displacement.y << " " << displacement.z << std::endl;
+		std::cout << mPosition.x << " " << mPosition.y << " " << mPosition.z << std::endl << std::endl;
+	}
 	void SetParent(Actor_ptr parent) {
 		mTempParent = parent;
 		mViewOutdated = true;
@@ -57,10 +90,25 @@ public:
 	void SetLocalTranslation(glm::fvec3 translation) {
 		mLocalTranslation = translation;
 	}
-	void SetLocalRotation(glm::fquat rotation) {
-		mLocalRotation = rotation;
+	void Rotate(float xDelta, float yDelta) {
+		xDelta *= 0.05f;
+		yDelta *= 0.05f;
+
+		mYaw += xDelta;
+		mPitch = glm::min(glm::max(mPitch - yDelta, -89.9f), 89.9f);
+
+		/// Update camera front vector
+		mFront.x = glm::cos(glm::radians(mPitch)) * glm::cos(glm::radians(mYaw));
+		mFront.y = glm::sin(glm::radians(mPitch));
+		mFront.z = glm::cos(glm::radians(mPitch)) * glm::sin(glm::radians(mYaw));
+		mFront = glm::normalize(mFront);
 	}
-	void SetLocalRotationDegrees(glm::fvec3 EulerAngles) { SetLocalRotation(glm::radians(EulerAngles)); }
+
+	float mPitch, mYaw;
+	glm::fvec3 mPosition, mFront;
+	glm::fvec3 GetParentPosition() {
+		return mPosition - mLocalTranslation;
+	}
 
 protected:
 	virtual void UpdateView();
@@ -89,7 +137,6 @@ protected:
 
 	std::weak_ptr<Actor> mTempParent;
 	glm::fvec3 mLocalTranslation;
-	glm::fquat mLocalRotation;
 };
 
 #endif // ENGINE_CORE_CAMERA_H

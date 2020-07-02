@@ -18,15 +18,15 @@ public:
 
 	void UpdateTransforms();
 	
-	void Move(glm::fvec3 displacement) {
+	void Move(glm::fvec3 newPosition) {
 		PDynamicActor_ptr actor = std::static_pointer_cast<PDynamicActor>(mPhysicsActor.lock());
-		actor->SetPosition(actor->GetPosition() + displacement);
+		actor->SetPosition(newPosition);
 		UpdateTransforms();
 	}
 	void Rotate(double xDelta, double yDelta) {
 		std::cout << "rotating player\n";
 		PDynamicActor_ptr actor = std::static_pointer_cast<PDynamicActor>(mPhysicsActor.lock());
-		actor->ApplyTorque(glm::fvec3(0.0f, xDelta * 0.1f, 0.0f));
+		actor->ApplyTorque(glm::fvec3(0.0f, xDelta * 100.1f, 0.0f));
 		UpdateTransforms();
 	}
 	void Jump() {

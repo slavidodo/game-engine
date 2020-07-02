@@ -30,7 +30,7 @@ bool Window::Init(std::string title, int32_t width, int32_t height)
 		std::cout << "Failed to create window, " << err << std::endl;
 		return false;
 	}
-
+	glfwSetInputMode(mGlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	mInitialized = true;
 	return true;
 }

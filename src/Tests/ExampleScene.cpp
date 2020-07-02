@@ -80,7 +80,7 @@ void RunExampleScene() {
 	AddCubeActor(bDynamic, std::make_shared<Transform>(glm::fvec3(-5.0f, 29.0f, -14.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)));
 
 
-	AddCubeActor(bDynamic, std::make_shared<Transform>(glm::fvec3(0.0f, 10.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)));
+	AddCubeActor(bDynamic, std::make_shared<Transform>(glm::fvec3(0.0f, 10.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(0.1f)));
 	Actor_ptr player = SceneManager::GetInstance().GetActors().back();
 	PDynamicActor_ptr _player = std::static_pointer_cast<PDynamicActor>(player->mPhysicsActor.lock());
 	_player->LockMotion(PDynamicActor::MotionAxis::ANGULAR_Z);
@@ -97,8 +97,7 @@ ExampleScene::ExampleScene(RScene_ptr renderScene, PScene_ptr physicsScene) : Sc
 	mPhysicsScene->mUpdateFunction = std::bind(&ExampleScene::UpdatePhysics, this);
 
 	mRenderScene->mMainCamera = Camera::CreatePerspectiveCamera(45.0f, 0.1f, 1000.f);
-	mRenderScene->mMainCamera->SetLocalTranslation(glm::fvec3(0.0f, 1.5f, -0.5f));
-	mRenderScene->mMainCamera->SetLocalRotationDegrees(glm::radians(glm::fvec3(-30.0f, 0.0f, 0.0f)));
+	mRenderScene->mMainCamera->SetLocalTranslation(glm::fvec3(0.0f, 0.2f, -0.2f));
 	
 	//mRenderScene->mMainCamera->SetEditorTranslation(glm::fvec3(0.0f, 5.0f, 20.0f));
 	//mRenderScene->mMainCamera->SetEditorTranslation(glm::fvec3(0.0f, 30.0f, 3.0f));
