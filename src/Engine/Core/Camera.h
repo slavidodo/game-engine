@@ -3,6 +3,8 @@
 #define ENGINE_CORE_CAMERA_H
 
 #include "Object.h"
+#include "../Scene/Actor.h"
+#include "../Scene/SceneNode.h"
 
 class Camera;
 typedef std::shared_ptr<Camera> Camera_ptr;
@@ -11,15 +13,17 @@ class Camera : public Object
 {
 public:
 	enum ProjectionType {
-		PROJECTION_PERSPECTIVE,
+		PROJECTION_PERSPECTIVE
 	};
 
 	static Camera_ptr CreatePerspectiveCamera(float InFovY, float InZNear, float InZFar) {
 		Camera_ptr Cam = std::make_shared<Camera>();
-		Cam->SetProjectionType(ProjectionType::PROJECTION_PERSPECTIVE);
+		Cam->SetProjectionType(Camera::ProjectionType::PROJECTION_PERSPECTIVE);
 		Cam->SetFovY(InFovY);
 		Cam->SetZNear(InZNear);
 		Cam->SetZFar(InZFar);
+		Cam->SetLocalTranslation(glm::fvec3(0.0f, 0.0f, 0.0f));
+		Cam->SetLocalRotation(glm::fquat(0.0f, 0.0f, 0.0f, 1.0f));
 		return Cam;
 	}
 
@@ -44,6 +48,20 @@ public:
 	void SetEditorRotation(glm::fvec3 EulerAngles) { mEditorRotation = glm::fquat(EulerAngles); }
 	void SetEditorRotationDegrees(glm::fvec3 EulerAngles) { SetEditorRotation(glm::radians(EulerAngles)); }
 
+
+	void SetParent(Actor_ptr parent) {
+		mTempParent = parent;
+		mViewOutdated = true;
+		UpdateView();
+	}
+	void SetLocalTranslation(glm::fvec3 translation) {
+		mLocalTranslation = translation;
+	}
+	void SetLocalRotation(glm::fquat rotation) {
+		mLocalRotation = rotation;
+	}
+	void SetLocalRotationDegrees(glm::fvec3 EulerAngles) { SetLocalRotation(glm::radians(EulerAngles)); }
+
 protected:
 	virtual void UpdateView();
 	virtual void UpdateProjection();
@@ -67,6 +85,11 @@ protected:
 
 	bool mViewOutdated = true;
 	bool mProjOutdated = true;
+
+
+	std::weak_ptr<Actor> mTempParent;
+	glm::fvec3 mLocalTranslation;
+	glm::fquat mLocalRotation;
 };
 
 #endif // ENGINE_CORE_CAMERA_H

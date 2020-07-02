@@ -8,20 +8,22 @@
 
 bool Camera::IsViewOutdated()
 {
-	glm::fvec3 DesiredTranslation;
-	glm::fquat DesiredRotation;
-	if (SceneNode_ptr parent = mParent.lock()) {
-		Transform_ptr transform = parent->GetTransform(); // any scene node is guaranteed to have a transform
-		DesiredTranslation = transform->GetTranslation();
-		DesiredRotation = transform->GetRotation();
-	} else {
-		DesiredTranslation = mEditorTranslation;
-		DesiredRotation = mEditorRotation;
+	glm::fvec3 DesiredParentTranslation;
+	glm::fquat DesiredParentRotation;
+	
+	if (Actor_ptr parent = mTempParent.lock()) {
+		Transform_ptr transform = parent->GetTransform();
+		DesiredParentTranslation = transform->GetTranslation();
+		//DesiredParentRotation = transform->GetRotation();
+	}
+	else {
+		DesiredParentTranslation = mEditorTranslation;
+		DesiredParentRotation = mEditorRotation;
 	}
 
-	if (mViewOutdated || DesiredTranslation != mParentTranslation || DesiredRotation != mParentRotation) {
-		mParentTranslation = DesiredTranslation;
-		mParentRotation = DesiredRotation;
+	if (mViewOutdated || DesiredParentTranslation != mParentTranslation || DesiredParentRotation != mParentRotation) {
+		mParentTranslation = DesiredParentTranslation;
+		//mParentRotation = DesiredParentRotation;
 		mViewOutdated = true;
 	}
 
@@ -42,7 +44,7 @@ glm::fmat4x4 Camera::GetProjMatrix()
 
 float Camera::GetAspectRatio()
 {
-	glm::uvec2 size = gWindow.getWindowSize();
+	glm::uvec2 size = gWindow.GetWindowSize();
 	return (float)size.x / (float)size.y;
 }
 
@@ -51,10 +53,12 @@ void Camera::UpdateView()
 	if (IsViewOutdated()) {
 		mViewOutdated = false;
 
+		//std::cout << mParentRotation.x << " " << mParentRotation.y << " " << mParentRotation.z << " " << mParentRotation.w << std::endl;
+
 		glm::fmat3 rotation(glm::mat3_cast(mParentRotation));
 		glm::fmat3 rotationT = glm::transpose(rotation);
 
-		glm::fvec3 translation = (-rotationT) * mParentTranslation;
+		glm::fvec3 translation = (-rotationT) * (mParentTranslation + mLocalTranslation);
 		glm::fmat4 viewMatrix = rotationT;
 
 		// casts mat4x4 to mat3x4

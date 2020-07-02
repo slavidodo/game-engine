@@ -23,10 +23,54 @@ public:
 		mCurrentScene->mPhysicsScene = scene;
 	}
 
+	void SetPlayer(Actor_ptr player) {
+		mPlayer = player;
+		mCurrentScene->mRenderScene->mMainCamera->SetParent(player);
+	}
+
 	void AddActor(Actor_ptr pActor);
 	void RemoveActor(Actor_ptr pActor);
+	std::vector<Actor_ptr> GetActors() const {
+		if (mCurrentScene)
+			return mCurrentScene->GetActors();
+		return std::vector<Actor_ptr>();
+	}
 
-
+	enum class MovementDirection { Forward, Backward, Upward, Downward, Right, Left };
+	void MovePlayer(MovementDirection dir) {
+		float movementSpeed = 0.05f;
+		glm::fvec3 direction;
+		switch (dir) {
+		case MovementDirection::Forward:
+			direction = glm::fvec3(0.0f, 0.0f, -1.0f);
+			break;
+		case MovementDirection::Backward:
+			direction = glm::fvec3(0.0f, 0.0f, +1.0f);
+			break;
+		case MovementDirection::Upward:
+			direction = glm::fvec3(0.0f, +1.0f, 0.0f);
+			break;
+		case MovementDirection::Downward:
+			direction = glm::fvec3(0.0f, -1.0f, 0.0f);
+			break;
+		case MovementDirection::Right:
+			direction = glm::fvec3(+1.0f, 0.0f, 0.0f);
+			break;
+		case MovementDirection::Left:
+			direction = glm::fvec3(-1.0f, 0.0f, 0.0f);
+			break;
+		}
+		mPlayer->Move(direction * movementSpeed);
+	}
+	void RotatePlayer(double xDelta, double yDelta) {
+		//mPlayer->Rotate(xDelta, yDelta);
+		//mCurrentScene->mRenderScene->mMainCamera->AddParentRotation();
+	}
+	void JumpPlayer() {
+		if (mPlayer) {
+			mPlayer->Jump();
+		}
+	}
 
 	/// Render Functions
 	void Render(RHICommandList& RHICmdList);
@@ -49,6 +93,8 @@ public:
 
 private:
 	Scene_ptr mCurrentScene;
+	
+	Actor_ptr mPlayer;
 };
 
 #endif // ENGINE_SCENE_SCENEMANAGER_H

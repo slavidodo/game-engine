@@ -15,8 +15,9 @@ public:
 	void RunMainLoop();
 
 protected:
-	static void onKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	static void onFramebufferSizeCallback(GLFWwindow* window, int width, int height);
+	static void OnKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void OnMouseCallback(GLFWwindow* window, double xPosition, double yPosition);
+	static void OnFramebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 private:
 	bool mInitialized = false;

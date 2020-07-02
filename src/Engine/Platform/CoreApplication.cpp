@@ -6,6 +6,7 @@
 
 #include "../Filesystem/ResourceManager.h"
 #include "../Physics/PhysicsEngine.h"
+#include "../Input/InputManager.h"
 #include "../Scene/SceneManager.h"
 #include "../RHI/RHICommandList.h"
 #include "../Globals.h"
@@ -57,8 +58,9 @@ void CoreApplication::RunMainLoop()
 {
 	GLFWwindow* glfwWindow = gWindow.GetGlfwWindow();
 
-	glfwSetKeyCallback(glfwWindow, &CoreApplication::onKeyCallback);
-	glfwSetFramebufferSizeCallback(glfwWindow, &CoreApplication::onFramebufferSizeCallback);
+	glfwSetKeyCallback(glfwWindow, &CoreApplication::OnKeyCallback);
+	glfwSetCursorPosCallback(glfwWindow, &CoreApplication::OnMouseCallback);
+	glfwSetFramebufferSizeCallback(glfwWindow, &CoreApplication::OnFramebufferSizeCallback);
 
 	// todo: this is just temporary, since we don't really support async commands
 	// moreover, we don't really track the sequence of commands
@@ -66,6 +68,7 @@ void CoreApplication::RunMainLoop()
 	while (!glfwWindowShouldClose(gWindow.GetGlfwWindow())) {
 		RHICmdList.BeginFrame();
 		{
+			InputManager::GetInstance().CheckInputs();
 			SceneManager::GetInstance().UpdatePhysics();
 			SceneManager::GetInstance().Render(RHICmdList);
 		}
@@ -91,12 +94,16 @@ void CoreApplication::RunMainLoop()
 	}
 }
 
-void CoreApplication::onKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void CoreApplication::OnKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	//gInputManager.onKeyCallback(key, scancode, action, mods);
+	InputManager::GetInstance().OnKeyCallback(key, scancode, action, mods);
 }
 
-void CoreApplication::onFramebufferSizeCallback(GLFWwindow* window, int width, int height)
+void CoreApplication::OnMouseCallback(GLFWwindow* window, double xPosition, double yPosition) {
+	InputManager::GetInstance().OnMouseCallback(xPosition, yPosition);
+}
+
+void CoreApplication::OnFramebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
-	gWindow.setWindowSize(glm::uvec2(width, height));
+	gWindow.SetWindowSize(glm::uvec2(width, height));
 }

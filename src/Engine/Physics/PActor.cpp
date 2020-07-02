@@ -71,7 +71,6 @@ PStaticActor::PStaticActor(physx::PxRigidStatic* pStaticActor) : mStaticActor(pS
 }
 
 PStaticActor_ptr PStaticActor::CreateActor(Transform_ptr transform) {
-	//if (!transform) transform = std::make_shared<Transform>();
 	physx::PxRigidStatic* pStaticActor = PhysicsEngine::GetInstance().mPhysics->createRigidStatic(PhysicsEngine::GetInstance().ToPhysxTransform(transform));
 	if (!pStaticActor) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating static actor", __FILE__, __LINE__);

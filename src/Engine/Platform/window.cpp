@@ -45,29 +45,29 @@ void Window::Terminate()
 	glfwDestroyWindow(mGlfwWindow);
 }
 
-void Window::show()
+void Window::Show()
 {
 	glfwShowWindow(mGlfwWindow);
 }
 
-void Window::hide()
+void Window::Hide()
 {
 	glfwHideWindow(mGlfwWindow);
 }
 
-void Window::setWindowSize(glm::uvec2 size)
+void Window::SetWindowSize(glm::uvec2 size)
 {
 	mSize = size;
 	gDynamicRHI->RHISetViewport(glm::uvec2(0), size);
 }
 
-void Window::resize(glm::uvec2 size)
+void Window::Resize(glm::uvec2 size)
 {
-	setWindowSize(size);
+	SetWindowSize(size);
 	glfwSetWindowSize(mGlfwWindow, size.x, size.y);
 }
 
-void Window::title(std::string value)
+void Window::Title(std::string value)
 {
 	mTitle = value;
 	glfwSetWindowTitle(mGlfwWindow, mTitle.c_str());

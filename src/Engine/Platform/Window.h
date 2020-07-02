@@ -14,15 +14,15 @@ public:
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
 
-	void show();
-	void hide();
+	void Show();
+	void Hide();
 
-	void setWindowSize(glm::uvec2 size);
-	glm::uvec2 getWindowSize() { return mSize; }
-	void resize(glm::uvec2 size);
+	void SetWindowSize(glm::uvec2 size);
+	glm::uvec2 GetWindowSize() { return mSize; }
+	void Resize(glm::uvec2 size);
 
-	void title(std::string value);
-	const std::string title() const {
+	void Title(std::string value);
+	const std::string Title() const {
 		return mTitle;
 	}
 

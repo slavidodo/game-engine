@@ -33,7 +33,7 @@ public:
         while (it != end) {
             std::shared_ptr<T> p = std::static_pointer_cast<T>(*it);
             if (p != nullptr) {
-                return *p;
+                return p;
             }
 
             it++;

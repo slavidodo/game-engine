@@ -8,25 +8,22 @@ void SceneManager::Render(RHICommandList& RHICmdList) {
 		mCurrentScene->mRenderScene->mRenderFunction(RHICmdList);
 }
 
-
-void SceneManager::AddActor(Actor_ptr actor) {
-	if (mCurrentScene) {
-		mCurrentScene->mPhysicsScene->AddActor(actor->mPhysicsActor.lock());
-		mCurrentScene->mRenderScene->AddActor(actor->mRenderActor.lock());
-		mCurrentScene->AddActor(actor);
-	}
-}
-void SceneManager::RemoveActor(Actor_ptr actor) {
-	if (mCurrentScene) {
-		mCurrentScene->mPhysicsScene->RemoveActor(actor->mPhysicsActor.lock());
-		mCurrentScene->mRenderScene->RemoveActor(actor->mRenderActor.lock());
-		mCurrentScene->RemoveActor(actor);
-	}
-}
-
 void SceneManager::UpdatePhysics() {
 	if (mCurrentScene)
 		mCurrentScene->mPhysicsScene->mUpdateFunction();
+}
+
+
+void SceneManager::AddActor(Actor_ptr actor) {
+	if (mCurrentScene) {
+		mCurrentScene->AddActor(actor);
+	}
+		
+}
+void SceneManager::RemoveActor(Actor_ptr actor) {
+	if (mCurrentScene) {
+		mCurrentScene->RemoveActor(actor);
+	}
 }
 
 void SceneManager::ShiftOrigin(glm::vec3 translation) {

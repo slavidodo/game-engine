@@ -69,13 +69,13 @@ int main(int argc, char* argv[])
 	}
 
 	// show window
-	gWindow.show();
+	gWindow.Show();
 
 	// TODO: should be done in a more semantic way
 	// DynamicRHI has Init function, we could add PostInit
 	// make sure to Update the viewport at least once
 	// 
-	gWindow.setWindowSize(gWindow.getWindowSize());
+	gWindow.SetWindowSize(gWindow.GetWindowSize());
 
 	// TODO: (this is hardcoded) Example scene (cube, camera)
 	// TODO: The scene handles drawing but in real-life, it shouldn't
@@ -93,13 +93,11 @@ int main(int argc, char* argv[])
 	// in order to make this work, the engine may ship with extra
 	// objects, ...
 	PSceneDescriptor desc;
-	desc.SetGravityForce(glm::fvec3(0.0f, -1.0f, 0.0f));
+	desc.SetGravityForce(glm::fvec3(0.0f, -9.8f, 0.0f));
 
 
-	std::shared_ptr<ExampleScene> exampleScene = std::make_shared<ExampleScene>(std::make_shared<RScene>(), PScene::CreateScene(desc));
-	SceneManager::GetInstance().SetCurrentScene(exampleScene);
-	exampleScene->Init();
-	exampleScene = nullptr;
+	SceneManager::GetInstance().SetCurrentScene(std::make_shared<ExampleScene>(std::make_shared<RScene>(), PScene::CreateScene(desc)));
+	RunExampleScene();
 
 
 	// run application's main loop
