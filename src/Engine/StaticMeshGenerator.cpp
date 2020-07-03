@@ -142,6 +142,84 @@ StaticMesh_ptr StaticMeshGenerator::CreateCube(float edgeLength /* = 1.0f */)
 	return mesh;
 }
 
+StaticMesh_ptr StaticMeshGenerator::CreateBox(glm::fvec3 edgeLengths, glm::fvec3 color) {
+	StaticMesh_ptr mesh = std::make_shared<StaticMesh>();
+
+	edgeLengths.x /= 2.0f;
+	edgeLengths.y /= 2.0f;
+	edgeLengths.z /= 2.0f;
+
+	// initial information
+	const size_t NumVertices = 4 * 6;
+	const size_t NumIndices = 2 * 6 * 3;
+
+	StaticMeshVertex Vertices[NumVertices] = {
+		// front side
+		{glm::fvec3(-edgeLengths.x, -edgeLengths.y, +edgeLengths.z), color, glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3(+edgeLengths.x, -edgeLengths.y, +edgeLengths.z), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(+edgeLengths.x, +edgeLengths.y, +edgeLengths.z), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLengths.x, +edgeLengths.y, +edgeLengths.z), color, glm::fvec2(0.0f, 0.0f)},
+
+		// back side
+		{glm::fvec3(+edgeLengths.x, -edgeLengths.y, -edgeLengths.z), color, glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3(-edgeLengths.x, -edgeLengths.y, -edgeLengths.z), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(-edgeLengths.x, +edgeLengths.y, -edgeLengths.z), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(+edgeLengths.x, +edgeLengths.y, -edgeLengths.z), color, glm::fvec2(0.0f, 0.0f)},
+
+		// left side
+		{glm::fvec3(-edgeLengths.x, -edgeLengths.y, -edgeLengths.z), color, glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3(-edgeLengths.x, -edgeLengths.y, +edgeLengths.z), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(-edgeLengths.x, +edgeLengths.y, +edgeLengths.z), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLengths.x, +edgeLengths.y, -edgeLengths.z), color, glm::fvec2(0.0f, 0.0f)},
+
+		// right side
+		{glm::fvec3(+edgeLengths.x, -edgeLengths.y, +edgeLengths.z), color, glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3(+edgeLengths.x, -edgeLengths.y, -edgeLengths.z), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(+edgeLengths.x, +edgeLengths.y, -edgeLengths.z), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(+edgeLengths.x, +edgeLengths.y, +edgeLengths.z), color, glm::fvec2(0.0f, 0.0f)},
+
+		// up side
+		{glm::fvec3(-edgeLengths.x, +edgeLengths.y, +edgeLengths.z), color, glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3(+edgeLengths.x, +edgeLengths.y, +edgeLengths.z), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(+edgeLengths.x, +edgeLengths.y, -edgeLengths.z), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLengths.x, +edgeLengths.y, -edgeLengths.z), color, glm::fvec2(0.0f, 0.0f)},
+
+		// down side
+		{glm::fvec3(-edgeLengths.x, -edgeLengths.y, -edgeLengths.z), color, glm::fvec2(0.0f, 1.0f)},
+		{glm::fvec3(+edgeLengths.x, -edgeLengths.y, -edgeLengths.z), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(+edgeLengths.x, -edgeLengths.y, +edgeLengths.z), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-edgeLengths.x, -edgeLengths.y, +edgeLengths.z), color, glm::fvec2(0.0f, 0.0f)}};
+
+	uint16_t Indices[NumIndices] = {
+		// front
+		0, 1, 2, 0, 2, 3,
+
+		// back
+		4, 5, 6, 4, 6, 7,
+
+		// left
+		8, 9, 10, 8, 10, 11,
+
+		// right
+		12, 13, 14, 12, 14, 15,
+
+		// up
+		16, 17, 18, 16, 18, 19,
+
+		// back
+		20, 21, 22, 20, 22, 23};
+
+	StaticMeshCreateInfo createInfo;
+	createInfo.NumVertices = NumVertices;
+	createInfo.NumIndices = NumIndices;
+	createInfo.Vertices = Vertices;
+	createInfo.Indices = Indices;
+	createInfo.IndexType = RHIIndexBufferType::IBT_16;
+
+	CreateStaticMeshWithDefaultFilter(mesh, createInfo);
+	return mesh;
+}
+
 StaticMesh_ptr StaticMeshGenerator::CreatePlane(float width /*= 1.0f*/, float height /*= 1.0f*/, size_t divisions /*= 1*/)
 {
 	std::vector<StaticMeshVertex> Vertices;

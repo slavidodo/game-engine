@@ -56,7 +56,7 @@ public:
 
 	enum class MovementDirection { Forward, Backward, Upward, Downward, Right, Left };
 	void Move(MovementDirection direction) {
-		float movementSpeed = 0.05f;
+		float movementSpeed = 0.02f;
 		glm::fvec3 displacement = glm::fvec3(0.0f);
 		switch (direction) {
 		case MovementDirection::Forward:
@@ -79,8 +79,6 @@ public:
 			break;*/
 		}
 		mPosition += displacement;
-		std::cout << displacement.x << " " << displacement.y << " " << displacement.z << std::endl;
-		std::cout << mPosition.x << " " << mPosition.y << " " << mPosition.z << std::endl << std::endl;
 	}
 	void SetParent(Actor_ptr parent) {
 		mTempParent = parent;

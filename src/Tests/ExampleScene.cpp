@@ -50,16 +50,22 @@ public:
 // instead use this as a general vertex declaration
 static StaticMeshVertexDeclaration gStaticMeshVertexDeclaration;
 
+void AddPlayer(Transform_ptr transform) {
+	RActor_ptr renderActor = std::make_shared<RActor>(transform, StaticMeshGenerator::CreateBox(transform->GetScale()));
 
-void AddFloor(Transform_ptr transform) {
-	RActor_ptr renderActor = std::make_shared<RActor>(transform, StaticMeshGenerator::CreateCube(transform->GetScale().x / 2.0f));
-	PActor_ptr physicsActor = PStaticActor::CreateActor(transform);
-	physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(transform->GetScale() / 2.0f), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f)));
+	PActor_ptr physicsActor = PDynamicActor::CreateActor(transform);
+	
+	glm::fvec3 colliderScale = glm::fvec3(transform->GetScale());
+	colliderScale.y = 0.25f;
+	PCollider_ptr coll = PCollider::CreateCollider(PBoxGeometry::CreateGeometry(colliderScale), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f));
+	coll->SetLocalPosition(glm::fvec3(0.0f, 0.25f, 0.0f));
+	
+	physicsActor->AddCollider(coll);
 
 	SceneManager::GetInstance().AddActor(std::make_shared<Actor>(renderActor, physicsActor));
 }
-void AddCubeActor(bool bStatic, Transform_ptr transform) {
-	RActor_ptr renderActor = std::make_shared<RActor>(transform, StaticMeshGenerator::CreateCube(transform->GetScale().x / 2.0f));
+void AddBoxActor(bool bStatic, Transform_ptr transform, glm::fvec3 color) {
+	RActor_ptr renderActor = std::make_shared<RActor>(transform, StaticMeshGenerator::CreateBox(transform->GetScale(), color));
 	
 	PActor_ptr physicsActor = nullptr;
 	if (bStatic) physicsActor = PStaticActor::CreateActor(transform);
@@ -72,20 +78,23 @@ void RunExampleScene() {
 	bool bStatic = true;
 	bool bDynamic = false;
 
-	AddFloor(std::make_shared<Transform>(glm::fvec3(0.0f, -52.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(100.0f)));
+	/// Floor
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 0.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(100.0f, 1.0f, 100.0f)), glm::fvec3(0.0f));
 
-	AddCubeActor(bDynamic, std::make_shared<Transform>(glm::fvec3(0.0f, 15.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)));
-	AddCubeActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 5.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(5.0f)));
+	/// Platforms
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(5.0f, 2.0f, -5.0f), glm::fvec3(0.0f), glm::fvec3(8.0f, 1.0f, 8.0f)), glm::fvec3(0.0f, 0.0f, 1.0f));
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-10.0f, 6.0f, -5.0f), glm::fvec3(0.0f), glm::fvec3(8.0f, 1.0f, 8.0f)), glm::fvec3(1.0f, 0.0f, 0.0f));
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-25.0f, 10.0f, -5.0f), glm::fvec3(0.0f), glm::fvec3(8.0f, 1.0f, 8.0f)), glm::fvec3(0.0f, 1.0f, 0.0f));
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-25.0f, 14.0f, -15.0f), glm::fvec3(0.0f), glm::fvec3(8.0f, 1.0f, 8.0f)), glm::fvec3(1.0f, 0.0f, 1.0f));
 	
-	AddCubeActor(bDynamic, std::make_shared<Transform>(glm::fvec3(-5.0f, 29.0f, -14.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)));
+	AddBoxActor(bDynamic, std::make_shared<Transform>(glm::fvec3(-5.0f, 5.0f, -14.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)), glm::fvec3(1.0f, 1.0f, 0.0f));
 
 
-	AddCubeActor(bDynamic, std::make_shared<Transform>(glm::fvec3(0.0f, 10.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(0.1f)));
+	AddPlayer(std::make_shared<Transform>(glm::fvec3(0.0f, 2.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(0.001f)));
 	Actor_ptr player = SceneManager::GetInstance().GetActors().back();
 	PDynamicActor_ptr _player = std::static_pointer_cast<PDynamicActor>(player->mPhysicsActor.lock());
 	_player->LockMotion(PDynamicActor::MotionAxis::ANGULAR_Z);
 	_player->LockMotion(PDynamicActor::MotionAxis::ANGULAR_X);
-	//_player->LockMotion(PDynamicActor::MotionAxis::ANGULAR_Z);
 	_player->SetInertiaTensor(glm::vec3(100.0f));
 	SceneManager::GetInstance().SetPlayer(player);
 }
@@ -97,7 +106,7 @@ ExampleScene::ExampleScene(RScene_ptr renderScene, PScene_ptr physicsScene) : Sc
 	mPhysicsScene->mUpdateFunction = std::bind(&ExampleScene::UpdatePhysics, this);
 
 	mRenderScene->mMainCamera = Camera::CreatePerspectiveCamera(45.0f, 0.1f, 1000.f);
-	mRenderScene->mMainCamera->SetLocalTranslation(glm::fvec3(0.0f, 0.2f, -0.2f));
+	mRenderScene->mMainCamera->SetLocalTranslation(glm::fvec3(0.0f, 0.5f, 0.0f));
 	
 	//mRenderScene->mMainCamera->SetEditorTranslation(glm::fvec3(0.0f, 5.0f, 20.0f));
 	//mRenderScene->mMainCamera->SetEditorTranslation(glm::fvec3(0.0f, 30.0f, 3.0f));
@@ -148,9 +157,6 @@ void ExampleScene::UpdatePhysics() {
 	mDeltaTime = static_cast<float>(currentTime - mLastTime);
 	mLastTime = currentTime;
 
-	//PDynamicActor_ptr player = std::static_pointer_cast<PDynamicActor>(mActors.back()->mPhysicsActor.lock());
-	//player->ApplyTorque(glm::fvec3(0.0f, 1.0f, 0.0f));
-
 	mPhysicsScene->Update(mDeltaTime);
 	UpdateTransforms();
 }
@@ -184,12 +190,6 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 
 		Camera_ptr camera = mRenderScene->mMainCamera;
 		glm::mat4x4 ViewProjection = camera->GetProjMatrix() * camera->GetViewMatrix();
-
-		/*Actor_ptr player = SceneManager::GetInstance().GetActors().back();
-		glm::fvec3 physicsPos = player->mPhysicsActor.lock()->GetPosition();
-		glm::fvec3 renderPos  = player->mRenderActor.lock()->mTransform->GetTranslation();
-		std::cout << "Physics Pos: " << physicsPos.x << " " << physicsPos.y << " " << physicsPos.z << std::endl;
-		std::cout << "Render  Pos: " << renderPos.x << " " << renderPos.y << " " << renderPos.z << std::endl << std::endl;*/
 
 		for (Actor_ptr actor : mActors) {
 			Transform_ptr Transform = actor->mRenderActor.lock()->mTransform;

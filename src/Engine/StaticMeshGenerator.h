@@ -21,6 +21,7 @@ public:
 	static StaticMesh_ptr CreateTriangle(float edgeLength = 1.0f);
 	static StaticMesh_ptr CreateQuad(float edgeLength = 1.0f);
 	static StaticMesh_ptr CreateCube(float edgeLength = 1.0f);
+	static StaticMesh_ptr CreateBox(glm::fvec3 edgeLengths = glm::fvec3(1.0f), glm::fvec3 color = glm::fvec3(0.0f));
 	static StaticMesh_ptr CreateSphere(float radius = 1.0f);
 	static StaticMesh_ptr CreatePlane(float width = 1.0f, float height = 1.0f, size_t division = 1U);
 

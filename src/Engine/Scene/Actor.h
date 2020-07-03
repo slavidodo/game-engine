@@ -18,22 +18,8 @@ public:
 
 	void UpdateTransforms();
 	
-	void Move(glm::fvec3 newPosition) {
-		PDynamicActor_ptr actor = std::static_pointer_cast<PDynamicActor>(mPhysicsActor.lock());
-		actor->SetPosition(newPosition);
-		UpdateTransforms();
-	}
-	void Rotate(double xDelta, double yDelta) {
-		std::cout << "rotating player\n";
-		PDynamicActor_ptr actor = std::static_pointer_cast<PDynamicActor>(mPhysicsActor.lock());
-		actor->ApplyTorque(glm::fvec3(0.0f, xDelta * 100.1f, 0.0f));
-		UpdateTransforms();
-	}
-	void Jump() {
-		PDynamicActor_ptr actor = std::static_pointer_cast<PDynamicActor>(mPhysicsActor.lock());
-		actor->ApplyImpulse(glm::vec3(0.0f, 0.2f, 0.0f));
-		UpdateTransforms();
-	}
+	void Move(glm::fvec3 newPosition);
+	void Jump();
 
 	void SetTransform(Transform_ptr transform) {
 		mTransform = transform;
