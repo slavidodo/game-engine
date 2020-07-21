@@ -30,14 +30,14 @@
 #include "PGeometry.h"
 #include "PMaterial.h"
 
-class PActor;
+class PhysicsActor;
 class PCollider;
-typedef std::shared_ptr<PActor> PActor_ptr;
+typedef std::shared_ptr<PhysicsActor> PhysicsActor_ptr;
 typedef std::shared_ptr<PCollider> PCollider_ptr;
 
 class PCollider 
 {
-friend class PActor;
+friend class PhysicsActor;
 
 public:
 	PCollider(physx::PxShape* shape);

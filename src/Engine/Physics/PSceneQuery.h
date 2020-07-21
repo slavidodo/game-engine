@@ -27,7 +27,7 @@
 #define ENGINE_PHYSICS_SCENE_QUERY_H
 
 #include "physx/PxPhysicsAPI.h"
-#include "PActor.h"
+#include "PhysicsActor.h"
 
 class PRaycastHit;
 class PSweepHit;
@@ -42,7 +42,7 @@ class PQueryHit
 public:
 	~PQueryHit();
 
-	PActor_ptr GetActor() const;
+	PhysicsActor_ptr GetActor() const;
 	PCollider_ptr GetCollider() const;
 
 protected:
@@ -54,7 +54,7 @@ class PPointHit
 public:
 	~PPointHit();
 
-	PActor_ptr GetActor() const;
+	PhysicsActor_ptr GetActor() const;
 	PCollider_ptr GetCollider() const;
 
 	float GetDistance() const;

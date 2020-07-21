@@ -179,9 +179,6 @@
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLShaderCompiler.cpp">
       <Filter>Engine\OpenGLRHI</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Engine\Physics\PActor.cpp">
-      <Filter>Engine\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Engine\Physics\PCollider.cpp">
       <Filter>Engine\Physics</Filter>
     </ClCompile>
@@ -209,16 +206,25 @@
     <ClCompile Include="..\src\Engine\Physics\PAllocator.cpp">
       <Filter>Engine\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Engine\Scene\RScene.cpp">
-      <Filter>Engine\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Engine\Scene\PScene.cpp">
-      <Filter>Engine\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Engine\Scene\RActor.cpp">
-      <Filter>Engine\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Engine\Scene\Actor.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Physics\PhysicsActor.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\PhysicsScene.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\RenderActor.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\RenderScene.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\Scene.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Scene\PlayerController.cpp">
       <Filter>Engine\Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -345,9 +351,6 @@
     <ClInclude Include="..\src\Engine\Atomic\ThreadSafeRefCountedObject.h">
       <Filter>Engine\Atomic</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Engine\Physics\PActor.h">
-      <Filter>Engine\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Engine\Physics\PAllocator.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
@@ -375,19 +378,25 @@
     <ClInclude Include="..\src\Engine\Physics\PSceneQuery.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Engine\Scene\RScene.h">
-      <Filter>Engine\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Engine\Scene\PScene.h">
-      <Filter>Engine\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Engine\Scene\RActor.h">
-      <Filter>Engine\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Engine\Scene\Actor.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Engine\Scene\Scene.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Physics\PhysicsActor.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Scene\PhysicsScene.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Scene\RenderScene.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Scene\RenderActor.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Scene\PlayerController.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
   </ItemGroup>

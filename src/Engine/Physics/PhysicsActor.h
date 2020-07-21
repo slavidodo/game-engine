@@ -30,20 +30,20 @@
 #include "PCollider.h"
 #include "../Core/Transform.h"
 
-class PActor;
+class PhysicsActor;
 class PStaticActor;
 class PDynamicActor;
 
-typedef std::shared_ptr<PActor> PActor_ptr;
+typedef std::shared_ptr<PhysicsActor> PhysicsActor_ptr;
 typedef std::shared_ptr<PStaticActor> PStaticActor_ptr;
 typedef std::shared_ptr<PDynamicActor> PDynamicActor_ptr;
 
-class PActor 
+class PhysicsActor 
 {
 	friend class PCollider;
 
 public:
-	~PActor();
+	~PhysicsActor();
 
 	physx::PxRigidActor* GetSdkActor() const;
 	
@@ -61,7 +61,7 @@ protected:
 	std::list<PCollider_ptr> mColliders;
 };
 
-class PStaticActor : public PActor 
+class PStaticActor : public PhysicsActor 
 {
 public:
 	PStaticActor(physx::PxRigidStatic* pStaticActor);
@@ -73,7 +73,7 @@ private:
 	physx::PxRigidStatic* mStaticActor = nullptr;
 };
 
-class PDynamicActor : public PActor 
+class PDynamicActor : public PhysicsActor 
 {
 public:
 	PDynamicActor(physx::PxRigidDynamic* pDynamicActor);

@@ -54,8 +54,6 @@ bool PhysicsEngine::Init(const PhysicsSettings& settings) {
 }
 
 void PhysicsEngine::Terminate() {
-	SceneManager::GetInstance().SetCurrentPhysicsScene(nullptr);
-
 	gDefaultMaterial.reset();
 
 	PxCloseExtensions();

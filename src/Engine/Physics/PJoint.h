@@ -27,7 +27,7 @@
 #define ENGINE_PHYSICS_JOINT_H
 
 #include "physx/PxPhysicsAPI.h"
-#include "PActor.h"
+#include "PhysicsActor.h"
 
 class PJoint;
 class PFixedJoint;
@@ -60,7 +60,7 @@ class PFixedJoint : public PJoint
 {
 public:
 	PFixedJoint(physx::PxFixedJoint* pFixedJoint);
-	static PFixedJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
+	static PFixedJoint_ptr CreateJoint(PhysicsActor_ptr actor1, PhysicsActor_ptr actor2);
 
 private:
 	physx::PxFixedJoint* mFixedJoint;
@@ -70,7 +70,7 @@ class PDistanceJoint : public PJoint
 {
 public:
 	PDistanceJoint(physx::PxDistanceJoint* pDistanceJoint);
-	static PDistanceJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
+	static PDistanceJoint_ptr CreateJoint(PhysicsActor_ptr actor1, PhysicsActor_ptr actor2);
 
 	void SetLimits(float minDistance, float maxDistance, float tolerance = -1.0f);
 
@@ -82,7 +82,7 @@ class PSphericalJoint : public PJoint
 {
 public:
 	PSphericalJoint(physx::PxSphericalJoint* pSphericalJoint);
-	static PSphericalJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
+	static PSphericalJoint_ptr CreateJoint(PhysicsActor_ptr actor1, PhysicsActor_ptr actor2);
 
 	void SetLimits(float yMaxAngleRadians, float zMaxAngleRadians, float tolerance = -1.0f);
 
@@ -94,7 +94,7 @@ class PRevoluteJoint : public PJoint
 {
 public:
 	PRevoluteJoint(physx::PxRevoluteJoint* pRevoluteJoint);
-	static PRevoluteJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
+	static PRevoluteJoint_ptr CreateJoint(PhysicsActor_ptr actor1, PhysicsActor_ptr actor2);
 
 	void SetLimits(float minAngleRadian, float maxAngleRadian, float tolerance = -1.0f);
 
@@ -106,7 +106,7 @@ class PPrismaticJoint : public PJoint
 {
 public:
 	PPrismaticJoint(physx::PxPrismaticJoint* pPrismaticJoint);
-	static PPrismaticJoint_ptr CreateJoint(PActor_ptr actor1, PActor_ptr actor2);
+	static PPrismaticJoint_ptr CreateJoint(PhysicsActor_ptr actor1, PhysicsActor_ptr actor2);
 
 	void SetLimits(float minDistance, float maxDistance, float tolerance = -1.0f);
 

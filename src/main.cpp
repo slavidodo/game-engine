@@ -92,17 +92,18 @@ int main(int argc, char* argv[])
 	// and agreed-on structure of how a scene could be stored
 	// in order to make this work, the engine may ship with extra
 	// objects, ...
-	PSceneDescriptor desc;
+	PhysicsSceneDescriptor desc;
 	desc.SetGravityForce(glm::fvec3(0.0f, -9.8f, 0.0f));
 
 
-	SceneManager::GetInstance().SetCurrentScene(std::make_shared<ExampleScene>(std::make_shared<RScene>(), PScene::CreateScene(desc)));
+	SceneManager::GetInstance().SetCurrentScene(std::make_shared<ExampleScene>(std::make_shared<RenderScene>(), PhysicsScene::CreateScene(desc)));
 	RunExampleScene();
 
 
 	// run application's main loop
 	gApplication.RunMainLoop();
 
+	SceneManager::GetInstance().SetCurrentScene(nullptr);
 	// shut down, remove context and related resources
 	gDynamicRHI->Terminate();
 	delete gDynamicRHI;

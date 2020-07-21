@@ -16,8 +16,9 @@ public:
 		: Transform(translation, glm::fquat(eulerAngles), scale) {}
 
 	Transform(glm::fvec3 translation, glm::fquat rotation, glm::fvec3 scale = glm::fvec3(1.0f))
-		: mTranslation(translation), mRotation(rotation), mScale(scale), mForward(0.0f), mRight(0.0f), mUp(0.0f),
-			mLocalToWorld(0.0f), mWorldToLocal(0.0f)
+		: mTranslation(translation), mRotation(rotation), mScale(scale), 
+		  mForward(0.0f, 0.0f, 1.0f), mRight(1.0f, 0.0f, 0.0f), mUp(0.0f, 1.0f, 0.0f),
+		  mLocalToWorld(0.0f), mWorldToLocal(0.0f)
 	{
 	}
 

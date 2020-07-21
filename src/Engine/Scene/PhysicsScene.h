@@ -27,19 +27,19 @@
 #define ENGINE_PHYSICS_SCENE_H
 
 #include "physx/PxPhysicsAPI.h"
-#include "../Scene/PScene.h"
+#include "../Scene/PhysicsScene.h"
 #include "../Physics/PSceneQuery.h"
 
-class PScene;
-typedef std::shared_ptr<PScene> PScene_ptr;
+class PhysicsScene;
+typedef std::shared_ptr<PhysicsScene> PhysicsScene_ptr;
 
 physx::PxFilterFlags FilterShaderFunction(physx::PxFilterObjectAttributes attribs1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attribs2, physx::PxFilterData filterData2, physx::PxPairFlags& pairFlags, const void* constBlock, uint32_t constBlockSize);
 
-struct PSceneDescriptor 
+struct PhysicsSceneDescriptor 
 {
 public:
-	PSceneDescriptor();
-	~PSceneDescriptor();
+	PhysicsSceneDescriptor();
+	~PhysicsSceneDescriptor();
 
 	physx::PxSceneDesc* GetSdkDescriptor() const;
 
@@ -51,17 +51,17 @@ private:
 	physx::PxSceneDesc* mDescriptor;
 };
 
-class PScene 
+class PhysicsScene 
 {
 public:
-	PScene(physx::PxScene* pScene);
-	~PScene();
+	PhysicsScene(physx::PxScene* pScene);
+	~PhysicsScene();
 
-	static PScene_ptr CreateScene(const PSceneDescriptor& pPSceneDesc);
+	static PhysicsScene_ptr CreateScene(const PhysicsSceneDescriptor& pPhysicsSceneDesc);
 
-	void AddActor(PActor_ptr pActor);
-	void RemoveActor(PActor_ptr pActor);
-	std::list<PActor_ptr> GetActors() const {
+	void AddActor(PhysicsActor_ptr pActor);
+	void RemoveActor(PhysicsActor_ptr pActor);
+	std::list<PhysicsActor_ptr> GetActors() const {
 		return mActors;
 	}
 
@@ -99,7 +99,7 @@ public:
 private:
 	physx::PxScene* mScene = nullptr;
 
-	std::list<PActor_ptr> mActors;
+	std::list<PhysicsActor_ptr> mActors;
 
 	std::pair<physx::PxPairFlag::Enum, physx::PxFilterFlag::Enum> mCollisionMatrix[128][128];
 };

@@ -1,11 +1,11 @@
 
 #include "pch.h"
-#include "RScene.h"
+#include "RenderScene.h"
 
-void RScene::AddActor(RActor_ptr actor) {
+void RenderScene::AddActor(RenderActor_ptr actor) {
 	 mActors.push_back(actor);
 }	 
-void RScene::RemoveActor(RActor_ptr actor) {
+void RenderScene::RemoveActor(RenderActor_ptr actor) {
 	auto it = std::find(mActors.begin(), mActors.end(), actor);
 	if (it != mActors.end()) mActors.erase(it);
 }

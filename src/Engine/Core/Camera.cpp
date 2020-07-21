@@ -52,8 +52,6 @@ void Camera::UpdateView() {
 	if (IsViewOutdated()) {
 		mViewOutdated = false;
 
-		//std::cout << mParentRotation.x << " " << mParentRotation.y << " " << mParentRotation.z << " " << mParentRotation.w << std::endl;
-
 		glm::fmat3 rotation(glm::mat3_cast(mParentRotation));
 		glm::fmat3 rotationT = glm::transpose(rotation);
 
@@ -64,9 +62,12 @@ void Camera::UpdateView() {
 		mViewMatrix = glm::translate(viewMatrix, translation);
 	}
 
-	glm::fvec3 parentPosition = mTempParent.lock()->GetTransform()->GetTranslation();
-	mPosition.y = parentPosition.y + mLocalTranslation.y;
-	mViewMatrix = glm::lookAt(mPosition, mPosition + mFront, glm::fvec3(0.0f, 1.0f, 0.0f));
+	if (Actor_ptr parentActor = mTempParent.lock()) {
+		Transform_ptr parentTransform = parentActor->GetTransform();
+		mPosition = parentTransform->GetTranslation() + mLocalTranslation;
+		//mFront = parentTransform->GetForward();
+		mViewMatrix = glm::lookAt(mPosition, mPosition + mFront, glm::fvec3(0.0f, 1.0f, 0.0f));
+	}
 }
 
 void Camera::SetProjectionType(ProjectionType type)
@@ -121,4 +122,30 @@ glm::fmat4x4 Camera::GetPerspectiveProjMatrix()
 	std::cout << "Updating Proj: " << GetFovY() << ", " << glm::radians(GetFovY()) << ", " << GetAspectRatio()
 		<< ", " << mZNear << ", " << mZFar << std::endl;
 	return glm::perspective(glm::radians(GetFovY()), GetAspectRatio(), mZNear, mZFar);
+}
+
+
+
+void Camera::SetParent(Actor_ptr parent) {
+	mTempParent = parent;
+	mViewOutdated = true;
+	UpdateView();
+}
+
+void Camera::SetLocalTranslation(glm::fvec3 translation) {
+	mLocalTranslation = translation;
+}
+
+void Camera::Rotate(float xDelta, float yDelta) {
+	xDelta *= 0.05f;
+	yDelta *= 0.05f;
+
+	mYaw += xDelta;
+	mPitch = glm::min(glm::max(mPitch - yDelta, -89.9f), 89.9f);
+
+	/// Update camera front vector
+	mFront.x = glm::cos(glm::radians(mPitch)) * glm::cos(glm::radians(mYaw));
+	mFront.y = glm::sin(glm::radians(mPitch));
+	mFront.z = glm::cos(glm::radians(mPitch)) * glm::sin(glm::radians(mYaw));
+	mFront = glm::normalize(mFront);
 }

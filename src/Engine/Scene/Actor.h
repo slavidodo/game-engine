@@ -1,24 +1,23 @@
 #pragma once
 
 #include "Engine/Core/Object.h"
-#include "RActor.h"
-#include "../Physics/PActor.h"
+#include "RenderActor.h"
+#include "../Physics/PhysicsActor.h"
+#include "../Utils.h"
 
 class Actor;
 typedef std::shared_ptr<Actor> Actor_ptr;
 
 class Actor : public Object {
 public:
-	Actor(RActor_ptr renderActor, PActor_ptr physicsActor) : mRenderActor(renderActor), mPhysicsActor(physicsActor) {
-		mTransform = renderActor->mTransform;
-	}
+	Actor(Transform_ptr transform, RenderActor_ptr renderActor, PhysicsActor_ptr physicsActor);
 
-	std::weak_ptr<PActor> mPhysicsActor;
-	std::weak_ptr<RActor> mRenderActor;
+	std::weak_ptr<PhysicsActor> mPhysicsActor;
+	std::weak_ptr<RenderActor> mRenderActor;
 
-	void UpdateTransforms();
+	void UpdateTransformsFromPhysics();
 	
-	void Move(glm::fvec3 newPosition);
+	void Move(glm::fvec3 displacement);
 	void Jump();
 
 	void SetTransform(Transform_ptr transform) {
@@ -30,4 +29,5 @@ public:
 
 protected:
 	Transform_ptr mTransform;
+	
 };

@@ -4,6 +4,7 @@
 
 #include "../Scene/SceneManager.h"
 #include "../Platform/Window.h"
+#include "../Utils.h"
 
 class InputManager
 {

@@ -3,7 +3,7 @@
 #define ENGINE_SCENE_SCENE_H
 
 #include "SceneNode.h"
-#include "RActor.h"
+#include "RenderActor.h"
 #include "../Core/Camera.h"
 #include "../RHI/RHICommandList.h"
 #include "Engine/Rendering/ShaderParameterMacros.h"
@@ -32,10 +32,10 @@ public:
 	}
 };
 
-class RScene;
-typedef std::shared_ptr<RScene> RScene_ptr;
+class RenderScene;
+typedef std::shared_ptr<RenderScene> RenderScene_ptr;
 
-class RScene
+class RenderScene
 {
 public:
 	/*Camera_ptr GetMainCamera() const {
@@ -44,8 +44,8 @@ public:
 
 	std::function<void(RHICommandList& RHICmdList)> mRenderFunction;
 
-	void AddActor(RActor_ptr actor);
-	void RemoveActor(RActor_ptr actor);
+	void AddActor(RenderActor_ptr actor);
+	void RemoveActor(RenderActor_ptr actor);
 
 	Camera_ptr mMainCamera;
 
@@ -57,7 +57,7 @@ public:
 protected:
 	SceneNode_ptr mRootNode;
 
-	std::list<RActor_ptr> mActors;
+	std::list<RenderActor_ptr> mActors;
 };
 
 #endif // ENGINE_SCENE_SCENE_H

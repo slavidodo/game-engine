@@ -195,7 +195,7 @@
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLTexture.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLState.cpp" />
     <ClCompile Include="..\src\Engine\OpenGLRHI\OpenGLVertexDeclaration.cpp" />
-    <ClCompile Include="..\src\Engine\Physics\PActor.cpp" />
+    <ClCompile Include="..\src\Engine\Physics\PhysicsActor.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PAllocator.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PCollider.cpp" />
     <ClCompile Include="..\src\Engine\Physics\PCollisionFilterCallback.cpp" />
@@ -210,9 +210,11 @@
     <ClCompile Include="..\src\Engine\RHI\RHICommandList.cpp" />
     <ClCompile Include="..\src\Engine\RHI\DynamicRHI.cpp" />
     <ClCompile Include="..\src\Engine\Scene\Actor.cpp" />
-    <ClCompile Include="..\src\Engine\Scene\PScene.cpp" />
-    <ClCompile Include="..\src\Engine\Scene\RActor.cpp" />
-    <ClCompile Include="..\src\Engine\Scene\RScene.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\PhysicsScene.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\PlayerController.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\RenderActor.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\RenderScene.cpp" />
+    <ClCompile Include="..\src\Engine\Scene\Scene.cpp" />
     <ClCompile Include="..\src\Engine\Scene\SceneManager.cpp" />
     <ClCompile Include="..\src\Engine\Scene\SceneNode.cpp" />
     <ClCompile Include="..\src\Engine\Scene\SceneRenderer.cpp" />
@@ -255,7 +257,7 @@
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLShaderCompiler.h" />
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLSpecs.h" />
     <ClInclude Include="..\src\Engine\OpenGLRHI\OpenGLState.h" />
-    <ClInclude Include="..\src\Engine\Physics\PActor.h" />
+    <ClInclude Include="..\src\Engine\Physics\PhysicsActor.h" />
     <ClInclude Include="..\src\Engine\Physics\PAllocator.h" />
     <ClInclude Include="..\src\Engine\Physics\PCollider.h" />
     <ClInclude Include="..\src\Engine\Physics\PCollisionFilterCallback.h" />
@@ -273,9 +275,10 @@
     <ClInclude Include="..\src\Engine\RHI\RHIResource.h" />
     <ClInclude Include="..\src\Engine\RHI\DynamicRHI.h" />
     <ClInclude Include="..\src\Engine\Scene\Actor.h" />
-    <ClInclude Include="..\src\Engine\Scene\PScene.h" />
-    <ClInclude Include="..\src\Engine\Scene\RScene.h" />
-    <ClInclude Include="..\src\Engine\Scene\RActor.h" />
+    <ClInclude Include="..\src\Engine\Scene\PhysicsScene.h" />
+    <ClInclude Include="..\src\Engine\Scene\PlayerController.h" />
+    <ClInclude Include="..\src\Engine\Scene\RenderScene.h" />
+    <ClInclude Include="..\src\Engine\Scene\RenderActor.h" />
     <ClInclude Include="..\src\Engine\Scene\Scene.h" />
     <ClInclude Include="..\src\Engine\Scene\SceneManager.h" />
     <ClInclude Include="..\src\Engine\Scene\SceneNode.h" />

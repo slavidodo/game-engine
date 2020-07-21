@@ -30,6 +30,7 @@ bool CoreApplication::Init()
 		settings.bEnableVisualDebugger = true;
 		settings.bTrackMemoryAllocations = true;
 		#endif
+		//settings.toleranceScale.length = 2.4f;
 		settings.bEnableHeightFields = true;
 	}
 	if (!PhysicsEngine::GetInstance().Init(settings)) {

@@ -26,38 +26,38 @@
 #include "Pch.h"
 #include "../Physics/PhysicsEngine.h"
 
-PScene::PScene(physx::PxScene* pScene) : mScene(pScene) {
+PhysicsScene::PhysicsScene(physx::PxScene* pScene) : mScene(pScene) {
 	for (int i = 0; i < 128; i++) mCollisionMatrix[0][i] = mCollisionMatrix[i][0] = { 
 		physx::PxPairFlag::eCONTACT_DEFAULT,
 		physx::PxFilterFlag::eDEFAULT
 	};
 	mScene->setFilterShaderData(mCollisionMatrix, sizeof(uint8_t) * 128 * 128);
 }
-PScene::~PScene() {
+PhysicsScene::~PhysicsScene() {
 	if (!mScene) return;
 	
 	PAlignedAllocator::deallocate(mScene->userData);
 	mScene->release();
 }
 
-PScene_ptr PScene::CreateScene(const PSceneDescriptor& pSceneDesc) {
+PhysicsScene_ptr PhysicsScene::CreateScene(const PhysicsSceneDescriptor& pSceneDesc) {
 	physx::PxScene* pScene = PhysicsEngine::GetInstance().mPhysics->createScene(*pSceneDesc.GetSdkDescriptor());
 	if (!pScene) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error creating scene", __FILE__, __LINE__);
 		return nullptr;
 	}
 
-	PScene_ptr scene = std::make_shared<PScene>(pScene);
-	scene->mScene->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PScene>>()) std::weak_ptr<PScene>(scene);
+	PhysicsScene_ptr scene = std::make_shared<PhysicsScene>(pScene);
+	scene->mScene->userData = new (PAlignedAllocator::allocate<std::weak_ptr<PhysicsScene>>()) std::weak_ptr<PhysicsScene>(scene);
 
 	return std::move(scene);
 }
 
-void PScene::AddActor(PActor_ptr actor) {
+void PhysicsScene::AddActor(PhysicsActor_ptr actor) {
 	mScene->addActor(*actor->GetSdkActor());
 	mActors.push_back(actor);
 }
-void PScene::RemoveActor(PActor_ptr actor) {
+void PhysicsScene::RemoveActor(PhysicsActor_ptr actor) {
 	auto it = std::find(mActors.begin(), mActors.end(), actor);
 	if (it == mActors.end()) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Trying to remove an actor that is not in this scene", __FILE__, __LINE__);
@@ -68,16 +68,16 @@ void PScene::RemoveActor(PActor_ptr actor) {
 	mActors.erase(it);
 }
 
-void PScene::Update(float dt) {
+void PhysicsScene::Update(float dt) {
 	mScene->simulate(dt);
 	mScene->fetchResults(true);
 }
 
-void PScene::ShiftOrigin(glm::vec3 translation) {
+void PhysicsScene::ShiftOrigin(glm::vec3 translation) {
 	mScene->shiftOrigin(physx::PxVec3(translation.x, translation.y, translation.z));
 }
 
-bool PScene::Raycast(glm::vec3 origin, glm::vec3 direction, float maxDistance, PRaycastHit_ptr hit) {
+bool PhysicsScene::Raycast(glm::vec3 origin, glm::vec3 direction, float maxDistance, PRaycastHit_ptr hit) {
 	physx::PxRaycastBuffer hitsBuffer;
 	bool bHit = mScene->raycast(physx::PxVec3(origin.x, origin.y, origin.z), physx::PxVec3(direction.x, direction.y, direction.z), maxDistance, hitsBuffer);
 	if (!bHit) return false;
@@ -85,7 +85,7 @@ bool PScene::Raycast(glm::vec3 origin, glm::vec3 direction, float maxDistance, P
 	if (hit) hit->CreateHit(&hitsBuffer.block);
 	return true;
 }
-bool PScene::Raycast(glm::vec3 origin, glm::vec3 direction, float maxDistance, std::vector<PRaycastHit_ptr>& hits) {
+bool PhysicsScene::Raycast(glm::vec3 origin, glm::vec3 direction, float maxDistance, std::vector<PRaycastHit_ptr>& hits) {
 	const uint32_t bufferSize = 128;
 	physx::PxRaycastHit buffer[bufferSize];
 	physx::PxRaycastBuffer hitsBuffer(buffer, bufferSize);
@@ -98,7 +98,7 @@ bool PScene::Raycast(glm::vec3 origin, glm::vec3 direction, float maxDistance, s
 	}
 	return true;
 }
-bool PScene::Sweep(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, glm::vec3 direction, float maxDistance, PSweepHit_ptr hit) {
+bool PhysicsScene::Sweep(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, glm::vec3 direction, float maxDistance, PSweepHit_ptr hit) {
 	physx::PxSweepBuffer hitsBuffer;
 	physx::PxTransform transform = physx::PxTransform(physx::PxVec3(origin.x, origin.y, origin.z), physx::PxQuat(rotation.x, rotation.y, rotation.z, rotation.w));
 	bool bHit = mScene->sweep(*geometry->GetSdkGeometry(), transform, physx::PxVec3(direction.x, direction.y, direction.z), maxDistance, hitsBuffer);
@@ -107,7 +107,7 @@ bool PScene::Sweep(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation,
 	if (hit) hit->CreateHit(&hitsBuffer.block);
 	return true;
 }
-bool PScene::Sweep(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, glm::vec3 direction, float maxDistance, std::vector<PSweepHit_ptr>& hits) {
+bool PhysicsScene::Sweep(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, glm::vec3 direction, float maxDistance, std::vector<PSweepHit_ptr>& hits) {
 	const uint32_t bufferSize = 128;
 	physx::PxSweepHit buffer[bufferSize];
 	physx::PxSweepBuffer hitsBuffer(buffer, bufferSize);
@@ -121,7 +121,7 @@ bool PScene::Sweep(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation,
 	}
 	return true;
 }
-bool PScene::Overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, POverlapHit_ptr hit) {
+bool PhysicsScene::Overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, POverlapHit_ptr hit) {
 	physx::PxOverlapBuffer hits;
 	physx::PxTransform transform = physx::PxTransform(physx::PxVec3(origin.x, origin.y, origin.z), physx::PxQuat(rotation.x, rotation.y, rotation.z, rotation.w));
 	physx::PxQueryFilterData filterData = physx::PxQueryFilterData(physx::PxQueryFlags(physx::PxQueryFlag::eANY_HIT));
@@ -132,7 +132,7 @@ bool PScene::Overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotatio
 	hit->CreateHit(new (PAlignedAllocator::allocate<physx::PxOverlapHit>()) physx::PxOverlapHit(hits.block));
 	return true;
 }
-bool PScene::Overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, std::vector<POverlapHit_ptr>& hits) {
+bool PhysicsScene::Overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, std::vector<POverlapHit_ptr>& hits) {
 	const uint32_t bufferSize = 128;
 	physx::PxOverlapHit buffer[bufferSize];
 	physx::PxOverlapBuffer hitsBuffer(buffer, bufferSize);
@@ -147,7 +147,7 @@ bool PScene::Overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotatio
 	return true;
 }
 
-void PScene::SetCollisionRelationship(uint8_t categoryNum1, uint8_t categoryNum2, CollisionHandle collisionHandle, PairFlag pairFlag) {
+void PhysicsScene::SetCollisionRelationship(uint8_t categoryNum1, uint8_t categoryNum2, CollisionHandle collisionHandle, PairFlag pairFlag) {
 	mCollisionMatrix[categoryNum1][categoryNum2] = mCollisionMatrix[categoryNum2][categoryNum1] = {
 		static_cast<physx::PxPairFlag::Enum>(collisionHandle),
 		static_cast<physx::PxFilterFlag::Enum>(pairFlag)
@@ -155,7 +155,7 @@ void PScene::SetCollisionRelationship(uint8_t categoryNum1, uint8_t categoryNum2
 	mScene->setFilterShaderData(mCollisionMatrix, sizeof(uint8_t) * 128 * 128);
 }
 
-void PScene::SetJointVisualization(bool value) {
+void PhysicsScene::SetJointVisualization(bool value) {
 	float val = (value ? 1.0f : 0.0f);
 	
 	bool success = mScene->setVisualizationParameter(physx::PxVisualizationParameter::eJOINT_LIMITS, val);
@@ -167,26 +167,26 @@ void PScene::SetJointVisualization(bool value) {
 	}
 }
 
-PSceneDescriptor::PSceneDescriptor() {
+PhysicsSceneDescriptor::PhysicsSceneDescriptor() {
 	mDescriptor = new (PAlignedAllocator::allocate<physx::PxSceneDesc>()) physx::PxSceneDesc(PhysicsEngine::GetInstance().mPhysics->getTolerancesScale());
 	setFilterShader(FilterShaderFunction);
 	SetCpuDispatcher(physx::PxDefaultCpuDispatcherCreate(0));
 }
-PSceneDescriptor::~PSceneDescriptor() {
+PhysicsSceneDescriptor::~PhysicsSceneDescriptor() {
 	PAlignedAllocator::deallocate(mDescriptor);
 }
 
-physx::PxSceneDesc* PSceneDescriptor::GetSdkDescriptor() const {
+physx::PxSceneDesc* PhysicsSceneDescriptor::GetSdkDescriptor() const {
 	return mDescriptor;
 }
 
-void PSceneDescriptor::SetGravityForce(glm::vec3 force) {
+void PhysicsSceneDescriptor::SetGravityForce(glm::vec3 force) {
 	mDescriptor->gravity = physx::PxVec3(force.x, force.y, force.z);
 }
-void PSceneDescriptor::setFilterShader(physx::PxSimulationFilterShader filterShader) {
+void PhysicsSceneDescriptor::setFilterShader(physx::PxSimulationFilterShader filterShader) {
 	mDescriptor->filterShader = filterShader;
 }
-void PSceneDescriptor::SetCpuDispatcher(physx::PxCpuDispatcher* cpuDispatcher) {
+void PhysicsSceneDescriptor::SetCpuDispatcher(physx::PxCpuDispatcher* cpuDispatcher) {
 	mDescriptor->cpuDispatcher = cpuDispatcher;
 	if (!mDescriptor->cpuDispatcher) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eABORT, "Error provided CPU Dispatcher invalid", __FILE__, __LINE__);

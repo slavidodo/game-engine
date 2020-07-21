@@ -26,7 +26,7 @@ public:
 		Cam->mPitch = 0.0f;
 		Cam->mYaw = -90.0f;
 		Cam->mPosition = glm::fvec3(0.0f);
-		Cam->mFront = glm::fvec3(0.0f, 0.0f, 1.0f);
+		Cam->mFront = glm::fvec3(0.0f, 0.0f, -1.0f);
 		Cam->SetLocalTranslation(glm::fvec3(0.0f, 0.0f, 0.0f));
 		
 		return Cam;
@@ -54,59 +54,12 @@ public:
 	void SetEditorRotationDegrees(glm::fvec3 EulerAngles) { SetEditorRotation(glm::radians(EulerAngles)); }
 
 
-	enum class MovementDirection { Forward, Backward, Upward, Downward, Right, Left };
-	void Move(MovementDirection direction) {
-		float movementSpeed = 0.02f;
-		glm::fvec3 displacement = glm::fvec3(0.0f);
-		switch (direction) {
-		case MovementDirection::Forward:
-			displacement = mFront * movementSpeed * glm::fvec3(1.0f, 0.0f, 1.0f);
-			break;
-		case MovementDirection::Backward:
-			displacement = -mFront * movementSpeed * glm::fvec3(1.0f, 0.0f, 1.0f);
-			break;
-		case MovementDirection::Right:
-			displacement = glm::cross(mFront, glm::fvec3(0.0f, 1.0f, 0.0f)) * movementSpeed * glm::fvec3(1.0f, 0.0f, 1.0f);
-			break;
-		case MovementDirection::Left:
-			displacement = -glm::cross(mFront, glm::fvec3(0.0f, 1.0f, 0.0f)) * movementSpeed * glm::fvec3(1.0f, 0.0f, 1.0f);
-			break;
-		/*case MovementDirection::Upward:
-			mPosition += glm::cross(glm::cross(mFront, glm::fvec3(0.0f, 1.0f, 0.0f)), mFront) * movementSpeed;
-			break;
-		case MovementDirection::Downward:
-			mPosition -= glm::cross(glm::cross(mFront, glm::fvec3(0.0f, 1.0f, 0.0f)), mFront) * movementSpeed;
-			break;*/
-		}
-		mPosition += displacement;
-	}
-	void SetParent(Actor_ptr parent) {
-		mTempParent = parent;
-		mViewOutdated = true;
-		UpdateView();
-	}
-	void SetLocalTranslation(glm::fvec3 translation) {
-		mLocalTranslation = translation;
-	}
-	void Rotate(float xDelta, float yDelta) {
-		xDelta *= 0.05f;
-		yDelta *= 0.05f;
-
-		mYaw += xDelta;
-		mPitch = glm::min(glm::max(mPitch - yDelta, -89.9f), 89.9f);
-
-		/// Update camera front vector
-		mFront.x = glm::cos(glm::radians(mPitch)) * glm::cos(glm::radians(mYaw));
-		mFront.y = glm::sin(glm::radians(mPitch));
-		mFront.z = glm::cos(glm::radians(mPitch)) * glm::sin(glm::radians(mYaw));
-		mFront = glm::normalize(mFront);
-	}
+	void SetParent(Actor_ptr parent);
+	void SetLocalTranslation(glm::fvec3 translation);
+	void Rotate(float xDelta, float yDelta);
 
 	float mPitch, mYaw;
 	glm::fvec3 mPosition, mFront;
-	glm::fvec3 GetParentPosition() {
-		return mPosition - mLocalTranslation;
-	}
 
 protected:
 	virtual void UpdateView();

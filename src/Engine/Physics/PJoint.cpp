@@ -46,7 +46,7 @@ void PJoint::SetVisualization(bool value) {
 PFixedJoint::PFixedJoint(physx::PxFixedJoint* pFixedJoint) : mFixedJoint(pFixedJoint) {
 	mJoint = static_cast<physx::PxJoint*>(mFixedJoint);
 }
-PFixedJoint_ptr PFixedJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
+PFixedJoint_ptr PFixedJoint::CreateJoint(PhysicsActor_ptr actor1, PhysicsActor_ptr actor2) {
 	physx::PxFixedJoint* pFixedJoint = physx::PxFixedJointCreate(*PhysicsEngine::GetInstance().mPhysics, actor1->GetSdkActor(), actor1->GetSdkActor()->getGlobalPose(), actor2->GetSdkActor(), actor2->GetSdkActor()->getGlobalPose());
 	if (!pFixedJoint) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating fixed joint", __FILE__, __LINE__);
@@ -62,7 +62,7 @@ PFixedJoint_ptr PFixedJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
 PDistanceJoint::PDistanceJoint(physx::PxDistanceJoint* pDistanceJoint) : mDistanceJoint(pDistanceJoint) {
 	mJoint = static_cast<physx::PxJoint*>(mDistanceJoint);
 }
-PDistanceJoint_ptr PDistanceJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
+PDistanceJoint_ptr PDistanceJoint::CreateJoint(PhysicsActor_ptr actor1, PhysicsActor_ptr actor2) {
 	physx::PxDistanceJoint* pDistanceJoint = physx::PxDistanceJointCreate(*PhysicsEngine::GetInstance().mPhysics, actor1->GetSdkActor(), actor1->GetSdkActor()->getGlobalPose(), actor2->GetSdkActor(), actor2->GetSdkActor()->getGlobalPose());
 	if (!pDistanceJoint) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Distance joint", __FILE__, __LINE__);
@@ -88,7 +88,7 @@ void PDistanceJoint::SetLimits(float minDistance, float maxDistance, float toler
 PSphericalJoint::PSphericalJoint(physx::PxSphericalJoint* pSphericalJoint) : mSphericalJoint(pSphericalJoint) {
 	mJoint = static_cast<physx::PxJoint*>(mSphericalJoint);
 }
-PSphericalJoint_ptr PSphericalJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
+PSphericalJoint_ptr PSphericalJoint::CreateJoint(PhysicsActor_ptr actor1, PhysicsActor_ptr actor2) {
 	physx::PxSphericalJoint* pSphericalJoint = physx::PxSphericalJointCreate(*PhysicsEngine::GetInstance().mPhysics, actor1->GetSdkActor(), actor1->GetSdkActor()->getGlobalPose(), actor2->GetSdkActor(), actor2->GetSdkActor()->getGlobalPose());
 	if (!pSphericalJoint) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Spherical joint", __FILE__, __LINE__);
@@ -109,7 +109,7 @@ void PSphericalJoint::SetLimits(float yMaxAngleRadians, float zMaxAngleRadians, 
 PRevoluteJoint::PRevoluteJoint(physx::PxRevoluteJoint* pRevoluteJoint) : mRevoluteJoint(pRevoluteJoint) {
 	mJoint = static_cast<physx::PxJoint*>(mRevoluteJoint);
 }
-PRevoluteJoint_ptr PRevoluteJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
+PRevoluteJoint_ptr PRevoluteJoint::CreateJoint(PhysicsActor_ptr actor1, PhysicsActor_ptr actor2) {
 	physx::PxRevoluteJoint* pRevoluteJoint = physx::PxRevoluteJointCreate(*PhysicsEngine::GetInstance().mPhysics, actor1->GetSdkActor(), actor1->GetSdkActor()->getGlobalPose(), actor2->GetSdkActor(), actor2->GetSdkActor()->getGlobalPose());
 	if (!pRevoluteJoint) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Revolute joint", __FILE__, __LINE__);
@@ -130,7 +130,7 @@ void PRevoluteJoint::SetLimits(float minAngleRadian, float maxAngleRadian, float
 PPrismaticJoint::PPrismaticJoint(physx::PxPrismaticJoint* pPrismaticJoint) : mPrismaticJoint(pPrismaticJoint) {
 	mJoint = static_cast<physx::PxJoint*>(mPrismaticJoint);
 }
-PPrismaticJoint_ptr PPrismaticJoint::CreateJoint(PActor_ptr actor1, PActor_ptr actor2) {
+PPrismaticJoint_ptr PPrismaticJoint::CreateJoint(PhysicsActor_ptr actor1, PhysicsActor_ptr actor2) {
 	physx::PxPrismaticJoint* pPrismaticJoint = physx::PxPrismaticJointCreate(*PhysicsEngine::GetInstance().mPhysics, actor1->GetSdkActor(), actor1->GetSdkActor()->getGlobalPose(), actor2->GetSdkActor(), actor2->GetSdkActor()->getGlobalPose());
 	if (!pPrismaticJoint) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Error creating Prismatic joint", __FILE__, __LINE__);

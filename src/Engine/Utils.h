@@ -14,6 +14,8 @@ public:
 	static glm::fvec4 ColorOrange;
 	static glm::fvec4 ColorCyan;
 
+	enum class Direction { Forward, Backward, Upward, Downward, Right, Left };
+
 private:
 	Utils() {}
 };

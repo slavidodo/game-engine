@@ -14,7 +14,7 @@ void RunExampleScene();
 class ExampleScene : public Scene
 {
 public:
-	ExampleScene(RScene_ptr renderScene, PScene_ptr physicsScene);
+	ExampleScene(RenderScene_ptr renderScene, PhysicsScene_ptr physicsScene);
 	
 	void UpdatePhysics();
 	void Render(RHICommandList& RHICmdList);
@@ -24,8 +24,6 @@ private:
 	 * Initialize materials, shaders, render passes
 	 */
 	void InitGraphcisPipeline();
-
-	void UpdateTransforms();
 	void RenderSceneActors(RHICommandList& RHICmdList);
 };
 

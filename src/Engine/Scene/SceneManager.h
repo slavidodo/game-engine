@@ -4,6 +4,8 @@
 
 #include "Scene.h"
 #include "Actor.h"
+#include "../Utils.h"
+#include "PlayerController.h"
 
 class SceneManager
 {
@@ -13,20 +15,7 @@ public:
 		return instance;
 	}
 
-	void SetCurrentScene(Scene_ptr scene) {
-		mCurrentScene = scene;
-	}
-	void SetCurrentRenderScene(RScene_ptr scene) {
-		mCurrentScene->mRenderScene = scene;
-	}
-	void SetCurrentPhysicsScene(PScene_ptr scene) {
-		mCurrentScene->mPhysicsScene = scene;
-	}
-
-	void SetPlayer(Actor_ptr player) {
-		mPlayer = player;
-		mCurrentScene->mRenderScene->mMainCamera->SetParent(player);
-	}
+	void SetCurrentScene(Scene_ptr scene);
 
 	void AddActor(Actor_ptr pActor);
 	void RemoveActor(Actor_ptr pActor);
@@ -35,20 +24,12 @@ public:
 			return mCurrentScene->GetActors();
 		return std::vector<Actor_ptr>();
 	}
+	
 
-	void MovePlayer(Camera::MovementDirection dir) {
-		mCurrentScene->mRenderScene->mMainCamera->Move(dir);
-		mPlayer->Move(mCurrentScene->mRenderScene->mMainCamera->GetParentPosition());
-	}
-	void RotateCamera(double xDelta, double yDelta) {
-		mCurrentScene->mRenderScene->mMainCamera->Rotate(xDelta, yDelta);
-		//mCurrentScene->mRenderScene->mMainCamera->AddParentRotation();
-	}
-	void JumpPlayer() {
-		if (mPlayer) {
-			mPlayer->Jump();
-		}
-	}
+	void SetPlayer(Actor_ptr player);
+	void MovePlayer(Utils::Direction dir);
+	void RotateCamera(double xDelta, double yDelta);
+	void JumpPlayer();
 
 	/// Render Functions
 	void Render(RHICommandList& RHICmdList);
@@ -66,13 +47,14 @@ public:
 	bool Overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, POverlapHit_ptr hit = nullptr);
 	bool Overlap(PGeometry_ptr geometry, glm::vec3 origin, glm::quat rotation, std::vector<POverlapHit_ptr>& hit);
 
-	//void SetCollisionRelationship(uint8_t categoryNum1, uint8_t categoryNum2, PScene::CollisionHandle collisionHandle, PScene::PairFlag pairFlag);
+	//void SetCollisionRelationship(uint8_t categoryNum1, uint8_t categoryNum2, PhysicsScene::CollisionHandle collisionHandle, PhysicsScene::PairFlag pairFlag);
 
 
 private:
 	Scene_ptr mCurrentScene;
 	
 	Actor_ptr mPlayer;
+	PlayerController_ptr mPlayerController;
 };
 
 #endif // ENGINE_SCENE_SCENEMANAGER_H

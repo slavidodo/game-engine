@@ -50,29 +50,32 @@ public:
 // instead use this as a general vertex declaration
 static StaticMeshVertexDeclaration gStaticMeshVertexDeclaration;
 
-void AddPlayer(Transform_ptr transform) {
-	RActor_ptr renderActor = std::make_shared<RActor>(transform, StaticMeshGenerator::CreateBox(transform->GetScale()));
+void AddPlayer(Transform_ptr transform, glm::fvec3 color) {
+	glm::fvec3 halfDimensions = transform->GetScale() * 0.5f;
+	RenderActor_ptr renderActor = std::make_shared<RenderActor>(StaticMeshGenerator::CreateBox(halfDimensions * 0.00001f, color));
 
-	PActor_ptr physicsActor = PDynamicActor::CreateActor(transform);
-	
-	glm::fvec3 colliderScale = glm::fvec3(transform->GetScale());
-	colliderScale.y = 0.25f;
-	PCollider_ptr coll = PCollider::CreateCollider(PBoxGeometry::CreateGeometry(colliderScale), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f));
-	coll->SetLocalPosition(glm::fvec3(0.0f, 0.25f, 0.0f));
-	
-	physicsActor->AddCollider(coll);
+	PhysicsActor_ptr physicsActor = PDynamicActor::CreateActor(transform);
+	physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(halfDimensions), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f)));
 
-	SceneManager::GetInstance().AddActor(std::make_shared<Actor>(renderActor, physicsActor));
+	Actor_ptr player = std::make_shared<Actor>(transform, renderActor, physicsActor);
+	SceneManager::GetInstance().AddActor(player);
+	if (PhysicsActor_ptr physicsActor = player->mPhysicsActor.lock()) {
+		PDynamicActor_ptr dynamicPlayer = std::static_pointer_cast<PDynamicActor>(physicsActor);
+		dynamicPlayer->LockMotion(PDynamicActor::MotionAxis::ANGULAR_Z);
+		dynamicPlayer->LockMotion(PDynamicActor::MotionAxis::ANGULAR_X);
+		SceneManager::GetInstance().SetPlayer(player);
+	}
 }
 void AddBoxActor(bool bStatic, Transform_ptr transform, glm::fvec3 color) {
-	RActor_ptr renderActor = std::make_shared<RActor>(transform, StaticMeshGenerator::CreateBox(transform->GetScale(), color));
+	glm::fvec3 halfDimensions = transform->GetScale() * 0.5f;
+	RenderActor_ptr renderActor = std::make_shared<RenderActor>(StaticMeshGenerator::CreateBox(halfDimensions * 0.55f, color));
 	
-	PActor_ptr physicsActor = nullptr;
+	PhysicsActor_ptr physicsActor = nullptr;
 	if (bStatic) physicsActor = PStaticActor::CreateActor(transform);
 	else         physicsActor = PDynamicActor::CreateActor(transform);
-	physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(transform->GetScale() / 2.0f), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f)));
+	physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(halfDimensions), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f)));
 
-	SceneManager::GetInstance().AddActor(std::make_shared<Actor>(renderActor, physicsActor));
+	SceneManager::GetInstance().AddActor(std::make_shared<Actor>(transform, renderActor, physicsActor));
 }
 void RunExampleScene() {
 	bool bStatic = true;
@@ -82,31 +85,23 @@ void RunExampleScene() {
 	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 0.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(100.0f, 1.0f, 100.0f)), glm::fvec3(0.0f));
 
 	/// Platforms
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(5.0f, 2.0f, -5.0f), glm::fvec3(0.0f), glm::fvec3(8.0f, 1.0f, 8.0f)), glm::fvec3(0.0f, 0.0f, 1.0f));
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-10.0f, 6.0f, -5.0f), glm::fvec3(0.0f), glm::fvec3(8.0f, 1.0f, 8.0f)), glm::fvec3(1.0f, 0.0f, 0.0f));
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-25.0f, 10.0f, -5.0f), glm::fvec3(0.0f), glm::fvec3(8.0f, 1.0f, 8.0f)), glm::fvec3(0.0f, 1.0f, 0.0f));
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-25.0f, 14.0f, -15.0f), glm::fvec3(0.0f), glm::fvec3(8.0f, 1.0f, 8.0f)), glm::fvec3(1.0f, 0.0f, 1.0f));
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 2.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.0f, 0.0f, 1.0f));
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-4.0f, 4.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 0.0f, 0.0f));
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 6.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.0f, 1.0f, 0.0f));
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 0.0f, 1.0f));
 	
-	AddBoxActor(bDynamic, std::make_shared<Transform>(glm::fvec3(-5.0f, 5.0f, -14.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)), glm::fvec3(1.0f, 1.0f, 0.0f));
-
-
-	AddPlayer(std::make_shared<Transform>(glm::fvec3(0.0f, 2.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(0.001f)));
-	Actor_ptr player = SceneManager::GetInstance().GetActors().back();
-	PDynamicActor_ptr _player = std::static_pointer_cast<PDynamicActor>(player->mPhysicsActor.lock());
-	_player->LockMotion(PDynamicActor::MotionAxis::ANGULAR_Z);
-	_player->LockMotion(PDynamicActor::MotionAxis::ANGULAR_X);
-	_player->SetInertiaTensor(glm::vec3(100.0f));
-	SceneManager::GetInstance().SetPlayer(player);
+	//AddBoxActor(bDynamic, std::make_shared<Transform>(glm::fvec3(0.0f, 1.0f, -2.0f), glm::fvec3(0.0f), glm::fvec3(0.5f)),             glm::fvec3(1.0f, 1.0f, 0.0f));
+	AddPlayer(            std::make_shared<Transform>(glm::fvec3(2.0f, 5.0f, 2.0f),  glm::fvec3(0.0f), glm::fvec3(0.3f, 0.3f, 0.3f)), glm::fvec3(0.0f, 1.0f, 1.0f));
 }
 
 
 
-ExampleScene::ExampleScene(RScene_ptr renderScene, PScene_ptr physicsScene) : Scene(renderScene, physicsScene) {
+ExampleScene::ExampleScene(RenderScene_ptr renderScene, PhysicsScene_ptr physicsScene) : Scene(renderScene, physicsScene) {
 	mRenderScene->mRenderFunction = std::bind(&ExampleScene::Render, this, std::placeholders::_1);
 	mPhysicsScene->mUpdateFunction = std::bind(&ExampleScene::UpdatePhysics, this);
 
 	mRenderScene->mMainCamera = Camera::CreatePerspectiveCamera(45.0f, 0.1f, 1000.f);
-	mRenderScene->mMainCamera->SetLocalTranslation(glm::fvec3(0.0f, 0.5f, 0.0f));
+	mRenderScene->mMainCamera->SetLocalTranslation(glm::fvec3(0.0f, 0.15f, 0.0f));
 	
 	//mRenderScene->mMainCamera->SetEditorTranslation(glm::fvec3(0.0f, 5.0f, 20.0f));
 	//mRenderScene->mMainCamera->SetEditorTranslation(glm::fvec3(0.0f, 30.0f, 3.0f));
@@ -158,10 +153,7 @@ void ExampleScene::UpdatePhysics() {
 	mLastTime = currentTime;
 
 	mPhysicsScene->Update(mDeltaTime);
-	UpdateTransforms();
-}
-void ExampleScene::UpdateTransforms() {
-	for (Actor_ptr actor : mActors) actor->UpdateTransforms();
+	for (Actor_ptr actor : mActors) actor->UpdateTransformsFromPhysics();
 }
 
 void ExampleScene::Render(RHICommandList& RHICmdList)
@@ -192,24 +184,26 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 		glm::mat4x4 ViewProjection = camera->GetProjMatrix() * camera->GetViewMatrix();
 
 		for (Actor_ptr actor : mActors) {
-			Transform_ptr Transform = actor->mRenderActor.lock()->mTransform;
-			StaticMesh_ptr Mesh = actor->mRenderActor.lock()->mMesh;
+			RenderActor_ptr renderActor = actor->mRenderActor.lock();
+			if (!renderActor) continue;
+			Transform_ptr transform = renderActor->mTransform;
+			StaticMesh_ptr mesh = renderActor->mMesh;
 
 			// set the vertex buffer to be our data source
-			RHICmdList.SetStreamSource(0, Mesh->VertexBuffer, 0);
+			RHICmdList.SetStreamSource(0, mesh->VertexBuffer, 0);
 
 			// make sure all matricies are calculated if any changes occurred
-			Transform->EnsureUpdated();
+			transform->EnsureUpdated();
 
 			// Update shader paramaters
 			PrimitiveUniformShaderParameters Parameters;
-			Parameters.LocalToWorld = ViewProjection * Transform->GetLocalToWorld();
+			Parameters.LocalToWorld = ViewProjection * transform->GetLocalToWorld();
 			mRenderScene->mUniformBuffer.UpdateUniformBufferImmediate(Parameters);
 
 			// this is yet fixed to draw triangles, in some cases or might be preffered
 			// by the user, we may need to determine the topology
 			// this will issue a draw call with index buffer
-			RHICmdList.DrawIndexedPrimitive(Mesh->IndexBuffer, 0, 0, Mesh->NumVertices, 0, Mesh->NumTriangles, 1);
+			RHICmdList.DrawIndexedPrimitive(mesh->IndexBuffer, 0, 0, mesh->NumVertices, 0, mesh->NumTriangles, 1);
 		}
 	}
 	RHICmdList.EndRenderPass();

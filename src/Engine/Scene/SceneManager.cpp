@@ -3,28 +3,49 @@
 
 #include "SceneManager.h"
 
+void SceneManager::SetCurrentScene(Scene_ptr scene) {
+	mCurrentScene = scene;
+}
+void SceneManager::SetPlayer(Actor_ptr player) {
+	mPlayer = player;
+	mPlayerController = std::make_shared<PlayerController>(mPlayer, mCurrentScene->mRenderScene->mMainCamera);
+	mCurrentScene->mRenderScene->mMainCamera->SetParent(player);
+}
+
 void SceneManager::Render(RHICommandList& RHICmdList) {
 	if (mCurrentScene)
 		mCurrentScene->mRenderScene->mRenderFunction(RHICmdList);
 }
-
 void SceneManager::UpdatePhysics() {
 	if (mCurrentScene)
 		mCurrentScene->mPhysicsScene->mUpdateFunction();
 }
 
-
 void SceneManager::AddActor(Actor_ptr actor) {
 	if (mCurrentScene) {
 		mCurrentScene->AddActor(actor);
-	}
-		
+	}	
 }
 void SceneManager::RemoveActor(Actor_ptr actor) {
 	if (mCurrentScene) {
 		mCurrentScene->RemoveActor(actor);
 	}
 }
+
+
+void SceneManager::MovePlayer(Utils::Direction dir) {
+	if (mPlayerController) 
+		mPlayerController->MovePlayer(dir);
+}
+void SceneManager::RotateCamera(double xDelta, double yDelta) {
+	if (mPlayerController)
+		mPlayerController->RotateCamera(xDelta, yDelta);
+}
+void SceneManager::JumpPlayer() {
+	if (mPlayerController)
+		mPlayerController->JumpPlayer();
+}
+
 
 void SceneManager::ShiftOrigin(glm::vec3 translation) {
 	mCurrentScene->mPhysicsScene->ShiftOrigin(translation);

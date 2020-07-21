@@ -12,6 +12,9 @@ void Transform::SetTranslation(glm::fvec3 value)
 void Transform::SetRotation(glm::fquat value)
 {
 	mRotation = value;
+	mForward = mRotation * glm::fvec3(0.0f, 0.0f, +1.0f);
+	mUp		 = mRotation * glm::fvec3(0.0f, +1.0f, 0.0f);
+	mRight   = mRotation * glm::fvec3(+1.0f, 0.0f, 0.0f);
 	mMustUpdate = true;
 }
 

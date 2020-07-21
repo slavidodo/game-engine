@@ -2,31 +2,42 @@
 #include "Actor.h"
 #include "SceneManager.h"
 
-void Actor::UpdateTransforms() {
-	RActor_ptr renderActor = mRenderActor.lock();
-	PActor_ptr physicsActor = mPhysicsActor.lock();
-	if (renderActor && physicsActor) {
-		mTransform = physicsActor->GetTransform();
-		renderActor->Update(mTransform);
+Actor::Actor(Transform_ptr transform, RenderActor_ptr renderActor, PhysicsActor_ptr physicsActor) : mTransform(transform), mRenderActor(renderActor), mPhysicsActor(physicsActor) {
+	if (renderActor)
+		renderActor->SetTransform(mTransform);
+}
+
+void Actor::UpdateTransformsFromPhysics() {
+	PhysicsActor_ptr physicsActor = mPhysicsActor.lock();
+	if (physicsActor) {
+		mTransform->SetTranslation(physicsActor->GetTransform()->GetTranslation());
+		//std::cout << "Position: " << mTransform->GetTranslation().x << " " << mTransform->GetTranslation().y << " " << mTransform->GetTranslation().z << std::endl;
 	}
 }
 
-void Actor::Move(glm::fvec3 newPosition) {
-	PDynamicActor_ptr actor = std::static_pointer_cast<PDynamicActor>(mPhysicsActor.lock());
-	actor->SetPosition(newPosition);
-	UpdateTransforms();
+void Actor::Move(glm::fvec3 displacement) {
+	mTransform->SetTranslation(mTransform->GetTranslation() + displacement);
+	if (PhysicsActor_ptr physicsActor = mPhysicsActor.lock()) {
+		PDynamicActor_ptr dynamicActor = std::static_pointer_cast<PDynamicActor>(physicsActor);
+		dynamicActor->SetPosition(GetTransform()->GetTranslation());
+	}
 }
 void Actor::Jump() {
-	glm::fvec3 raycastOrigin = glm::fvec3(mTransform->GetTranslation());
-	raycastOrigin.y -= mTransform->GetScale().y / 2.0f + 0.000001f;
-	if (SceneManager::GetInstance().Raycast(raycastOrigin, glm::fvec3(0.0f, -1.0f, 0.0f), 0.1f)) {
-		PDynamicActor_ptr actor = std::static_pointer_cast<PDynamicActor>(mPhysicsActor.lock());
-		actor->ApplyImpulse(glm::vec3(0.0f, 0.25f, 0.0f));
-		UpdateTransforms();
-	}
-	else {
-		/*PDynamicActor_ptr actor = std::static_pointer_cast<PDynamicActor>(mPhysicsActor.lock());
-		actor->ApplyImpulse(glm::vec3(0.0f, 0.5f, 0.0f));
-		UpdateTransforms();*/
+	if (PhysicsActor_ptr physicsActor = mPhysicsActor.lock()) {
+		Transform_ptr playerTransform = physicsActor->GetTransform();
+		glm::fvec3 raycastOrigin = glm::fvec3(playerTransform->GetTranslation());
+
+		float halfHeight = 0.0f;
+		std::vector<PRaycastHit_ptr> hits;
+		if (PhysicsActor_ptr physicsActor = mPhysicsActor.lock()) 
+			halfHeight = physicsActor->GetTransform()->GetScale().y / 2.0f;
+		
+		SceneManager::GetInstance().Raycast(raycastOrigin, glm::fvec3(0.0f, -1.0f, 0.0f), 0.01f + halfHeight, hits);
+		bool bOnGround = hits.size() > 1;
+		if (bOnGround) {
+			PDynamicActor_ptr actor = std::static_pointer_cast<PDynamicActor>(physicsActor);
+			actor->ApplyImpulse(glm::vec3(0.0f, 0.2f, 0.0f));
+			UpdateTransformsFromPhysics();
+		}
 	}
 }

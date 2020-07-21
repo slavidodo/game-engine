@@ -26,22 +26,22 @@
 #include "Pch.h"
 #include "PhysicsEngine.h"
 
-PActor::~PActor() {
+PhysicsActor::~PhysicsActor() {
 	if (!mActor) return;
 	
 	PAlignedAllocator::deallocate(mActor->userData);
 	mActor->release();
 }
 
-physx::PxRigidActor* PActor::GetSdkActor() const {
+physx::PxRigidActor* PhysicsActor::GetSdkActor() const {
 	return mActor;
 }
 
-void PActor::AddCollider(PCollider_ptr collider) {	
+void PhysicsActor::AddCollider(PCollider_ptr collider) {	
 	mActor->attachShape(*collider->GetSdkShape());
 	mColliders.push_back(collider);
 }
-void PActor::RemoveCollider(PCollider_ptr pCollider) {
+void PhysicsActor::RemoveCollider(PCollider_ptr pCollider) {
 	auto it = std::find(mColliders.begin(), mColliders.end(), pCollider);
 	if (it == mColliders.end()) {
 		PhysicsEngine::GetInstance().mErrorReporter->reportError(physx::PxErrorCode::eDEBUG_WARNING, "Trying to remove a collider that is not attached to this actor", __FILE__, __LINE__);
@@ -52,15 +52,15 @@ void PActor::RemoveCollider(PCollider_ptr pCollider) {
 	mColliders.erase(it);
 }
 
-glm::fvec3 PActor::GetPosition() const {
+glm::fvec3 PhysicsActor::GetPosition() const {
 	physx::PxTransform transform = mActor->getGlobalPose();
 	return glm::fvec3(transform.p.x, transform.p.y, transform.p.z);
 }
-glm::fquat PActor::GetRotation() const {
+glm::fquat PhysicsActor::GetRotation() const {
 	physx::PxTransform transform = mActor->getGlobalPose();
 	return glm::fquat(transform.q.x, transform.q.y, transform.q.z, transform.q.w);
 }
-Transform_ptr PActor::GetTransform() const {
+Transform_ptr PhysicsActor::GetTransform() const {
 	physx::PxTransform transform = mActor->getGlobalPose();
 	return std::move(PhysicsEngine::GetInstance().ToEngineTransform(transform));
 }

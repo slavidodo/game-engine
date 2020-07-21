@@ -31,7 +31,6 @@ void InputManager::OnKeyCallback(int32_t key, int32_t scancode, int32_t action, 
 void InputManager::OnMouseCallback(double xPos, double yPos) {
 	if (bFirstFrame) {
 		bFirstFrame = false;
-		SceneManager::GetInstance().RotateCamera(0.0, 0.0);
 	}
 	else {
 		double xDelta = xPos - mMousePos.first;
@@ -43,17 +42,17 @@ void InputManager::OnMouseCallback(double xPos, double yPos) {
 
 void InputManager::CheckInputs() {
 	if (glfwGetKey(gWindow.GetGlfwWindow(), GLFW_KEY_W))
-		SceneManager::GetInstance().MovePlayer(Camera::MovementDirection::Forward);
+		SceneManager::GetInstance().MovePlayer(Utils::Direction::Forward);
 	if (glfwGetKey(gWindow.GetGlfwWindow(), GLFW_KEY_S))
-		SceneManager::GetInstance().MovePlayer(Camera::MovementDirection::Backward);
+		SceneManager::GetInstance().MovePlayer(Utils::Direction::Backward);
 	if (glfwGetKey(gWindow.GetGlfwWindow(), GLFW_KEY_A))
-		SceneManager::GetInstance().MovePlayer(Camera::MovementDirection::Left);
+		SceneManager::GetInstance().MovePlayer(Utils::Direction::Left);
 	if (glfwGetKey(gWindow.GetGlfwWindow(), GLFW_KEY_D))
-		SceneManager::GetInstance().MovePlayer(Camera::MovementDirection::Right);
+		SceneManager::GetInstance().MovePlayer(Utils::Direction::Right);
 	/*if (glfwGetKey(gWindow.GetGlfwWindow(), GLFW_KEY_E))
-		SceneManager::GetInstance().MovePlayer(Camera::MovementDirection::Upward);
+		SceneManager::GetInstance().MovePlayer(Utils::Direction::Upward);
 	if (glfwGetKey(gWindow.GetGlfwWindow(), GLFW_KEY_Q))
-		SceneManager::GetInstance().MovePlayer(Camera::MovementDirection::Downward);*/
+		SceneManager::GetInstance().MovePlayer(Utils::Direction::Downward);*/
 	if (glfwGetKey(gWindow.GetGlfwWindow(), GLFW_KEY_SPACE))
 		SceneManager::GetInstance().JumpPlayer();
 	if (glfwGetKey(gWindow.GetGlfwWindow(), GLFW_KEY_ESCAPE))

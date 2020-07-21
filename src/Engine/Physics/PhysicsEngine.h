@@ -28,8 +28,8 @@
 
 #include "physx/PxPhysicsAPI.h"
 #include "PAllocator.h"
-#include "../Scene/PScene.h"
-#include "PActor.h"
+#include "../Scene/PhysicsScene.h"
+#include "PhysicsActor.h"
 #include "PCollider.h"
 #include "PGeometry.h"
 #include "PMaterial.h"

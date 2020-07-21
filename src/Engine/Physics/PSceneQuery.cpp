@@ -30,10 +30,10 @@ PQueryHit::~PQueryHit() {
 	PAlignedAllocator::deallocate(mQueryHit);
 }
 
-PActor_ptr PQueryHit::GetActor() const {
+PhysicsActor_ptr PQueryHit::GetActor() const {
 	physx::PxRigidActor* sdkActor = mQueryHit->actor;
-	std::weak_ptr<PActor> wpActor = *static_cast<std::weak_ptr<PActor>*>(sdkActor->userData);
-	if (PActor_ptr spActor = wpActor.lock())
+	std::weak_ptr<PhysicsActor> wpActor = *static_cast<std::weak_ptr<PhysicsActor>*>(sdkActor->userData);
+	if (PhysicsActor_ptr spActor = wpActor.lock())
 		return std::move(spActor);
 	return nullptr;
 }
@@ -49,11 +49,11 @@ PPointHit::~PPointHit() {
 	PAlignedAllocator::deallocate(mPointHit);
 }
 
-PActor_ptr PPointHit::GetActor() const {
+PhysicsActor_ptr PPointHit::GetActor() const {
 	physx::PxRigidActor* sdkActor = mPointHit->actor;
-	std::weak_ptr<PActor> wpActor = *static_cast<std::weak_ptr<PActor>*>(sdkActor->userData);
+	std::weak_ptr<PhysicsActor> wpActor = *static_cast<std::weak_ptr<PhysicsActor>*>(sdkActor->userData);
 	
-	if (PActor_ptr spActor = wpActor.lock())
+	if (PhysicsActor_ptr spActor = wpActor.lock())
 		return std::move(spActor);
 	return nullptr;
 }
