@@ -8,6 +8,9 @@
 #include "../Engine/Scene/SceneManager.h"
 #include "../Engine/Scene/Actor.h"
 
+#include "../Engine/Core/Model.h"
+
+
 void AddCubeActor(bool bStatic, Transform_ptr transform);
 void RunExampleScene();
 
@@ -25,6 +28,7 @@ private:
 	 */
 	void InitGraphcisPipeline();
 	void RenderSceneActors(RHICommandList& RHICmdList);
+
 };
 
 #endif // TESTS_EXAMPLE_SCENE

@@ -138,8 +138,13 @@ void Model::RenderSceneElements(RHICommandList& RHICmdList)
 
 		RHICmdList.DrawIndexedPrimitive(Mesh->IndexBuffer, 0, 0, Mesh->NumVertices, 0, Mesh->NumTriangles, 1);
 	}
-
 }
+
+StaticMesh_ptr Model::GetFirstMesh()
+{
+	return mStaticMeshList.front();
+}
+
 void Model::CreateStaticMeshWithDefaultFilter(StaticMesh_ptr mesh, StaticMeshCreateInfo& info)
 {
 	mesh->NumVertices = info.NumVertices;

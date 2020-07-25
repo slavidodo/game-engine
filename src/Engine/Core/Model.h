@@ -27,6 +27,7 @@ public:
 	Model(std::string path, const aiScene* pScene);
 	~Model();
 	void RenderSceneElements(RHICommandList& RHICmdList);
+	StaticMesh_ptr GetFirstMesh();
 private:
 	void Load(const aiScene* pScene);
 	void ProcessHierarchy(const aiNode* pNode, const aiScene* pScene, const aiNode* pParentNode = nullptr);
@@ -50,6 +51,7 @@ private:
 	std::string mFilename;
 
 	SceneNode_ptr CreateSceneNode(const aiNode* pNode);
+
 	void CreateStaticMeshWithDefaultFilter(StaticMesh_ptr mesh, StaticMeshCreateInfo& info);
 	std::vector<StaticMeshVertex> GetMeshVertices(const aiMesh* pMesh);
 	std::vector<int32_t> GetMeshIndices(const aiMesh* pMesh);

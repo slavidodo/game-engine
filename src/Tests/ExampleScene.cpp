@@ -71,7 +71,20 @@ void AddPlayer(Transform_ptr transform, glm::fvec3 color) {
 void AddBoxActor(bool bStatic, Transform_ptr transform, glm::fvec3 color) {
 	glm::fvec3 halfDimensions = transform->GetScale() * 0.5f;
 	RenderActor_ptr renderActor = std::make_shared<RenderActor>(StaticMeshGenerator::CreateBox(halfDimensions * 0.55f, color));
-	
+
+	PhysicsActor_ptr physicsActor = nullptr;
+	if (bStatic) physicsActor = PStaticActor::CreateActor(transform);
+	else         physicsActor = PDynamicActor::CreateActor(transform);
+	physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(halfDimensions), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f)));
+
+	SceneManager::GetInstance().AddActor(std::make_shared<Actor>(transform, renderActor, physicsActor));
+}
+void AddModelSingleMeshActor(bool bStatic, Transform_ptr transform, std::string path) {
+	auto modelTest = ResourceManager::GetInstance().LoadModel(path);
+
+	glm::fvec3 halfDimensions = transform->GetScale() * 0.5f;
+	RenderActor_ptr renderActor = std::make_shared<RenderActor>(modelTest->GetFirstMesh());
+
 	PhysicsActor_ptr physicsActor = nullptr;
 	if (bStatic) physicsActor = PStaticActor::CreateActor(transform);
 	else         physicsActor = PDynamicActor::CreateActor(transform);
@@ -91,9 +104,11 @@ void RunExampleScene() {
 	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-4.0f, 4.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 0.0f, 0.0f));
 	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 6.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.0f, 1.0f, 0.0f));
 	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 0.0f, 1.0f));
-	
+
+	AddModelSingleMeshActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 2.0f, 2.0f)), "Mine/scene.fbx");
+
 	//AddBoxActor(bDynamic, std::make_shared<Transform>(glm::fvec3(0.0f, 1.0f, -2.0f), glm::fvec3(0.0f), glm::fvec3(0.5f)),             glm::fvec3(1.0f, 1.0f, 0.0f));
-	AddPlayer(            std::make_shared<Transform>(glm::fvec3(2.0f, 5.0f, 2.0f),  glm::fvec3(0.0f), glm::fvec3(0.3f, 0.3f, 0.3f)), glm::fvec3(0.0f, 1.0f, 1.0f));
+	AddPlayer(std::make_shared<Transform>(glm::fvec3(2.0f, 5.0f, 2.0f), glm::fvec3(0.0f), glm::fvec3(0.3f, 0.3f, 0.3f)), glm::fvec3(0.0f, 1.0f, 1.0f));
 }
 
 
@@ -104,7 +119,10 @@ ExampleScene::ExampleScene(RenderScene_ptr renderScene, PhysicsScene_ptr physics
 
 	mRenderScene->mMainCamera = Camera::CreatePerspectiveCamera(45.0f, 0.1f, 1000.f);
 	mRenderScene->mMainCamera->SetLocalTranslation(glm::fvec3(0.0f, 0.15f, 0.0f));
-	
+
+	ResourceManager::GetInstance().Init();
+	ResourceManager::GetInstance().Mount("C:/DefinitelyNotWindows/Tracks/GameDev/Models");
+
 	//mRenderScene->mMainCamera->SetEditorTranslation(glm::fvec3(0.0f, 5.0f, 20.0f));
 	//mRenderScene->mMainCamera->SetEditorTranslation(glm::fvec3(0.0f, 30.0f, 3.0f));
 	//mRenderScene->mMainCamera->SetEditorRotationDegrees(glm::fvec3(-30.0f, 0.0f, 0.0f));
@@ -143,7 +161,7 @@ void ExampleScene::InitGraphcisPipeline()
 	mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 1);
 	mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
 	mRenderScene->mBoundShaderState = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
-	
+
 	mRenderScene->mUniformBuffer = UniformBufferRef<PrimitiveUniformShaderParameters>::CreateUniformBufferImmediate(
 		PrimitiveUniformShaderParameters(), EUniformBufferUsage::UniformBuffer_MultiFrame);
 
@@ -208,7 +226,6 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 			// this will issue a draw call with index buffer
 			RHICmdList.DrawIndexedPrimitive(mesh->IndexBuffer, 0, 0, mesh->NumVertices, 0, mesh->NumTriangles, 1);
 		}
-		modelTest->RenderSceneElements(RHICmdList);
 	}
 	RHICmdList.EndRenderPass();
 }
