@@ -7,7 +7,7 @@
 
 bool ResourceManager::Init()
 {
-	if (mInitialized)
+	if (mInitialized) 
 		return true;
 
 	mInitialized = PHYSFS_init(nullptr) != 0;
@@ -15,7 +15,7 @@ bool ResourceManager::Init()
 	if (mInitialized) {
 		// initialize assimp importers
 		mAssimpImporter.reset(new Assimp::Importer);
-		mAssimpImporter->SetIOHandler(new AssimpIOSystem);
+		mAssimpImporter->SetIOHandler(new AssimpIOSystem); 
 	}
 
 	return mInitialized;
@@ -53,6 +53,7 @@ File_ptr ResourceManager::OpenWrite(std::string filename)
 	return std::move(std::make_shared<File>(file));
 }
 
+// todo main program should use thread to async load this
 Model_ptr ResourceManager::LoadModel(std::string filename)
 {
 	// todo; lock and do this on another thread
@@ -69,9 +70,9 @@ Model_ptr ResourceManager::LoadModel(std::string filename)
 		| aiProcess_JoinIdenticalVertices // get rid of duplicated vertices
 		| aiProcess_SortByPType // split primitives
 		| aiProcess_OptimizeGraph; // get rid of unnecessary nodes
-
 	const aiScene* scene = mAssimpImporter->ReadFile(filename, flags);
 	if (scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+		std::cout << "ERROR::ASSIMP:: " << mAssimpImporter->GetErrorString() << std::endl;
 		return nullptr;
 	}
 

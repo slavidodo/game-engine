@@ -5,6 +5,8 @@
 
 #include "../Engine/StaticMeshGenerator.h"
 
+#include "../Engine/Filesystem/ResourceManager.h"
+
 // TODO: we should not include any opengl specific headers
 // but for now in a test-phase we do so
 #include "../Engine/OpenGLRHI/OpenGLShaderCompiler.h"
@@ -110,6 +112,7 @@ ExampleScene::ExampleScene(RenderScene_ptr renderScene, PhysicsScene_ptr physics
 	InitGraphcisPipeline();
 }
 
+
 void ExampleScene::InitGraphcisPipeline()
 {
 	// this is fine to do, as we are creating things, an immediate context
@@ -205,6 +208,7 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 			// this will issue a draw call with index buffer
 			RHICmdList.DrawIndexedPrimitive(mesh->IndexBuffer, 0, 0, mesh->NumVertices, 0, mesh->NumTriangles, 1);
 		}
+		modelTest->RenderSceneElements(RHICmdList);
 	}
 	RHICmdList.EndRenderPass();
 }
