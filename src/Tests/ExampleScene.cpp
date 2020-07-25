@@ -34,6 +34,38 @@ void main() {\n\
 }\0";
 
 
+const std::string SimpleModelLoadingVS = R"(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec2 aTexCoords;
+out vec2 TexCoords;
+layout(std140) uniform vb0 {
+	highp mat4 mvp;
+};
+void main(){
+    TexCoords = aTexCoords;    
+    gl_Position = mvp * vec4(aPos, 1.0);
+}
+)";
+
+
+const std::string SimpleModelLoadingFS = R"(
+#version 330 core
+out vec4 FragColor;
+
+in vec2 TexCoords;
+
+uniform sampler2D texture_diffuse1;
+
+void main()
+{    
+    FragColor = texture(texture_diffuse1, TexCoords);
+    //FragColor =  vec4(0.0f,0.0f,1.0f,1.0f);
+}
+)";
+
+
 class StaticMeshVertexDeclaration
 {
 public:
@@ -90,7 +122,7 @@ void AddModelSingleMeshActor(bool bStatic, Transform_ptr transform, std::string 
 	else         physicsActor = PDynamicActor::CreateActor(transform);
 	physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(halfDimensions), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f)));
 
-	SceneManager::GetInstance().AddActor(std::make_shared<Actor>(transform, renderActor, physicsActor));
+	SceneManager::GetInstance().AddActor(std::make_shared<Actor>(transform, renderActor, physicsActor, 1));
 }
 void RunExampleScene() {
 	bool bStatic = true;
@@ -131,7 +163,12 @@ ExampleScene::ExampleScene(RenderScene_ptr renderScene, PhysicsScene_ptr physics
 }
 
 
-void ExampleScene::InitGraphcisPipeline()
+RHIVertexShaderRef mVertexShaderRHINormal, mVertexShaderRHIModel;
+RHIPixelShaderRef mPixelShaderRHINormal, mPixelShaderRHIModel;
+
+RHIBoundShaderStateRef mShaderStateNormal, mShaderStateModel;
+
+void ExampleScene::InitGraphcisPipeline(int shaderMode)
 {
 	// this is fine to do, as we are creating things, an immediate context
 	// must be present
@@ -145,8 +182,35 @@ void ExampleScene::InitGraphcisPipeline()
 	// shader manager to fetch this from resources or at least
 	// move it out of here and load it using resource manager
 	std::vector<uint8_t> VertexShaderBytes, PixelShaderBytes;
+	std::vector<uint8_t> VertexShaderBytesModel, PixelShaderBytesModel;
+
 	std::copy(SimpleVertexShaderCode.begin(), SimpleVertexShaderCode.end(), std::back_inserter(VertexShaderBytes));
 	std::copy(SimplePixelShaderCode.begin(), SimplePixelShaderCode.end(), std::back_inserter(PixelShaderBytes));
+	std::copy(SimpleModelLoadingVS.begin(), SimpleModelLoadingVS.end(), std::back_inserter(VertexShaderBytesModel));
+	std::copy(SimpleModelLoadingFS.begin(), SimpleModelLoadingFS.end(), std::back_inserter(PixelShaderBytesModel));
+
+	/*mVertexShaderRHINormal = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 1);
+	mPixelShaderRHINormal = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
+	mVertexShaderRHIModel = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytesModel, 1);
+	mPixelShaderRHIModel = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytesModel, 0);*/
+
+	//switch (shaderMode)
+	//{
+	//case 0: // normal color
+	//	std::copy(SimpleVertexShaderCode.begin(), SimpleVertexShaderCode.end(), std::back_inserter(VertexShaderBytes));
+	//	std::copy(SimplePixelShaderCode.begin(), SimplePixelShaderCode.end(), std::back_inserter(PixelShaderBytes));
+	//	mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 1);
+	//	mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
+	//	break;
+	//case 1: // texture 
+	//	std::copy(SimpleModelLoadingVS.begin(), SimpleModelLoadingVS.end(), std::back_inserter(VertexShaderBytesModel));
+	//	std::copy(SimpleModelLoadingFS.begin(), SimpleModelLoadingFS.end(), std::back_inserter(VertexShaderBytesModel));
+	//	mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytesModel, 1);
+	//	mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytesModel, 0);
+	//	break;
+	//default:
+	//	break;
+	//}
 
 	// compile shaders and obtain a bound shader state
 	// i suggest the name here NOT to be "bound" since this shader
@@ -158,14 +222,64 @@ void ExampleScene::InitGraphcisPipeline()
 	// them automatically and obtain their locations (opengl)
 	// for directx and vulkan, the shader is compiled at compile-time
 	// using the editor and the information is stored along with it
+
+	//mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 1);
+	//mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
+	//mRenderScene->mBoundShaderState = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
+
 	mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 1);
 	mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
-	mRenderScene->mBoundShaderState = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
+	mShaderStateNormal = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
+
+	mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytesModel, 1);
+	mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytesModel, 0);
+	mShaderStateModel = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
+
+	bindShaderMode(RHICmdList, shaderMode);
 
 	mRenderScene->mUniformBuffer = UniformBufferRef<PrimitiveUniformShaderParameters>::CreateUniformBufferImmediate(
 		PrimitiveUniformShaderParameters(), EUniformBufferUsage::UniformBuffer_MultiFrame);
 
 	gDynamicRHI->RHISetShaderUniformBuffer(mRenderScene->mVertexShaderRHI, 0, mRenderScene->mUniformBuffer);
+
+
+}
+void ExampleScene::bindShaderMode(RHICommandList& RHICmdList, int shaderMode) {
+	//switch (shaderMode)
+	//{
+	//case 0: // normal color
+	//	mRenderScene->mVertexShaderRHI = mVertexShaderRHINormal.GetReference();
+	//	mRenderScene->mPixelShaderRHI = mPixelShaderRHINormal.GetReference();
+	//	break;
+	//case 1: // texture 
+	//	mRenderScene->mVertexShaderRHI = mVertexShaderRHIModel.GetReference();
+	//	mRenderScene->mPixelShaderRHI = mPixelShaderRHIModel.GetReference();
+	//	break;
+	//default:
+	//	break;
+	//}
+	/*mRenderScene->mBoundShaderState = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
+	mRenderScene->mUniformBuffer = UniformBufferRef<PrimitiveUniformShaderParameters>::CreateUniformBufferImmediate(
+		PrimitiveUniformShaderParameters(), EUniformBufferUsage::UniformBuffer_MultiFrame);
+
+	gDynamicRHI->RHISetShaderUniformBuffer(mRenderScene->mVertexShaderRHI, 0, mRenderScene->mUniformBuffer);*/
+
+
+	switch (shaderMode)
+	{
+	case 0: // normal color
+		mRenderScene->mVertexShaderRHI = mVertexShaderRHINormal.GetReference();
+		mRenderScene->mPixelShaderRHI = mPixelShaderRHINormal.GetReference();
+		mRenderScene->mBoundShaderState = mShaderStateNormal.GetReference();
+		break;
+	case 1: // texture 
+		mRenderScene->mVertexShaderRHI = mVertexShaderRHIModel.GetReference();
+		mRenderScene->mPixelShaderRHI = mPixelShaderRHIModel.GetReference();
+		mRenderScene->mBoundShaderState = mShaderStateModel.GetReference();
+		break;
+	default:
+		break;
+	}
 }
 
 void ExampleScene::UpdatePhysics() {
@@ -193,6 +307,7 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 	// todo; for now we are not using a framebuffer (bound by RHITexture)
 	// the RHI will assume this is intended and will use the default back
 	// buffer
+
 	RHIRenderPassInfo RPInfo; // { Ref<RHITexture> ColorRT }
 	RHICmdList.BeginRenderPass(RPInfo);
 	{
@@ -204,7 +319,11 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 		Camera_ptr camera = mRenderScene->mMainCamera;
 		glm::mat4x4 ViewProjection = camera->GetProjMatrix() * camera->GetViewMatrix();
 
+
 		for (Actor_ptr actor : mActors) {
+			bindShaderMode(RHICmdList, actor->mShaderMode);
+			RHICmdList.SetBoundShaderState(mRenderScene->mBoundShaderState);
+
 			RenderActor_ptr renderActor = actor->mRenderActor.lock();
 			if (!renderActor) continue;
 			Transform_ptr transform = renderActor->mTransform;

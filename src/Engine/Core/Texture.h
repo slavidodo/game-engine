@@ -47,7 +47,7 @@ private:
 	int mWidth;
 	int mHeight;
 
-	TextureSettings mTextureSettings;
+	//TextureSettings mTextureSettings;
 };
 
 #endif // ENGINE_CORE_IMAGE_H

@@ -10,13 +10,13 @@ typedef std::shared_ptr<Actor> Actor_ptr;
 
 class Actor : public Object {
 public:
-	Actor(Transform_ptr transform, RenderActor_ptr renderActor, PhysicsActor_ptr physicsActor);
+	Actor(Transform_ptr transform, RenderActor_ptr renderActor, PhysicsActor_ptr physicsActor, int shaderMode = 0);
 
 	std::weak_ptr<PhysicsActor> mPhysicsActor;
 	std::weak_ptr<RenderActor> mRenderActor;
-
+	int mShaderMode;
 	void UpdateTransformsFromPhysics();
-	
+
 	void Move(glm::fvec3 displacement);
 	void Jump();
 
@@ -29,5 +29,5 @@ public:
 
 protected:
 	Transform_ptr mTransform;
-	
+
 };

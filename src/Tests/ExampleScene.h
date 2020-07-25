@@ -26,9 +26,11 @@ private:
 	/**
 	 * Initialize materials, shaders, render passes
 	 */
-	void InitGraphcisPipeline();
+	void InitGraphcisPipeline(int shaderMode = 0);
 	void RenderSceneActors(RHICommandList& RHICmdList);
 
+	//model
+	void bindShaderMode(RHICommandList& RHICmdList, int shaderMode);
 };
 
 #endif // TESTS_EXAMPLE_SCENE

@@ -24,7 +24,7 @@ public:
 			return mCurrentScene->GetActors();
 		return std::vector<Actor_ptr>();
 	}
-	
+
 
 	void SetPlayer(Actor_ptr player);
 	void MovePlayer(Utils::Direction dir);
@@ -34,7 +34,7 @@ public:
 	/// Render Functions
 	void Render(RHICommandList& RHICmdList);
 
-	
+
 	/// Physics Functions
 	void UpdatePhysics();
 
@@ -52,7 +52,7 @@ public:
 
 private:
 	Scene_ptr mCurrentScene;
-	
+
 	Actor_ptr mPlayer;
 	PlayerController_ptr mPlayerController;
 };

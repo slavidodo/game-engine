@@ -2,7 +2,7 @@
 #include "Actor.h"
 #include "SceneManager.h"
 
-Actor::Actor(Transform_ptr transform, RenderActor_ptr renderActor, PhysicsActor_ptr physicsActor) : mTransform(transform), mRenderActor(renderActor), mPhysicsActor(physicsActor) {
+Actor::Actor(Transform_ptr transform, RenderActor_ptr renderActor, PhysicsActor_ptr physicsActor, int shaderMode) : mTransform(transform), mRenderActor(renderActor), mPhysicsActor(physicsActor), mShaderMode(shaderMode) {
 	if (renderActor)
 		renderActor->SetTransform(mTransform);
 }
@@ -29,9 +29,9 @@ void Actor::Jump() {
 
 		float halfHeight = 0.0f;
 		std::vector<PRaycastHit_ptr> hits;
-		if (PhysicsActor_ptr physicsActor = mPhysicsActor.lock()) 
+		if (PhysicsActor_ptr physicsActor = mPhysicsActor.lock())
 			halfHeight = physicsActor->GetTransform()->GetScale().y / 2.0f;
-		
+
 		SceneManager::GetInstance().Raycast(raycastOrigin, glm::fvec3(0.0f, -1.0f, 0.0f), 0.01f + halfHeight, hits);
 		bool bOnGround = hits.size() > 1;
 		if (bOnGround) {
