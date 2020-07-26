@@ -23,7 +23,8 @@ OpenGLShaderType* CompileOpenGLShader(RHIShader* ShaderRHI, const std::vector<ui
 	if (!CompileStatus) {
 		char infoLog[512];
 		glGetShaderInfoLog(Resource, 512, NULL, infoLog);
-		std::cout << "Shader (type=" << OpenGLShaderType::TypeEnum << ") Compilation Failed:\n" << infoLog << std::endl;
+		//TODO
+		std::cout << "Shader (type=" << OpenGLShaderType::TypeEnum << ") Compilation Successful:\n" << infoLog << std::endl;
 	} else {
 		std::cout << "Shader (type=" << OpenGLShaderType::TypeEnum << ") Compiled Successfully" << std::endl;
 	}

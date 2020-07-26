@@ -66,14 +66,32 @@ in vec3 fragPos;\n\
 uniform sampler2D tex;\n\
 void main() {\n\
 	vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);\n\
-	vec3 ambient = 0.6f * lightColor;\n\
+	vec3 lightPos = vec3(12.0f, 12.0f, 12.0f);\n\
+	float d = length(fragPos - lightPos);\n\
+	float attenuation = 14.0f / (1.0f + d * 0.09f + d * d * 0.03f);\n\
+	vec3 ambient = 0.4f * lightColor;\n\
 	vec3 norm = normalize(vsNormal);\n\
-	vec3 lightPos = vec3(800.0f, 1000.0f, 160.0f);\n\
 	vec3 lightDir = normalize(lightPos - fragPos);\n\
 	float diff = max(dot(norm, lightDir), 0.0f);\n\
 	vec3 diffuse = 1.6f * diff * lightColor;\n\
-	vec3 result = (ambient + diffuse) * vec3(texture(tex, vsUV));\n\
-	outColor = vec4(result, 1.0f);\n\
+	if (d < 3.0f) {\n\
+		outColor = vec4(1.0f);\n\
+	} else {\n\
+		vec3 result = (ambient + diffuse * attenuation) * vec3(texture(tex, vsUV));\n\
+		outColor = vec4(result, 1.0f);\n\
+	}\n\
+}\0";
+
+const std::string SimpleLighterPixelShaderCode = "\
+#version 330 core\n\
+out vec4 outColor;\n\
+in vec3 vsColor;\n\
+in vec3 vsNormal;\n\
+in vec2 vsUV;\n\
+in vec3 fragPos;\n\
+uniform sampler2D tex;\n\
+void main() {\n\
+	outColor = vec4(1.0f);\n\
 }\0";
 
 
@@ -129,7 +147,7 @@ public:
 // instead use this as a general vertex declaration
 static StaticMeshVertexDeclaration gStaticMeshVertexDeclaration;
 
-void AddPlayer(Transform_ptr transform, glm::fvec3 color) {
+void AddPlayer(Transform_ptr transform, glm::fvec3 color, Texture_ptr tex) {
 	glm::fvec3 halfDimensions = transform->GetScale() * 0.5f;
 	RenderActor_ptr renderActor = std::make_shared<RenderActor>(StaticMeshGenerator::CreateLightedBox(halfDimensions * 0.00001f, color));
 
@@ -137,7 +155,9 @@ void AddPlayer(Transform_ptr transform, glm::fvec3 color) {
 	physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(halfDimensions), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f)));
 
 	Actor_ptr player = std::make_shared<Actor>(transform, renderActor, physicsActor);
+	player->SetTexture(tex);
 	SceneManager::GetInstance().AddActor(player);
+	
 	if (PhysicsActor_ptr physicsActor = player->mPhysicsActor.lock()) {
 		PDynamicActor_ptr dynamicPlayer = std::static_pointer_cast<PDynamicActor>(physicsActor);
 		dynamicPlayer->LockMotion(PDynamicActor::MotionAxis::ANGULAR_Z);
@@ -145,7 +165,7 @@ void AddPlayer(Transform_ptr transform, glm::fvec3 color) {
 		SceneManager::GetInstance().SetPlayer(player);
 	}
 }
-void AddBoxActor(bool bStatic, Transform_ptr transform, glm::fvec3 color) {
+void AddBoxActor(bool bStatic, Transform_ptr transform, glm::fvec3 color, Texture_ptr tex, bool lighter = false) {
 	glm::fvec3 halfDimensions = transform->GetScale() * 0.5f;
 	RenderActor_ptr renderActor = std::make_shared<RenderActor>(StaticMeshGenerator::CreateLightedBox(halfDimensions * 0.55f, color));
 
@@ -154,7 +174,11 @@ void AddBoxActor(bool bStatic, Transform_ptr transform, glm::fvec3 color) {
 	else         physicsActor = PDynamicActor::CreateActor(transform);
 	physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(halfDimensions), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f)));
 
-	SceneManager::GetInstance().AddActor(std::make_shared<Actor>(transform, renderActor, physicsActor));
+	Actor_ptr actor = std::make_shared<Actor>(transform, renderActor, physicsActor);
+	actor->SetTexture(tex);
+	actor->lighter = lighter;
+	SceneManager::GetInstance().AddActor(actor);
+
 }
 void AddModelSingleMeshActor(bool bStatic, Transform_ptr transform, std::string path) {
 	Model_ptr modelTest = ResourceManager::GetInstance().LoadModel(path);
@@ -175,21 +199,30 @@ void RunExampleScene() {
 	bool bDynamic = false;
 
 	/// Floor
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 0.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(20.0f, 1.0f, 20.0f)), glm::fvec3(0.2f, 0.4f, 0.6f));
+	Texture_ptr floorTexture = std::make_shared<Texture>();
+	floorTexture->Load("C:/Users/omars/Documents/VS Projects/SlaviEngine/game-engine/Resources/awesomeFace.png");
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 0.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(10.0f, 1.0f, 10.0f)), glm::fvec3(0.2f, 0.4f, 0.6f), floorTexture);
+
+	/// Light cube
+	Texture_ptr lightTexture = std::make_shared<Texture>();
+	lightTexture->Load("C:/Users/omars/Documents/VS Projects/SlaviEngine/game-engine/Resources/whiteTex.png");
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(12.0f, 12.0f, 12.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)), glm::fvec3(1.0f, 1.0f, 1.0f), lightTexture, true);
 
 	/// Platforms
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 2.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 1.0f, 1.0f));
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-4.0f, 4.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 0.0f, 0.0f));
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 6.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.0f, 1.0f, 0.0f));
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.8f, 0.5f, 0.0f));
+	Texture_ptr platformTexture = std::make_shared<Texture>();
+	platformTexture->Load("C:/Users/omars/Documents/VS Projects/SlaviEngine/game-engine/Resources/containerDiffuseMap.png");
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 2.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 1.0f, 1.0f), platformTexture);
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-4.0f, 4.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 0.0f, 0.0f), platformTexture);
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 6.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.0f, 1.0f, 0.0f), platformTexture);
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.8f, 0.5f, 0.0f), platformTexture);
 
 	/// Random Boxes
-	AddBoxActor(bDynamic, std::make_shared<Transform>(glm::fvec3(4.0f, 2.0f, 4.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)), glm::fvec3(0.3f, 0.1f, 1.0f));
+	AddBoxActor(bDynamic, std::make_shared<Transform>(glm::fvec3(4.0f, 2.0f, 4.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)), glm::fvec3(0.3f, 0.1f, 1.0f), platformTexture);
 
 	//AddModelSingleMeshActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 2.0f, 2.0f)), "../cube.obj");
 
 	//AddBoxActor(bDynamic, std::make_shared<Transform>(glm::fvec3(0.0f, 1.0f, -2.0f), glm::fvec3(0.0f), glm::fvec3(0.5f)),             glm::fvec3(1.0f, 1.0f, 0.0f));
-	AddPlayer(std::make_shared<Transform>(glm::fvec3(2.0f, 6.0f, 2.0f), glm::fvec3(0.0f), glm::fvec3(0.3f, 0.3f, 0.3f)), glm::fvec3(0.0f, 1.0f, 1.0f));
+	AddPlayer(std::make_shared<Transform>(glm::fvec3(2.0f, 8.0f, 2.0f), glm::fvec3(0.0f), glm::fvec3(0.3f, 0.3f, 0.3f)), glm::fvec3(0.0f, 1.0f, 1.0f), platformTexture);
 }
 
 
@@ -235,8 +268,8 @@ void ExampleScene::InitGraphcisPipeline(int shaderMode)
 
 	//std::copy(SimpleVertexShaderCode.begin(), SimpleVertexShaderCode.end(), std::back_inserter(VertexShaderBytes));
 	//std::copy(SimplePixelShaderCode.begin(), SimplePixelShaderCode.end(), std::back_inserter(PixelShaderBytes));
-	std::copy(SimpleLightedVertexShaderCode.begin(), SimpleLightedVertexShaderCode.end(), std::back_inserter(VertexShaderBytes));
-	std::copy(SimpleLightedPixelShaderCode.begin(), SimpleLightedPixelShaderCode.end(), std::back_inserter(PixelShaderBytes));
+	//std::copy(SimpleLightedVertexShaderCode.begin(), SimpleLightedVertexShaderCode.end(), std::back_inserter(VertexShaderBytes));
+	//std::copy(SimpleLightedPixelShaderCode.begin(), SimpleLightedPixelShaderCode.end(), std::back_inserter(PixelShaderBytes));
 	//std::copy(SimpleModelLoadingVS.begin(), SimpleModelLoadingVS.end(), std::back_inserter(VertexShaderBytesModel));
 	//std::copy(SimpleModelLoadingFS.begin(), SimpleModelLoadingFS.end(), std::back_inserter(PixelShaderBytesModel));
 
@@ -295,9 +328,9 @@ void ExampleScene::InitGraphcisPipeline(int shaderMode)
 
 	mShaderProgram = ShaderProgram(SimpleLightedVertexShaderCode, SimpleLightedPixelShaderCode);
 	mShaderProgram.SetIntUniform("tex", 0);
-	Texture_ptr texture = std::make_shared<Texture>();
-	texture->Load("C:/Users/omars/Documents/VS Projects/SlaviEngine/game-engine/Resources/containerDiffuseMap.png");
-	texture->Bind();
+
+	mShaderProgram2 = ShaderProgram(SimpleLightedVertexShaderCode, SimpleLighterPixelShaderCode);
+	//mShaderProgram2.SetIntUniform("tex", 0);
 }
 void ExampleScene::bindShaderMode(RHICommandList& RHICmdList, int shaderMode) {
 	//switch (shaderMode)
@@ -383,6 +416,8 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 			if (!renderActor) continue;
 			Transform_ptr transform = renderActor->mTransform;
 			StaticMesh_ptr mesh = renderActor->mMesh;
+			Texture_ptr texture = actor->GetTexture();
+			texture->Bind();
 
 			// set the vertex buffer to be our data source
 			RHICmdList.SetStreamSource(0, mesh->VertexBuffer, 0);
@@ -394,9 +429,15 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 			PrimitiveUniformShaderParameters Parameters;
 			Parameters.LocalToWorld = ViewProjection * transform->GetLocalToWorld();
 			Parameters.modelMatrix = transform->GetLocalToWorld();
-			mShaderProgram.Activate();
-			mShaderProgram.SetFloatMatrix4Uniform("mvp", Parameters.LocalToWorld);
-			mShaderProgram.SetFloatMatrix4Uniform("modelMat", Parameters.modelMatrix);
+			if (actor->lighter) {
+				mShaderProgram2.Activate();
+				mShaderProgram2.SetFloatMatrix4Uniform("mvp", Parameters.LocalToWorld);
+				mShaderProgram2.SetFloatMatrix4Uniform("modelMat", Parameters.modelMatrix);
+			} else {
+				mShaderProgram.Activate();
+				mShaderProgram.SetFloatMatrix4Uniform("mvp", Parameters.LocalToWorld);
+				mShaderProgram.SetFloatMatrix4Uniform("modelMat", Parameters.modelMatrix);
+			}
 			//mRenderScene->mUniformBuffer.UpdateUniformBufferImmediate(Parameters);
 
 			// this is yet fixed to draw triangles, in some cases or might be preffered

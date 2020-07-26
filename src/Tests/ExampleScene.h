@@ -12,7 +12,7 @@
 #include "../Engine/Rendering/ShaderProgram.h"
 
 
-void AddCubeActor(bool bStatic, Transform_ptr transform);
+void AddCubeActor(bool bStatic, Transform_ptr transform, Texture_ptr tex);
 void RunExampleScene();
 
 class ExampleScene : public Scene
@@ -34,7 +34,7 @@ private:
 	void bindShaderMode(RHICommandList& RHICmdList, int shaderMode);
 
 	Texture_ptr mTexture;
-	ShaderProgram mShaderProgram;
+	ShaderProgram mShaderProgram, mShaderProgram2;
 };
 
 #endif // TESTS_EXAMPLE_SCENE
