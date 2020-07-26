@@ -45,10 +45,8 @@ out vec3 vsColor;\n\
 out vec3 vsNormal;\n\
 out vec2 vsUV;\n\
 out vec3 fragPos;\n\
-layout(std140) uniform vb0 {\n\
-	highp mat4 mvp;\n\
-	highp mat4 modelMat;\n\
-};\n\
+uniform mat4 mvp;\n\
+uniform mat4 modelMat;\n\
 void main() {\n\
 	gl_Position = mvp * vec4(inPositionfa, 1.0f);\n\
 	vsColor = inColor;\n\
@@ -117,10 +115,11 @@ class StaticMeshVertexDeclaration
 public:
 	void InitRHI() {
 		VertexDeclarationElementList Elements;
-		uint16_t Stride = sizeof(VertexDeclarationElementList);
-		Elements.push_back(VertexElement(0, offsetof(StaticMeshVertex, position), VET_Float3, 0, Stride));
-		Elements.push_back(VertexElement(0, offsetof(StaticMeshVertex, color), VET_Float3, 1, Stride));
-		Elements.push_back(VertexElement(0, offsetof(StaticMeshVertex, uv), VET_Float2, 2, Stride));
+		uint16_t Stride = sizeof(StaticMeshLightedVertex);
+		Elements.push_back(VertexElement(0, offsetof(StaticMeshLightedVertex, position), VET_Float3, 0, Stride));
+		Elements.push_back(VertexElement(0, offsetof(StaticMeshLightedVertex, normal), VET_Float3, 1, Stride));
+		Elements.push_back(VertexElement(0, offsetof(StaticMeshLightedVertex, color), VET_Float3, 2, Stride));
+		Elements.push_back(VertexElement(0, offsetof(StaticMeshLightedVertex, uv), VET_Float2, 3, Stride));
 		VertexDeclarationRHI = gDynamicRHI->RHICreateVertexDeclaration(Elements);
 	}
 
@@ -275,29 +274,29 @@ void ExampleScene::InitGraphcisPipeline(int shaderMode)
 	// for directx and vulkan, the shader is compiled at compile-time
 	// using the editor and the information is stored along with it
 
-	//mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 1);
-	//mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
-	//mRenderScene->mBoundShaderState = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
-
-	mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 2);
+	mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 1);
 	mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
-	mShaderStateNormal = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
+	mRenderScene->mBoundShaderState = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
+
+	//mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 2);
+	//mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
+	//mShaderStateNormal = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
 
 	//mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytesModel, 1);
 	//mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytesModel, 0);
 	//mShaderStateModel = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
 
-	bindShaderMode(RHICmdList, shaderMode);
+	//bindShaderMode(RHICmdList, shaderMode);
 
-	mRenderScene->mUniformBuffer = UniformBufferRef<PrimitiveUniformShaderParameters>::CreateUniformBufferImmediate(
+	/*mRenderScene->mUniformBuffer = UniformBufferRef<PrimitiveUniformShaderParameters>::CreateUniformBufferImmediate(
 		PrimitiveUniformShaderParameters(), EUniformBufferUsage::UniformBuffer_MultiFrame);
 
-	gDynamicRHI->RHISetShaderUniformBuffer(mRenderScene->mVertexShaderRHI, 0, mRenderScene->mUniformBuffer);
+	gDynamicRHI->RHISetShaderUniformBuffer(mRenderScene->mVertexShaderRHI, 0, mRenderScene->mUniformBuffer);*/
 
 	mShaderProgram = ShaderProgram(SimpleLightedVertexShaderCode, SimpleLightedPixelShaderCode);
 	mShaderProgram.SetIntUniform("tex", 0);
 	Texture_ptr texture = std::make_shared<Texture>();
-	texture->Load("C:/Users/omars/Documents/VS Projects/SlaviEngine/game-engine/Resources/awesomeFace.png");
+	texture->Load("C:/Users/omars/Documents/VS Projects/SlaviEngine/game-engine/Resources/containerDiffuseMap.png");
 	texture->Bind();
 }
 void ExampleScene::bindShaderMode(RHICommandList& RHICmdList, int shaderMode) {
@@ -377,7 +376,7 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 
 
 		for (Actor_ptr actor : mActors) {
-			bindShaderMode(RHICmdList, actor->mShaderMode);
+			//bindShaderMode(RHICmdList, actor->mShaderMode);
 			RHICmdList.SetBoundShaderState(mRenderScene->mBoundShaderState);
 
 			RenderActor_ptr renderActor = actor->mRenderActor.lock();
@@ -395,7 +394,10 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 			PrimitiveUniformShaderParameters Parameters;
 			Parameters.LocalToWorld = ViewProjection * transform->GetLocalToWorld();
 			Parameters.modelMatrix = transform->GetLocalToWorld();
-			mRenderScene->mUniformBuffer.UpdateUniformBufferImmediate(Parameters);
+			mShaderProgram.Activate();
+			mShaderProgram.SetFloatMatrix4Uniform("mvp", Parameters.LocalToWorld);
+			mShaderProgram.SetFloatMatrix4Uniform("modelMat", Parameters.modelMatrix);
+			//mRenderScene->mUniformBuffer.UpdateUniformBufferImmediate(Parameters);
 
 			// this is yet fixed to draw triangles, in some cases or might be preffered
 			// by the user, we may need to determine the topology

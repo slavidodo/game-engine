@@ -225,40 +225,40 @@ StaticMesh_ptr StaticMeshGenerator::CreateLightedBox(glm::fvec3 halfDimensions, 
 
 	StaticMeshLightedVertex Vertices[NumVertices] = {
 		// front side
-		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +0.0f, +1.0f), color, glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +0.0f, +1.0f), color, glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +0.0f, +1.0f), color, glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +0.0f, +1.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +0.0f, +1.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +0.0f, +1.0f), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +0.0f, +1.0f), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +0.0f, +1.0f), color, glm::fvec2(0.0f, 1.0f)},
 
 		// back side
-		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +0.0f, -1.0f), color, glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +0.0f, -1.0f), color, glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +0.0f, -1.0f), color, glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +0.0f, -1.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +0.0f, -1.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +0.0f, -1.0f), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +0.0f, -1.0f), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +0.0f, -1.0f), color, glm::fvec2(0.0f, 1.0f)},
 
 		// left side
-		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(-1.0f, +0.0f, +0.0f), color, glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(-1.0f, +0.0f, +0.0f), color, glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(-1.0f, +0.0f, +0.0f), color, glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(-1.0f, +0.0f, +0.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(-1.0f, +0.0f, +0.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(-1.0f, +0.0f, +0.0f), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(-1.0f, +0.0f, +0.0f), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(-1.0f, +0.0f, +0.0f), color, glm::fvec2(0.0f, 1.0f)},
 
 		// right side
-		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(+1.0f, +0.0f, +0.0f), color, glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(+1.0f, +0.0f, +0.0f), color, glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(+1.0f, +0.0f, +0.0f), color, glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(+1.0f, +0.0f, +0.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(+1.0f, +0.0f, +0.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(+1.0f, +0.0f, +0.0f), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(+1.0f, +0.0f, +0.0f), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(+1.0f, +0.0f, +0.0f), color, glm::fvec2(0.0f, 1.0f)},
 
 		// up side
-		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +1.0f, +0.0f), color, glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +1.0f, +0.0f), color, glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +1.0f, +0.0f), color, glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +1.0f, +0.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +1.0f, +0.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, +1.0f, +0.0f), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(+halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +1.0f, +0.0f), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(-halfDimensions.x, +halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, +1.0f, +0.0f), color, glm::fvec2(0.0f, 1.0f)},
 
 		// down side
-		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, -1.0f, +0.0f), color, glm::fvec2(0.0f, 1.0f)},
-		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, -1.0f, +0.0f), color, glm::fvec2(1.0f, 1.0f)},
-		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, -1.0f, +0.0f), color, glm::fvec2(1.0f, 0.0f)},
-		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, -1.0f, +0.0f), color, glm::fvec2(0.0f, 0.0f)}};
+		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, -1.0f, +0.0f), color, glm::fvec2(0.0f, 0.0f)},
+		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, -halfDimensions.z), glm::fvec3(+0.0f, -1.0f, +0.0f), color, glm::fvec2(1.0f, 0.0f)},
+		{glm::fvec3(+halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, -1.0f, +0.0f), color, glm::fvec2(1.0f, 1.0f)},
+		{glm::fvec3(-halfDimensions.x, -halfDimensions.y, +halfDimensions.z), glm::fvec3(+0.0f, -1.0f, +0.0f), color, glm::fvec2(0.0f, 1.0f)}};
 
 	uint16_t Indices[NumIndices] = {
 		// front

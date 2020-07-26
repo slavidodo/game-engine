@@ -224,6 +224,14 @@ void OpenGLDynamicRHI::SetupVertexArrays(OpenGLContextState& ContextState, uint3
 
 	uint32_t UsedAttributes = 0;
 
+	//VertexDeclarationElementList Elements;
+	//uint16_t Stride = sizeof(StaticMeshLightedVertex);
+	//Elements.push_back(VertexElement(0, offsetof(StaticMeshLightedVertex, position), VET_Float3, 0, Stride));
+	//Elements.push_back(VertexElement(0, offsetof(StaticMeshLightedVertex, normal), VET_Float3, 0, Stride));
+	//Elements.push_back(VertexElement(0, offsetof(StaticMeshLightedVertex, color), VET_Float3, 1, Stride));
+	//Elements.push_back(VertexElement(0, offsetof(StaticMeshLightedVertex, uv), VET_Float2, 2, Stride));
+	//RHIVertexDeclarationRef VertexDeclarationRHI = gDynamicRHI->RHICreateVertexDeclaration(Elements);
+
 	OpenGLVertexDeclaration* VertexDeclaration = mPendingState.BoundShaderState->GetVertexDeclaration();
 	for (size_t ElementIndex = 0; ElementIndex < VertexDeclaration->VertexElements.size(); ElementIndex++) {
 		OpenGLVertexElement& VertexElement = VertexDeclaration->VertexElements[ElementIndex];
