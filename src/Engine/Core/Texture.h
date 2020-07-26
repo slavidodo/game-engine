@@ -35,7 +35,7 @@ class Texture
 {
 public:
 	Texture();
-protected:
+//protected:
 	bool Load(const std::string& fileName);
 	void Unload();
 

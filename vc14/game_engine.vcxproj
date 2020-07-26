@@ -207,6 +207,7 @@
     <ClCompile Include="..\src\Engine\Physics\PSceneQuery.cpp" />
     <ClCompile Include="..\src\Engine\Platform\CoreApplication.cpp" />
     <ClCompile Include="..\src\Engine\Platform\Window.cpp" />
+    <ClCompile Include="..\src\Engine\Rendering\ShaderProgram.cpp" />
     <ClCompile Include="..\src\Engine\RHI\RHICommandList.cpp" />
     <ClCompile Include="..\src\Engine\RHI\DynamicRHI.cpp" />
     <ClCompile Include="..\src\Engine\Scene\Actor.cpp" />
@@ -270,6 +271,7 @@
     <ClInclude Include="..\src\Engine\platform\CoreApplication.h" />
     <ClInclude Include="..\src\Engine\Platform\Window.h" />
     <ClInclude Include="..\src\Engine\Rendering\ShaderParameterMacros.h" />
+    <ClInclude Include="..\src\Engine\Rendering\ShaderProgram.h" />
     <ClInclude Include="..\src\Engine\RHI\RHICommandList.h" />
     <ClInclude Include="..\src\Engine\RHI\RHIDefinitions.h" />
     <ClInclude Include="..\src\Engine\RHI\RHIResource.h" />

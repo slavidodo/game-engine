@@ -43,6 +43,7 @@ layout (location = 2) in vec3 inColor;\n\
 layout (location = 3) in vec2 inUV;\n\
 out vec3 vsColor;\n\
 out vec3 vsNormal;\n\
+out vec2 vsUV;\n\
 out vec3 fragPos;\n\
 layout(std140) uniform vb0 {\n\
 	highp mat4 mvp;\n\
@@ -51,6 +52,7 @@ layout(std140) uniform vb0 {\n\
 void main() {\n\
 	gl_Position = mvp * vec4(inPositionfa, 1.0f);\n\
 	vsColor = inColor;\n\
+	vsUV = inUV;\n\
 	mat3 normalMat = mat3(transpose(inverse(modelMat)));\n\
 	vsNormal = normalMat * inNormal;\n\
 	fragPos = mat3(modelMat) * inPositionfa;\n\
@@ -61,7 +63,9 @@ const std::string SimpleLightedPixelShaderCode = "\
 out vec4 outColor;\n\
 in vec3 vsColor;\n\
 in vec3 vsNormal;\n\
+in vec2 vsUV;\n\
 in vec3 fragPos;\n\
+uniform sampler2D tex;\n\
 void main() {\n\
 	vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);\n\
 	vec3 ambient = 0.6f * lightColor;\n\
@@ -70,7 +74,7 @@ void main() {\n\
 	vec3 lightDir = normalize(lightPos - fragPos);\n\
 	float diff = max(dot(norm, lightDir), 0.0f);\n\
 	vec3 diffuse = 1.6f * diff * lightColor;\n\
-	vec3 result = (ambient + diffuse) * vsColor;\n\
+	vec3 result = (ambient + diffuse) * vec3(texture(tex, vsUV));\n\
 	outColor = vec4(result, 1.0f);\n\
 }\0";
 
@@ -290,7 +294,11 @@ void ExampleScene::InitGraphcisPipeline(int shaderMode)
 
 	gDynamicRHI->RHISetShaderUniformBuffer(mRenderScene->mVertexShaderRHI, 0, mRenderScene->mUniformBuffer);
 
-
+	mShaderProgram = ShaderProgram(SimpleLightedVertexShaderCode, SimpleLightedPixelShaderCode);
+	mShaderProgram.SetIntUniform("tex", 0);
+	Texture_ptr texture = std::make_shared<Texture>();
+	texture->Load("C:/Users/omars/Documents/VS Projects/SlaviEngine/game-engine/Resources/awesomeFace.png");
+	texture->Bind();
 }
 void ExampleScene::bindShaderMode(RHICommandList& RHICmdList, int shaderMode) {
 	//switch (shaderMode)

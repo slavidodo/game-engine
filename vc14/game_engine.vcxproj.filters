@@ -227,6 +227,9 @@
     <ClCompile Include="..\src\Engine\Scene\PlayerController.cpp">
       <Filter>Engine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Engine\Rendering\ShaderProgram.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Tests\ExampleScene.h">
@@ -398,6 +401,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Engine\Scene\PlayerController.h">
       <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Rendering\ShaderProgram.h">
+      <Filter>Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

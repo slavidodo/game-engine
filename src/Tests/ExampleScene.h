@@ -9,6 +9,7 @@
 #include "../Engine/Scene/Actor.h"
 
 #include "../Engine/Core/Model.h"
+#include "../Engine/Rendering/ShaderProgram.h"
 
 
 void AddCubeActor(bool bStatic, Transform_ptr transform);
@@ -31,6 +32,9 @@ private:
 
 	//model
 	void bindShaderMode(RHICommandList& RHICmdList, int shaderMode);
+
+	Texture_ptr mTexture;
+	ShaderProgram mShaderProgram;
 };
 
 #endif // TESTS_EXAMPLE_SCENE

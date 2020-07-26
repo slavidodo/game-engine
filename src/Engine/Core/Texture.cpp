@@ -33,30 +33,31 @@ Texture::Texture() :mTextureID(0), mWidth(0), mHeight(0) {
 }
 
 bool Texture::Load(const std::string& fileName){
-	int nrChannels = 0;
-	int format = GL_RGB;
-	unsigned char* image = stbi_load(fileName.c_str(), &mWidth, &mHeight, &nrChannels, 0);
+	glGenTextures(1, &mTextureID);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mTextureID);
 
-	if (image == nullptr) {
-		std::cout << "Failed to load texture" << fileName.c_str() << std::endl;
+	// Texture settings
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// Texture filtering: 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// load image & generate texture
+	int width, height, numOfColorChannels;
+	unsigned char* data = stbi_load(fileName.c_str(), &width, &height, &numOfColorChannels, 0);
+
+	if (data) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	} else {
+		std::cout << "Failed to generate texture" << std::endl;
 		return false;
 	}
 
-	if (nrChannels == 4) {
-		format = GL_RGBA;
-	}
-
-	glGenTextures(1, &mTextureID);
-	glBindTexture(GL_TEXTURE_2D, mTextureID);
-
-	glTexImage2D(mTextureID, 0, format, mWidth, mHeight, format, 0, GL_UNSIGNED_BYTE, image);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	stbi_image_free(image);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
+	stbi_image_free(data);
 	return true;
 }
 
