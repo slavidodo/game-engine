@@ -20,6 +20,19 @@ struct StaticMeshVertex
 	glm::fvec2 uv;
 };
 
+struct StaticMeshLightedVertex {
+	StaticMeshLightedVertex()
+		: position(0), normal(0), color(0), uv(0) {}
+
+	StaticMeshLightedVertex(glm::fvec3 position, glm::fvec3 normal, glm::fvec3 color, glm::fvec2 uv)
+		: position(position), normal(normal), color(color), uv(uv) {}
+
+	glm::fvec3 position;
+	glm::fvec3 normal;
+	glm::fvec3 color;
+	glm::fvec2 uv;
+};
+
 class StaticMesh : public std::enable_shared_from_this<StaticMesh>
 {
 public:

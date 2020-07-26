@@ -4,6 +4,10 @@
 
 Scene::Scene(RenderScene_ptr renderScene, PhysicsScene_ptr physicsScene) : mRenderScene(renderScene), mPhysicsScene(physicsScene), mDeltaTime(0.0f), mLastTime(0.0f) {}
 
+float Scene::GetDeltaTime() {
+	return mDeltaTime;
+}
+
 void Scene::AddActor(Actor_ptr actor) {
 	if (PhysicsActor_ptr physicsActor = actor->mPhysicsActor.lock())
 		mPhysicsScene->AddActor(physicsActor);

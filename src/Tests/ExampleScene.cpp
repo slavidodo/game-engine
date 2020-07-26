@@ -34,6 +34,48 @@ void main() {\n\
 }\0";
 
 
+
+const std::string SimpleLightedVertexShaderCode = "\
+#version 330 core\n\
+layout (location = 0) in vec3 inPositionfa;\n\
+layout (location = 1) in vec3 inNormal;\n\
+layout (location = 2) in vec3 inColor;\n\
+layout (location = 3) in vec2 inUV;\n\
+out vec3 vsColor;\n\
+out vec3 vsNormal;\n\
+out vec3 fragPos;\n\
+layout(std140) uniform vb0 {\n\
+	highp mat4 mvp;\n\
+	highp mat4 modelMat;\n\
+};\n\
+void main() {\n\
+	gl_Position = mvp * vec4(inPositionfa, 1.0f);\n\
+	vsColor = inColor;\n\
+	mat3 normalMat = mat3(transpose(inverse(modelMat)));\n\
+	vsNormal = normalMat * inNormal;\n\
+	fragPos = mat3(modelMat) * inPositionfa;\n\
+}";
+
+const std::string SimpleLightedPixelShaderCode = "\
+#version 330 core\n\
+out vec4 outColor;\n\
+in vec3 vsColor;\n\
+in vec3 vsNormal;\n\
+in vec3 fragPos;\n\
+void main() {\n\
+	vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);\n\
+	vec3 ambient = 0.6f * lightColor;\n\
+	vec3 norm = normalize(vsNormal);\n\
+	vec3 lightPos = vec3(800.0f, 1000.0f, 160.0f);\n\
+	vec3 lightDir = normalize(lightPos - fragPos);\n\
+	float diff = max(dot(norm, lightDir), 0.0f);\n\
+	vec3 diffuse = 1.6f * diff * lightColor;\n\
+	vec3 result = (ambient + diffuse) * vsColor;\n\
+	outColor = vec4(result, 1.0f);\n\
+}\0";
+
+
+
 const std::string SimpleModelLoadingVS = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
@@ -86,7 +128,7 @@ static StaticMeshVertexDeclaration gStaticMeshVertexDeclaration;
 
 void AddPlayer(Transform_ptr transform, glm::fvec3 color) {
 	glm::fvec3 halfDimensions = transform->GetScale() * 0.5f;
-	RenderActor_ptr renderActor = std::make_shared<RenderActor>(StaticMeshGenerator::CreateBox(halfDimensions * 0.00001f, color));
+	RenderActor_ptr renderActor = std::make_shared<RenderActor>(StaticMeshGenerator::CreateLightedBox(halfDimensions * 0.00001f, color));
 
 	PhysicsActor_ptr physicsActor = PDynamicActor::CreateActor(transform);
 	physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(halfDimensions), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f)));
@@ -102,7 +144,7 @@ void AddPlayer(Transform_ptr transform, glm::fvec3 color) {
 }
 void AddBoxActor(bool bStatic, Transform_ptr transform, glm::fvec3 color) {
 	glm::fvec3 halfDimensions = transform->GetScale() * 0.5f;
-	RenderActor_ptr renderActor = std::make_shared<RenderActor>(StaticMeshGenerator::CreateBox(halfDimensions * 0.55f, color));
+	RenderActor_ptr renderActor = std::make_shared<RenderActor>(StaticMeshGenerator::CreateLightedBox(halfDimensions * 0.55f, color));
 
 	PhysicsActor_ptr physicsActor = nullptr;
 	if (bStatic) physicsActor = PStaticActor::CreateActor(transform);
@@ -112,7 +154,8 @@ void AddBoxActor(bool bStatic, Transform_ptr transform, glm::fvec3 color) {
 	SceneManager::GetInstance().AddActor(std::make_shared<Actor>(transform, renderActor, physicsActor));
 }
 void AddModelSingleMeshActor(bool bStatic, Transform_ptr transform, std::string path) {
-	auto modelTest = ResourceManager::GetInstance().LoadModel(path);
+	Model_ptr modelTest = ResourceManager::GetInstance().LoadModel(path);
+	if (!modelTest) return;
 
 	glm::fvec3 halfDimensions = transform->GetScale() * 0.5f;
 	RenderActor_ptr renderActor = std::make_shared<RenderActor>(modelTest->GetFirstMesh());
@@ -129,18 +172,21 @@ void RunExampleScene() {
 	bool bDynamic = false;
 
 	/// Floor
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 0.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(100.0f, 1.0f, 100.0f)), glm::fvec3(0.0f));
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 0.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(20.0f, 1.0f, 20.0f)), glm::fvec3(0.2f, 0.4f, 0.6f));
 
 	/// Platforms
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 2.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.0f, 0.0f, 1.0f));
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 2.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 1.0f, 1.0f));
 	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-4.0f, 4.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 0.0f, 0.0f));
 	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 6.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.0f, 1.0f, 0.0f));
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 0.0f, 1.0f));
+	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.8f, 0.5f, 0.0f));
 
-	AddModelSingleMeshActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 2.0f, 2.0f)), "Mine/scene.fbx");
+	/// Random Boxes
+	AddBoxActor(bDynamic, std::make_shared<Transform>(glm::fvec3(4.0f, 2.0f, 4.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)), glm::fvec3(0.3f, 0.1f, 1.0f));
+
+	//AddModelSingleMeshActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 2.0f, 2.0f)), "../cube.obj");
 
 	//AddBoxActor(bDynamic, std::make_shared<Transform>(glm::fvec3(0.0f, 1.0f, -2.0f), glm::fvec3(0.0f), glm::fvec3(0.5f)),             glm::fvec3(1.0f, 1.0f, 0.0f));
-	AddPlayer(std::make_shared<Transform>(glm::fvec3(2.0f, 5.0f, 2.0f), glm::fvec3(0.0f), glm::fvec3(0.3f, 0.3f, 0.3f)), glm::fvec3(0.0f, 1.0f, 1.0f));
+	AddPlayer(std::make_shared<Transform>(glm::fvec3(2.0f, 6.0f, 2.0f), glm::fvec3(0.0f), glm::fvec3(0.3f, 0.3f, 0.3f)), glm::fvec3(0.0f, 1.0f, 1.0f));
 }
 
 
@@ -184,10 +230,12 @@ void ExampleScene::InitGraphcisPipeline(int shaderMode)
 	std::vector<uint8_t> VertexShaderBytes, PixelShaderBytes;
 	std::vector<uint8_t> VertexShaderBytesModel, PixelShaderBytesModel;
 
-	std::copy(SimpleVertexShaderCode.begin(), SimpleVertexShaderCode.end(), std::back_inserter(VertexShaderBytes));
-	std::copy(SimplePixelShaderCode.begin(), SimplePixelShaderCode.end(), std::back_inserter(PixelShaderBytes));
-	std::copy(SimpleModelLoadingVS.begin(), SimpleModelLoadingVS.end(), std::back_inserter(VertexShaderBytesModel));
-	std::copy(SimpleModelLoadingFS.begin(), SimpleModelLoadingFS.end(), std::back_inserter(PixelShaderBytesModel));
+	//std::copy(SimpleVertexShaderCode.begin(), SimpleVertexShaderCode.end(), std::back_inserter(VertexShaderBytes));
+	//std::copy(SimplePixelShaderCode.begin(), SimplePixelShaderCode.end(), std::back_inserter(PixelShaderBytes));
+	std::copy(SimpleLightedVertexShaderCode.begin(), SimpleLightedVertexShaderCode.end(), std::back_inserter(VertexShaderBytes));
+	std::copy(SimpleLightedPixelShaderCode.begin(), SimpleLightedPixelShaderCode.end(), std::back_inserter(PixelShaderBytes));
+	//std::copy(SimpleModelLoadingVS.begin(), SimpleModelLoadingVS.end(), std::back_inserter(VertexShaderBytesModel));
+	//std::copy(SimpleModelLoadingFS.begin(), SimpleModelLoadingFS.end(), std::back_inserter(PixelShaderBytesModel));
 
 	/*mVertexShaderRHINormal = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 1);
 	mPixelShaderRHINormal = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
@@ -227,13 +275,13 @@ void ExampleScene::InitGraphcisPipeline(int shaderMode)
 	//mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
 	//mRenderScene->mBoundShaderState = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
 
-	mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 1);
+	mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytes, 2);
 	mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytes, 0);
 	mShaderStateNormal = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
 
-	mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytesModel, 1);
-	mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytesModel, 0);
-	mShaderStateModel = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
+	//mRenderScene->mVertexShaderRHI = OpenGLShaderCompiler::ManuallyCreateVertexShader(RHICmdList, VertexShaderBytesModel, 1);
+	//mRenderScene->mPixelShaderRHI = OpenGLShaderCompiler::ManuallyCreatePixelShader(RHICmdList, PixelShaderBytesModel, 0);
+	//mShaderStateModel = RHICmdList.CreateBoundShaderState(gStaticMeshVertexDeclaration.VertexDeclarationRHI, mRenderScene->mVertexShaderRHI, mRenderScene->mPixelShaderRHI);
 
 	bindShaderMode(RHICmdList, shaderMode);
 
@@ -338,6 +386,7 @@ void ExampleScene::RenderSceneActors(RHICommandList& RHICmdList)
 			// Update shader paramaters
 			PrimitiveUniformShaderParameters Parameters;
 			Parameters.LocalToWorld = ViewProjection * transform->GetLocalToWorld();
+			Parameters.modelMatrix = transform->GetLocalToWorld();
 			mRenderScene->mUniformBuffer.UpdateUniformBufferImmediate(Parameters);
 
 			// this is yet fixed to draw triangles, in some cases or might be preffered

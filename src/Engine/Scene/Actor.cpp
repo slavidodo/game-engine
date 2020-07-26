@@ -36,7 +36,8 @@ void Actor::Jump() {
 		bool bOnGround = hits.size() > 1;
 		if (bOnGround) {
 			PDynamicActor_ptr actor = std::static_pointer_cast<PDynamicActor>(physicsActor);
-			actor->ApplyImpulse(glm::vec3(0.0f, 0.2f, 0.0f));
+			float deltaTime = SceneManager::GetInstance().GetDeltaTime();
+			actor->ApplyImpulse(glm::vec3(0.0f, 65.0f * deltaTime, 0.0f));
 			UpdateTransformsFromPhysics();
 		}
 	}

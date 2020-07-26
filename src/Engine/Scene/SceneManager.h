@@ -16,6 +16,10 @@ public:
 	}
 
 	void SetCurrentScene(Scene_ptr scene);
+	float GetDeltaTime() {
+		if (mCurrentScene)
+			return mCurrentScene->GetDeltaTime();
+	}
 
 	void AddActor(Actor_ptr pActor);
 	void RemoveActor(Actor_ptr pActor);

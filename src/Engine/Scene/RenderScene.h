@@ -12,9 +12,10 @@ __declspec(align(SHADER_PARAMETER_STRUCT_ALIGNMENT))
 class PrimitiveUniformShaderParameters {
 public:
 	PrimitiveUniformShaderParameters()
-		: LocalToWorld(1.0f) {}
+		: LocalToWorld(1.0f), modelMatrix(1.0f) {}
 
 	TShaderParameterTypeInfo<glm::fmat4x4>::TAlignedType LocalToWorld;
+	TShaderParameterTypeInfo<glm::fmat4x4>::TAlignedType modelMatrix;
 
 	// TODO we don't wanna bother actually calculating the alignment for members
 	// for simplicity and the existence of a single member only, we do it like that
@@ -24,7 +25,8 @@ public:
 		static RHIUniformBufferLayout Layout;
 		if (Layout.Resources.size() == 0) {
 			// TODO(slavi) should be calculated automatically
-			Layout.ConstantBufferSize = 16 * sizeof(float);
+			Layout.ConstantBufferSize = 32 * sizeof(float);
+			Layout.Resources.push_back({0, UBMT_FLOAT32});
 			Layout.Resources.push_back({0, UBMT_FLOAT32});
 		}
 

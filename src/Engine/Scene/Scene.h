@@ -10,6 +10,8 @@ class Scene {
 public:
 	Scene(RenderScene_ptr renderScene, PhysicsScene_ptr physicsScene);
 
+	float GetDeltaTime();
+
 	std::vector<Actor_ptr> GetActors() const;
 	void AddActor(Actor_ptr actor);
 	void RemoveActor(Actor_ptr actor);
