@@ -12,6 +12,12 @@ typedef std::shared_ptr<Actor> Actor_ptr;
 class Actor : public Object {
 public:
 	bool lighter = false;
+	
+	bool kinematic = false;
+	bool dir = false;
+	glm::fvec3 originalPos;
+	glm::fvec3 limit1, limit2;
+	
 	Actor(Transform_ptr transform, RenderActor_ptr renderActor, PhysicsActor_ptr physicsActor, int shaderMode = 0);
 
 	std::weak_ptr<PhysicsActor> mPhysicsActor;

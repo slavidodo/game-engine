@@ -123,7 +123,7 @@ uniform sampler2D texture_diffuse1;
 void main()
 {    
     FragColor = texture(texture_diffuse1, TexCoords);
-    //FragColor =  vec4(0.0f,0.0f,1.0f,1.0f);
+    //FragColor = vec4(0.0f, 0.0f, 1.0f, 1.0f);
 }
 )";
 
@@ -165,16 +165,26 @@ void AddPlayer(Transform_ptr transform, glm::fvec3 color, Texture_ptr tex) {
 		SceneManager::GetInstance().SetPlayer(player);
 	}
 }
-void AddBoxActor(bool bStatic, Transform_ptr transform, glm::fvec3 color, Texture_ptr tex, bool lighter = false) {
+void AddBoxActor(int state, Transform_ptr transform, glm::fvec3 color, Texture_ptr tex, bool lighter = false, glm::fvec3 lim1 = glm::fvec3(0), glm::fvec3 lim2 = glm::fvec3(0)) {
 	glm::fvec3 halfDimensions = transform->GetScale() * 0.5f;
 	RenderActor_ptr renderActor = std::make_shared<RenderActor>(StaticMeshGenerator::CreateLightedBox(halfDimensions * 0.55f, color));
 
 	PhysicsActor_ptr physicsActor = nullptr;
-	if (bStatic) physicsActor = PStaticActor::CreateActor(transform);
+	if (!state) physicsActor = PStaticActor::CreateActor(transform);
 	else         physicsActor = PDynamicActor::CreateActor(transform);
 	physicsActor->AddCollider(PCollider::CreateCollider(PBoxGeometry::CreateGeometry(halfDimensions), PMaterial::CreateMaterial(100.0f, 100.0f, 0.3f)));
+	if (state == 2) {
+		PDynamicActor_ptr dynamicActor = std::static_pointer_cast<PDynamicActor>(physicsActor);
+		dynamicActor->SetKinematic(true);
+	}
 
 	Actor_ptr actor = std::make_shared<Actor>(transform, renderActor, physicsActor);
+	if (state == 2) {
+		actor->kinematic = true;
+		actor->limit1 = lim1;
+		actor->limit2 = lim2;
+		actor->originalPos = transform->GetTranslation();
+	}
 	actor->SetTexture(tex);
 	actor->lighter = lighter;
 	SceneManager::GetInstance().AddActor(actor);
@@ -195,29 +205,28 @@ void AddModelSingleMeshActor(bool bStatic, Transform_ptr transform, std::string 
 	SceneManager::GetInstance().AddActor(std::make_shared<Actor>(transform, renderActor, physicsActor, 1));
 }
 void RunExampleScene() {
-	bool bStatic = true;
-	bool bDynamic = false;
+	int xStatic = 0, xDynamic = 1, xKinematic = 2;
 
 	/// Floor
 	Texture_ptr floorTexture = std::make_shared<Texture>();
 	floorTexture->Load("C:/Users/omars/Documents/VS Projects/SlaviEngine/game-engine/Resources/awesomeFace.png");
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 0.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(10.0f, 1.0f, 10.0f)), glm::fvec3(0.2f, 0.4f, 0.6f), floorTexture);
+	AddBoxActor(xStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 0.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(10.0f, 1.0f, 10.0f)), glm::fvec3(0.2f, 0.4f, 0.6f), floorTexture);
 
 	/// Light cube
 	Texture_ptr lightTexture = std::make_shared<Texture>();
 	lightTexture->Load("C:/Users/omars/Documents/VS Projects/SlaviEngine/game-engine/Resources/whiteTex.png");
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(12.0f, 12.0f, 12.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)), glm::fvec3(1.0f, 1.0f, 1.0f), lightTexture, true);
+	AddBoxActor(xStatic, std::make_shared<Transform>(glm::fvec3(12.0f, 12.0f, 12.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)), glm::fvec3(1.0f, 1.0f, 1.0f), lightTexture, true);
 
 	/// Platforms
 	Texture_ptr platformTexture = std::make_shared<Texture>();
 	platformTexture->Load("C:/Users/omars/Documents/VS Projects/SlaviEngine/game-engine/Resources/containerDiffuseMap.png");
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(0.0f, 2.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 1.0f, 1.0f), platformTexture);
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-4.0f, 4.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 0.0f, 0.0f), platformTexture);
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 6.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.0f, 1.0f, 0.0f), platformTexture);
-	AddBoxActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.8f, 0.5f, 0.0f), platformTexture);
+	AddBoxActor(xKinematic, std::make_shared<Transform>(glm::fvec3(0.0f, 2.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 1.0f, 1.0f), platformTexture, false, glm::fvec3(0.0f, 2.0f, -3.0f), glm::fvec3(0.0f, 2.0f, 3.0f));
+	AddBoxActor(xKinematic, std::make_shared<Transform>(glm::fvec3(-4.0f, 4.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(1.0f, 0.0f, 0.0f), platformTexture, false, glm::fvec3(-4.0f, 4.0f, 3.0f), glm::fvec3(-4.0f, 4.0f, -3.0f));
+	AddBoxActor(xStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 6.0f, 0.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.0f, 1.0f, 0.0f), platformTexture, false, glm::fvec3(-6.0f, 7.0f, 2.0f), glm::fvec3(-10.0f, 5.0f, -2.0f));
+	AddBoxActor(xKinematic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 0.2f, 2.0f)), glm::fvec3(0.8f, 0.5f, 0.0f), platformTexture, false, glm::fvec3(-8.0f, 11.0f, -4.0f), glm::fvec3(-8.0f, 5.0f, -4.0f));
 
 	/// Random Boxes
-	AddBoxActor(bDynamic, std::make_shared<Transform>(glm::fvec3(4.0f, 2.0f, 4.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)), glm::fvec3(0.3f, 0.1f, 1.0f), platformTexture);
+	AddBoxActor(xDynamic, std::make_shared<Transform>(glm::fvec3(4.0f, 2.0f, 4.0f), glm::fvec3(0.0f), glm::fvec3(1.0f)), glm::fvec3(0.3f, 0.1f, 1.0f), platformTexture);
 
 	//AddModelSingleMeshActor(bStatic, std::make_shared<Transform>(glm::fvec3(-8.0f, 8.0f, -4.0f), glm::fvec3(0.0f), glm::fvec3(2.0f, 2.0f, 2.0f)), "../cube.obj");
 
@@ -330,7 +339,6 @@ void ExampleScene::InitGraphcisPipeline(int shaderMode)
 	mShaderProgram.SetIntUniform("tex", 0);
 
 	mShaderProgram2 = ShaderProgram(SimpleLightedVertexShaderCode, SimpleLighterPixelShaderCode);
-	//mShaderProgram2.SetIntUniform("tex", 0);
 }
 void ExampleScene::bindShaderMode(RHICommandList& RHICmdList, int shaderMode) {
 	//switch (shaderMode)
@@ -374,6 +382,22 @@ void ExampleScene::UpdatePhysics() {
 	double currentTime = glfwGetTime(); // really?
 	mDeltaTime = static_cast<float>(currentTime - mLastTime);
 	mLastTime = currentTime;
+
+	std::vector<Actor_ptr> vec = SceneManager::GetInstance().GetActors();
+	for (auto actor : vec) {
+		if (!actor->kinematic) continue;
+		
+		PDynamicActor_ptr dynamicActor = std::static_pointer_cast<PDynamicActor>(actor->mPhysicsActor.lock());
+		Transform_ptr oldTransform = actor->GetTransform();
+		glm::fvec3 pos = oldTransform->GetTranslation();
+		if (glm::distance(pos, actor->originalPos) > 3.0f) actor->dir = !actor->dir;
+		glm::fvec3 dest = actor->dir ? actor->limit1 : actor->limit2;
+
+		glm::fvec3 dir = dest - pos;
+		glm::fvec3 newPos = pos + glm::normalize(dir) * 2.0f * (float)mDeltaTime;
+		oldTransform->SetTranslation(newPos);
+		dynamicActor->SetKinematicTarget(oldTransform);
+	}
 
 	mPhysicsScene->Update(mDeltaTime);
 	for (Actor_ptr actor : mActors) actor->UpdateTransformsFromPhysics();

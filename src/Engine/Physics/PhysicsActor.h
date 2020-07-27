@@ -104,6 +104,8 @@ public:
 
 	void SetGravity(bool value);
 	void SetKinematic(bool value);
+	void SetKinematicTarget(Transform_ptr transform);
+	Transform_ptr GetKinematicTarget();
 
 	enum class MotionAxis { 
 		LINEAR_X  = (1 << 0), 

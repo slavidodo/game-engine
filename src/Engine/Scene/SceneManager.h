@@ -19,6 +19,8 @@ public:
 	float GetDeltaTime() {
 		if (mCurrentScene)
 			return mCurrentScene->GetDeltaTime();
+		else
+			return 0.0f;
 	}
 
 	void AddActor(Actor_ptr pActor);

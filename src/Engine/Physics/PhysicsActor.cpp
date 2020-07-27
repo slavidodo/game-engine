@@ -176,6 +176,16 @@ void PDynamicActor::SetGravity(bool value) {
 void PDynamicActor::SetKinematic(bool value) {
 	mDynamicActor->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, value);
 }
+void PDynamicActor::SetKinematicTarget(Transform_ptr transform) {
+	const physx::PxTransform newTransform = PhysicsEngine::GetInstance().ToPhysxTransform(transform);
+	mDynamicActor->setKinematicTarget(newTransform);
+}
+
+Transform_ptr PDynamicActor::GetKinematicTarget() {
+	physx::PxTransform transform;
+	mDynamicActor->getKinematicTarget(transform);
+	return PhysicsEngine::GetInstance().ToEngineTransform(transform);
+}
 
 void PDynamicActor::LockMotion(MotionAxis axis) {
 	mDynamicActor->setRigidDynamicLockFlag(static_cast<physx::PxRigidDynamicLockFlag::Enum>(axis), true);
